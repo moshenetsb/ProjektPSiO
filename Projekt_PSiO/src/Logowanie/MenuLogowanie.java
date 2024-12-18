@@ -89,7 +89,7 @@ public class MenuLogowanie {
 	}
 	
 	
-	// Zwraca -1, jeśli nie istnieje lub indeks osoby w tablicy, jeśli istnieje
+	// Zwraca -1, jeśli login nie istnieje lub indeks osoby w tablicy, jeśli istnieje
 	public static int czyIstniejeLoginPracownika(String login) {
 		int czyIstnieje = -1;
 		
@@ -101,7 +101,7 @@ public class MenuLogowanie {
 		return -1;
 	}
 	
-	// Zwraca -1, jeśli nie istnieje lub indeks osoby w tablicy, jeśli istnieje
+	// Zwraca -1, jeśli login nie istnieje lub indeks osoby w tablicy, jeśli istnieje
 	public static int czyIstniejeLoginKlienta(String login) {
 		int czyIstnieje = -1;
 		
@@ -113,4 +113,28 @@ public class MenuLogowanie {
 		return -1;
 	}
 		
+	// Zwraca -1, jeśli email nie istnieje lub indeks osoby w tablicy, jeśli istnieje
+		public static int czyIstniejeEmailPracownika(String email) {
+			int czyIstnieje = -1;
+			
+			for (int i = 0; i < kontaPracownikow.size(); i++) {
+				if (email == kontaPracownikow[i].getEmail())
+					return i;
+			}
+			
+			return -1;
+		}
+		
+		// Zwraca -1, jeśli email nie istnieje lub indeks osoby w tablicy, jeśli istnieje
+		public static int czyIstniejeEmailKlienta(String email) {
+			int czyIstnieje = -1;
+			
+			for (int i = 0; i < kontaKlientow.size(); i++) {
+				if (email == kontaKlientow[i].getEmail())
+					return i;
+			}
+			
+			return -1;
+		}
+	
 }

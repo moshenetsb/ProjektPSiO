@@ -28,8 +28,11 @@ public class Logowanie_LoginHaslo implements Logowanie {
 		// Logowanie klienta i sprawdzenie hasła
 		if (idKontaPracownika == -1) {
 
-			if (haslo == kontaKlientow[idKontaKlienta].getHaslo())
+			if (haslo == kontaKlientow[idKontaKlienta].getHaslo()) {
 				aktywnaOsoba = kontaKlientow[idKontaKlienta];
+				System.out.println("Załogowałeś się jako " + aktywnaOsoba.getImieNazwisko());
+			}
+
 			else {
 				System.out.println("Zostało podane błędne hasło!");
 				return;
@@ -39,8 +42,11 @@ public class Logowanie_LoginHaslo implements Logowanie {
 
 		// Logowanie pracownika i sprawdzenie hasła
 		else {
-			if (haslo == kontaPracownikow[idKontaPracownika].getHaslo())
+			if (haslo == kontaPracownikow[idKontaPracownika].getHaslo()) {
 				aktywnaOsoba = kontaPracownikow[idKontaPracownika];
+				System.out.println("Załogowałeś się jako " + aktywnaOsoba.getImieNazwisko());
+			}
+
 			else {
 				System.out.println("Zostało podane błędne hasło!");
 				return;
