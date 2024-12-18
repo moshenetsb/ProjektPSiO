@@ -75,5 +75,3 @@ public class Adres {
 		return "Adres [ul. " + ulica + ", nr. bud. " + numerBudynku + ", m. " + miasto + ", region " + region
 				+ ", państwo " + panstwo + ", kod pocztowy " + kodPocztowy + "]";
 	}
-
-}
