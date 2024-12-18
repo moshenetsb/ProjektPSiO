@@ -1,6 +1,7 @@
 package adres;
 
 public class Adres {
+
 	// Składowe kłasy
 	private int numerBudynku;
 	private String ulica;
@@ -19,7 +20,7 @@ public class Adres {
 		this.panstwo = panstwo;
 	}
 
-	//Getters
+	// Getters and Setters
 	public int getNumerBudynku() {
 		return numerBudynku;
 	}
@@ -40,7 +41,6 @@ public class Adres {
 		return miasto;
 	}
 
-	//Setters
 	public void setMiasto(String miasto) {
 		this.miasto = miasto;
 	}
@@ -69,6 +69,7 @@ public class Adres {
 		this.panstwo = panstwo;
 	}
 
+	// toString
 	@Override
 	public String toString() {
 		return "Adres [ul. " + ulica + ", nr. bud. " + numerBudynku + ", m. " + miasto + ", region " + region
