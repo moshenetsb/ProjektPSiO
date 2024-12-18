@@ -1,11 +1,16 @@
-package PreMetody;
+package Metody;
 
-import Osoby.*;
+import osoba.*;
 import Produkty.*;
-import Arraylist;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Metody{
 
+	public static Scanner scanner = new Scanner(System.in);
+	public static boolean czyKoniecProgramu = false;
+	public static Osoba aktywnaOsoba = null;
+	
     public static ArrayList<Klient> listaKlientow = new ArrayList<>();
     public static ArrayList<Pracownik> listaSprzedawcow = new ArrayList<>();
     public static ArrayList<Kierownik> listaKierownikow = new ArrayList<>();

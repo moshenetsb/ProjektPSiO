@@ -1,13 +1,11 @@
 package Logowanie;
 
-import java.util.Scanner;
+import Metody.Metody;
 import java.util.ArrayList;
 
 public class MenuLogowanie {
 	
 	// Pola statyczne_______________________________________________
-	public static Scanner scanner = new Scanner(System.in);
-	public static boolean czyKoniecProgramu = false;
 	public static Logowanie preferowaneLogowanie = null;
 	// ________________________________________________________________
 	
@@ -19,13 +17,13 @@ public class MenuLogowanie {
 				+ "_________________________________\n");
 
 		System.out.print("Wybierz opcje: ");
-		int wybor = scanner.nextInt();
+		int wybor = Metody.scanner.nextInt();
 		
 		while (wybor < 1 || wybor > 3) {
 			System.out.println("Została wybrana nieistniejąca opcja!");
 			
 			System.out.print("Wybierz opcje: ");
-			wybor = scanner.nextInt();
+			wybor = Metody.scanner.nextInt();
 		}
 		
 		switch(wybor) {
@@ -43,7 +41,7 @@ public class MenuLogowanie {
 			
 		case 3:
 			System.out.println("Program został zakończony");
-			czyKoniecProgramu = true;
+			Metody.czyKoniecProgramu = true;
 			break;
 		}
 		
@@ -66,13 +64,13 @@ public class MenuLogowanie {
 		System.out.print("_______________________________________________\n");
 		
 		System.out.print("Wybierz opcje: ");
-		int wybor = scanner.nextInt();
+		int wybor = Metody.scanner.nextInt();
 		
 		while (wybor < 1 || wybor > iloscOpcji) {
 			System.out.println("Została wybrana nieistniejąca opcja!");
 			
 			System.out.print("Wybierz opcje: ");
-			wybor = scanner.nextInt();
+			wybor = Metody.scanner.nextInt();
 		}
 		
 		switch(wybor) {
@@ -93,8 +91,8 @@ public class MenuLogowanie {
 	public static int czyIstniejeLoginPracownika(String login) {
 		int czyIstnieje = -1;
 		
-		for (int i = 0; i < kontaPracownikow.size(); i++) {
-			if (login == kontaPracownikow[i].getLogin())
+		for (int i = 0; i < Metody.listaPracownikow.size(); i++) {
+			if (login == Metody.listaPracownikow[i].getLogin())
 				return i;
 		}
 		
@@ -105,8 +103,8 @@ public class MenuLogowanie {
 	public static int czyIstniejeLoginKlienta(String login) {
 		int czyIstnieje = -1;
 		
-		for (int i = 0; i < kontaKlientow.size(); i++) {
-			if (login == kontaKlientow[i].getLogin())
+		for (int i = 0; i < Metody.listaKlientow.size(); i++) {
+			if (login == Metody.listaKlientow[i].getLogin())
 				return i;
 		}
 		
@@ -117,8 +115,8 @@ public class MenuLogowanie {
 		public static int czyIstniejeEmailPracownika(String email) {
 			int czyIstnieje = -1;
 			
-			for (int i = 0; i < kontaPracownikow.size(); i++) {
-				if (email == kontaPracownikow[i].getEmail())
+			for (int i = 0; i < Metody.listaPracownikow.size(); i++) {
+				if (email == Metody.listaPracownikow[i].getEmail())
 					return i;
 			}
 			
@@ -129,8 +127,8 @@ public class MenuLogowanie {
 		public static int czyIstniejeEmailKlienta(String email) {
 			int czyIstnieje = -1;
 			
-			for (int i = 0; i < kontaKlientow.size(); i++) {
-				if (email == kontaKlientow[i].getEmail())
+			for (int i = 0; i < Metody.listaKlientow.size(); i++) {
+				if (email == Metody.listaKlientow[i].getEmail())
 					return i;
 			}
 			

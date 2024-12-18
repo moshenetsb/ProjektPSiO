@@ -1,5 +1,7 @@
 package Logowanie;
 
+import Metody.Metody;
+
 public class Logowanie_EmailHaslo implements Logowanie {
 
 	@Override
@@ -7,8 +9,8 @@ public class Logowanie_EmailHaslo implements Logowanie {
 
 		// Odczytywanie email
 		System.out.print("Podaj email: ");
-		String email = MenuLogowanie.scanner.nextLine();
-		email = MenuLogowanie.scanner.nextLine();
+		String email = Metody.scanner.nextLine();
+		email = Metody.scanner.nextLine();
 
 		// Sprawdzenie istnienia użytkowników z podanym email
 		int idKontaPracownika = MenuLogowanie.czyIstniejeEmailPracownika(email);
@@ -22,15 +24,15 @@ public class Logowanie_EmailHaslo implements Logowanie {
 
 		// Odczytywanie hasła
 		System.out.print("Podaj hasło: ");
-		String haslo = MenuLogowanie.scanner.nextLine();
-		haslo = MenuLogowanie.scanner.nextLine();
+		String haslo = Metody.scanner.nextLine();
+		haslo = Metody.scanner.nextLine();
 
 		// Logowanie klienta i sprawdzenie hasła
 		if (idKontaPracownika == -1) {
 
-			if (haslo == kontaKlientow[idKontaKlienta].getHaslo()) {
-				aktywnaOsoba = kontaKlientow[idKontaKlienta];
-				System.out.println("Załogowałeś się jako " + aktywnaOsoba.getImieNazwisko());
+			if (haslo == Metody.listaKlientow[idKontaKlienta].getHaslo()) {
+				Metody.aktywnaOsoba = Metody.listaKlientow[idKontaKlienta];
+				System.out.println("Załogowałeś się jako " + Metody.aktywnaOsoba.getImieNazwisko());
 			}
 
 			else {
@@ -42,9 +44,9 @@ public class Logowanie_EmailHaslo implements Logowanie {
 
 		// Logowanie pracownika i sprawdzenie hasła
 		else {
-			if (haslo == kontaPracownikow[idKontaPracownika].getHaslo()) {
-				aktywnaOsoba = kontaPracownikow[idKontaPracownika];
-				System.out.println("Załogowałeś się jako " + aktywnaOsoba.getImieNazwisko());
+			if (haslo == Metody.listaPracownikow[idKontaPracownika].getHaslo()) {
+				Metody.aktywnaOsoba = Metody.listaPracownikow[idKontaPracownika];
+				System.out.println("Załogowałeś się jako " + Metody.aktywnaOsoba.getImieNazwisko());
 
 			}
 
