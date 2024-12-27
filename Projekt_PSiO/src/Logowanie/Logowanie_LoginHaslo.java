@@ -1,56 +1,54 @@
 package Logowanie;
 
 import Metody.Metody;
+import osoba.*;
+import javax.swing.*;
 
 public class Logowanie_LoginHaslo implements Logowanie {
 
 	@Override
-	public void logowanie() {
-
-		// Odczytywanie loginu
-		System.out.print("Podaj login: ");
-		String login = Metody.scanner.nextLine();
-		login = Metody.scanner.nextLine();
+	public void logowanie(String loginEmail, String haslo) {
 
 		// Sprawdzenie istnienia użytkowników z podanym loginem
-		int idKontaPracownika = MenuLogowanie.czyIstniejeLoginPracownika(login);
-		int idKontaKlienta = MenuLogowanie.czyIstniejeLoginKlienta(login);
+		int idKontaOsobyZarzadzajacej = MenuLogowanie.czyIstniejeLoginOsobyZarzadzajacej(loginEmail);
+		int idKontaKlienta = MenuLogowanie.czyIstniejeLoginKlienta(loginEmail);
 
 		// Jeśli błędny login
-		if (idKontaPracownika == -1 && idKontaKlienta == -1) {
-			System.out.println("Podany login nie istnieje!");
+		if (idKontaOsobyZarzadzajacej == -1 && idKontaKlienta == -1) {
+			JOptionPane.showMessageDialog(null, "Podany login nie istnieje!");
 			return;
 		}
 
-		// Odczytywanie hasła
-		System.out.print("Podaj hasło: ");
-		String haslo = Metody.scanner.nextLine();
-		haslo = Metody.scanner.nextLine();
-
 		// Logowanie klienta i sprawdzenie hasła
-		if (idKontaPracownika == -1) {
+		if (idKontaOsobyZarzadzajacej == -1) {
 
-			if (haslo == Metody.listaKlientow.get(idKontaKlienta).getHaslo()) {
-				Metody.aktywnaOsoba = Metody.listaKlientow.get(idKontaKlienta);
-				System.out.println("Załogowałeś się jako " + Metody.aktywnaOsoba.getImieNazwisko());
+			if (haslo.equals(Metody.listaKlientow.get(idKontaKlienta).getHaslo())) {
+				Metody.aktywnaOsobaDostep = "klient";
+				Metody.idAktywnejOsoby = idKontaKlienta;
+				JOptionPane.showMessageDialog(null, "Witamy, " + Metody.listaKlientow.get(Metody.idAktywnejOsoby).getImieNazwisko());
 			}
 
 			else {
-				System.out.println("Zostało podane błędne hasło!");
+				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!");
 				return;
 			}
 
 		}
 
-		// Logowanie pracownika i sprawdzenie hasła
+		// Logowanie osoby zarządzającej i sprawdzenie hasła
 		else {
-			if (haslo == Metody.listaPracownikow.get(idKontaPracownika).getHaslo()) {
-				Metody.aktywnaOsoba = Metody.listaPracownikow.get(idKontaPracownika);
-				System.out.println("Załogowałeś się jako " + Metody.aktywnaOsoba.getImieNazwisko());
+			if (haslo.equals(Metody.listaOsobZarzadzajacych.get(idKontaOsobyZarzadzajacej).getHaslo())) {
+				Metody.idAktywnejOsoby = idKontaOsobyZarzadzajacej;
+				if (Metody.listaOsobZarzadzajacych.get(Metody.idAktywnejOsoby) instanceof Kierownik)
+					Metody.aktywnaOsobaDostep = "kierownik";
+				else
+					Metody.aktywnaOsobaDostep = "pracownik";
+				JOptionPane.showMessageDialog(null, "Witamy, " + Metody.listaOsobZarzadzajacych.get(Metody.idAktywnejOsoby).getImieNazwisko());
+			
 			}
 
 			else {
-				System.out.println("Zostało podane błędne hasło!");
+				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!");
 				return;
 			}
 		}

@@ -2,6 +2,7 @@ package Metody;
 
 import osoba.*;
 import Produkty.*;
+import Logowanie.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
@@ -9,9 +10,8 @@ import java.io.*;
 public class Metody {
 
 	// Pola_statyczne______________________________________________________________________________
-	public static Scanner scanner = new Scanner(System.in);
-	public static boolean czyKoniecProgramu = false;
-	public static Osoba aktywnaOsoba = null;
+	public static String aktywnaOsobaDostep;
+	public static int idAktywnejOsoby;
 
 	public static ArrayList<OsobaZarzadzajaca> listaOsobZarzadzajacych = new ArrayList<>();
 	public static ArrayList<Klient> listaKlientow = new ArrayList<>();
@@ -24,6 +24,21 @@ public class Metody {
 		wczytajPracownikow();
 		wczytajKierownikow();
 		// wczytajProdukty();
+	}
+
+	public static void wczytajSposobLogowania() {
+		try (BufferedReader is = new BufferedReader(new FileReader("./BazaDanych/SposobLogowania.txt"))) {
+			String sposob = is.readLine();
+			is.close();
+			if (sposob.equals("email"))
+				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_EmailHaslo());
+			else
+				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_LoginHaslo());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private static void wczytajKlientow() {
@@ -116,6 +131,20 @@ public class Metody {
 		zapiszPracownikow();
 		zapiszKierownikow();
 		// zapiszProdukty();
+	}
+
+	public static void zapiszSposobLogowania() {
+		try (BufferedWriter write = new BufferedWriter(new FileWriter("./BazaDanych/SposobLogowania.txt"))) {
+			if (MenuLogowanie.getPreferowaneLogowanie() instanceof Logowanie_LoginHaslo) {
+				write.write("login");
+			} else {
+				write.write("email");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private static void zapiszKlientow() {

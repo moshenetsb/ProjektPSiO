@@ -4,10 +4,10 @@ import adres.Adres;
 
 public abstract class OsobaZarzadzajaca extends Osoba {
 
+	private static final long serialVersionUID = 1L;
+
 	private String pesel;
 	private float ocena;
-
-
 
 	public OsobaZarzadzajaca(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres[] adres,
 			double saldoKonta, String pesel, float ocena) {

@@ -1,16 +1,15 @@
 package osoba;
 
-
 import adres.Adres;
 
 public class Klient extends Osoba {
-	
+
+	private static final long serialVersionUID = 1L;
 
 	private String promocjeKlienta;
 	private String[] historiaZakupow;
 	private String ranga;
-	//ranga Nowy, Średniozaawansowany, Stały
-
+	// ranga Nowy, Średniozaawansowany, Stały
 
 	public Klient(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres[] adres,
 			double saldoKonta, String promocjeKlienta, String[] historiaZakupow, String ranga) {
@@ -19,8 +18,6 @@ public class Klient extends Osoba {
 		this.historiaZakupow = historiaZakupow;
 		this.ranga = ranga;
 	}
-
-
 
 	public String getPromocjeKlienta() {
 		return promocjeKlienta;
@@ -38,20 +35,20 @@ public class Klient extends Osoba {
 		this.historiaZakupow = historiaZakupow;
 	}
 
-	public String ranga() { return ranga ;}
+	public String ranga() {
+		return ranga;
+	}
 
-	public void setRanga(String ranga) {this.ranga = ranga;}
-	
+	public void setRanga(String ranga) {
+		this.ranga = ranga;
+	}
+
 	public String toString() {
-		return "Klient [promocjeKlienta=" + getPromocjeKlienta() 
-				+ "]";
+		return "Klient [promocjeKlienta=" + getPromocjeKlienta() + "]";
 	}
 
-	public void kup(int id)
-	{
+	public void kup(int id) {
 
 	}
-
-	
 
 }

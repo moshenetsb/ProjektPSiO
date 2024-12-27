@@ -2,6 +2,6 @@ package Logowanie;
 
 public interface Logowanie {
 	
-	void logowanie();
+	void logowanie(String loginEmail, String haslo);
 
 }
