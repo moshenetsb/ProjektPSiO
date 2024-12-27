@@ -6,176 +6,176 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
 
-public class Metody{
+public class Metody {
 
+	// Pola_statyczne______________________________________________________________________________
 	public static Scanner scanner = new Scanner(System.in);
 	public static boolean czyKoniecProgramu = false;
 	public static Osoba aktywnaOsoba = null;
-	
-    public static ArrayList<Klient> listaKlientow = new ArrayList<>();
-    public static ArrayList<Pracownik> listaPracownikow = new ArrayList<>();
-   // public static ArrayList<Kierownik> listaKierownikow = new ArrayList<>();
-   // public static ArrayList<T> listaProduktow = new ArrayList<T>();
 
-    public static void wczytaj() {
-        wczytajKlientow();
-        wczytajPracownikow();
-       // wczytajKierownikow();
-       // wczytajProdukty();
-    }
+	public static ArrayList<OsobaZarzadzajaca> listaOsobZarzadzajacych = new ArrayList<>();
+	public static ArrayList<Klient> listaKlientow = new ArrayList<>();
+	public static ArrayList<Produkty> listaProduktow = new ArrayList<>();
 
-    public static void zapisz() {
-        zapiszKlientow();
-        zapiszPracownikow();
-       // zapiszKierownikow();
-       // zapiszProdukty();
-    }
+	// _Wczytywanie_obiektów_______________________________________________________________________
 
-    public static void wczytajKlientow() {
-        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/klienci.txt"))) {
-            Object obj1 = is.readObject();
-            Klient klient = (Klient) obj1;
-            listaKlientow.add(klient);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+	public static void wczytajDane() {
+		wczytajKlientow();
+		wczytajPracownikow();
+		wczytajKierownikow();
+		// wczytajProdukty();
+	}
+
+	public static void wczytajKlientow() {
+
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Klienci.ser"))) {
+			while (true) {
+				try {
+					Object obj1 = is.readObject();
+					listaKlientow.add((Klient) obj1);
+
+				} catch (EOFException e) { // Pokazuje koniec pliku
+					break;
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-    }
 
+	}
 
-    public static void wczytajPracownikow() {
-        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/pracownicy.txt"))) {
-            Object obj1 = is.readObject();
-            Pracownik pracownik = (Pracownik) obj1;
-            listaPracownikow.add(pracownik);
-        
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+	public static void wczytajPracownikow() {
+
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Pracownicy.ser"))) {
+			while (true) {
+				try {
+					Object obj1 = is.readObject();
+					listaOsobZarzadzajacych.add((Pracownik) obj1);
+
+				} catch (EOFException e) { // Pokazuje koniec pliku
+					break;
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
-   /* public static void wczytajKierownikow() {
-        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/kierownicy.txt"))) {
-            Object obj1 = is.readObject();
-            kier = (Kierownik) obj1;
-            listaKierownikow.add(kier);
-        }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    } */
+	public static void wczytajKierownikow() {
 
-  /*  public static void wczytajProdukty() {
-        File bazaProdukty = new File("BazaDanych/produkty.txt");
-        try (BufferedReader reader = new BufferedReader(new FileReader(bazaProdukty))) {
-            String linia;
-            while ((linia = reader.readLine()) != null) {
-                String[] dane = linia.split(",");
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Kierownicy.ser"))) {
+			while (true) {
+				try {
+					Object obj1 = is.readObject();
+					listaOsobZarzadzajacych.add((Kierownik) obj1);
 
-                if dane[0] == "Kategoria: gaming"
-                {
-                    Gaming produkt = new Gaming(dane[1], Double.parseDouble(dane[2]), dane[3], Integer.parseInt(dane[4]));
-                    listaProduktow.add(produkt);
-                }
+				} catch (EOFException e) { // Pokazuje koniec pliku
+					break;
+				}
+			}
 
-                else if dane[0] == "Kategoria: fotografia"
-                {
-                    Fotografia produkt = new Fotografia(dane[1], Double.parseDouble(dane[2]), dane[3], Integer.parseInt(dane[4]));
-                    listaProduktow.add(produkt);
-                }
+		} catch (IOException e) {
+			e.printStackTrace();
 
-                else
-                {
-                    Mieszane produkt = new Mieszane(dane[1], Double.parseDouble(dane[2]), dane[3], Integer.parseInt(dane[4]));
-                    listaProduktow.add(produkt);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-*/
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public static void zapiszKlientow() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("BazaDanych/klienci.txt")))
-        {
-           for (Klient klient : listaKlientow)
-           {
-                writer.write(klient.getLogin() + "," + klient.getEmail() + "," + klient.getHaslo() + "," + klient.getSaldoKonta());
-                writer.newLine();
-            }
-        }
-        catch (IOException e)
-        {
-             e.printStackTrace();
-       }
-    }
+	/*
+	 * public static void wczytajProdukty() { File bazaProdukty = new
+	 * File("BazaDanych/produkty.txt"); try (BufferedReader reader = new
+	 * BufferedReader(new FileReader(bazaProdukty))) { String linia; while ((linia =
+	 * reader.readLine()) != null) { String[] dane = linia.split(",");
+	 * 
+	 * if dane[0] == "Kategoria: gaming" { Gaming produkt = new Gaming(dane[1],
+	 * Double.parseDouble(dane[2]), dane[3], Integer.parseInt(dane[4]));
+	 * listaProduktow.add(produkt); }
+	 * 
+	 * else if dane[0] == "Kategoria: fotografia" { Fotografia produkt = new
+	 * Fotografia(dane[1], Double.parseDouble(dane[2]), dane[3],
+	 * Integer.parseInt(dane[4])); listaProduktow.add(produkt); }
+	 * 
+	 * else { Mieszane produkt = new Mieszane(dane[1], Double.parseDouble(dane[2]),
+	 * dane[3], Integer.parseInt(dane[4])); listaProduktow.add(produkt); } } } catch
+	 * (IOException e) { e.printStackTrace(); } }
+	 */
 
-    public static void zapiszPracownikow() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("BazaDanych/pracownicy.txt"))) {
-            for (Pracownik pracownik : listaPracownikow) {
-                writer.write(pracownik.getLogin() + "," + pracownik.getEmail() + "," + pracownik.getHaslo());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	// _Zapisywanie_obiektów________________________________________________________________________
 
+	public static void zapisz() {
+		zapiszKlientow();
+		zapiszPracownikow();
+		zapiszKierownikow();
+		// zapiszProdukty();
+	}
 
-    }
+	public static void zapiszKlientow() {
 
-   /* public static void zapiszKierownikow() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("BazaDanych/kierownicy.txt"))) {
-            for (Kierownik kierownik : listaKierownikow) {
-                writer.write(kierownik.getLogin() + "," + kierownik.getEmail() + "," + kierownik.getHaslo());
-                writer.newLine();
-        }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    } */
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Klienci.ser"))) {
+			for (Klient klient : listaKlientow) {
+				writeob.writeObject(klient);
+			}
 
-   /* public static void zapiszProdukty() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("BazaDanych/produkty.txt"))) {
-            for (Produkt produkt : listaProduktow) {
-                writer.write("Kategoria: " + produkt.getInstance() + "," + produkt.nazwaProduktu + "," + produkt.cena + "," + produkt.opis + "," + produkt.liczbaProduktu);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    } */
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	public static void zapiszPracownikow() {
 
- /*   public static void dodajProdukt() {
-    }
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Pracownicy.ser"))) {
+			for (OsobaZarzadzajaca osobaZarzadzajaca : listaOsobZarzadzajacych) {
+				if (osobaZarzadzajaca instanceof Pracownik)
+					writeob.writeObject(osobaZarzadzajaca);
+			}
 
-    public static void usunProdukt() {
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    public static void wystwietlProdukty() {
-        for (Produkt produkt : listaProduktow) {
-            System.out.println(produkt);
-        }
-    } */
+	}
 
-    public static void usunKlienta() {
-    }
+	public static void zapiszKierownikow() {
 
-    public static void wystwietlKlientow() {
-        for (Klient klient : listaKlientow) {
-            System.out.println(klient);
-        }
-    }
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Kierownicy.ser"))) {
+			for (OsobaZarzadzajaca osobaZarzadzajaca : listaOsobZarzadzajacych) {
+				if (osobaZarzadzajaca instanceof Kierownik)
+					writeob.writeObject(osobaZarzadzajaca);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/*
+	 * public static void zapiszProdukty() { try (BufferedWriter writer = new
+	 * BufferedWriter(new FileWriter("BazaDanych/produkty.txt"))) { for (Produkt
+	 * produkt : listaProduktow) { writer.write("Kategoria: " +
+	 * produkt.getInstance() + "," + produkt.nazwaProduktu + "," + produkt.cena +
+	 * "," + produkt.opis + "," + produkt.liczbaProduktu); writer.newLine(); } }
+	 * catch (IOException e) { e.printStackTrace(); } }
+	 */
+
+	/*
+	 * 
+	 * public static void wystwietlProdukty() { for (Produkt produkt :
+	 * listaProduktow) { System.out.println(produkt); } }
+	 */
+
+	public static void wystwietlKlientow() {
+		for (Klient klient : listaKlientow) {
+			System.out.println(klient);
+		}
+	}
 }
-
-
-
-
-
-
