@@ -26,9 +26,9 @@ public class Metody {
 		// wczytajProdukty();
 	}
 
-	public static void wczytajKlientow() {
+	private static void wczytajKlientow() {
 
-		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Klienci.ser"))) {
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("./BazaDanych/Klienci.ser"))) {
 			while (true) {
 				try {
 					Object obj1 = is.readObject();
@@ -48,9 +48,9 @@ public class Metody {
 
 	}
 
-	public static void wczytajPracownikow() {
+	private static void wczytajPracownikow() {
 
-		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Pracownicy.ser"))) {
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("./BazaDanych/Pracownicy.ser"))) {
 			while (true) {
 				try {
 					Object obj1 = is.readObject();
@@ -69,9 +69,9 @@ public class Metody {
 		}
 	}
 
-	public static void wczytajKierownikow() {
+	private static void wczytajKierownikow() {
 
-		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("BazaDanych/Kierownicy.ser"))) {
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("./BazaDanych/Kierownicy.ser"))) {
 			while (true) {
 				try {
 					Object obj1 = is.readObject();
@@ -111,16 +111,16 @@ public class Metody {
 
 	// _Zapisywanie_obiektów________________________________________________________________________
 
-	public static void zapisz() {
+	public static void zapiszDane() {
 		zapiszKlientow();
 		zapiszPracownikow();
 		zapiszKierownikow();
 		// zapiszProdukty();
 	}
 
-	public static void zapiszKlientow() {
+	private static void zapiszKlientow() {
 
-		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Klienci.ser"))) {
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Klienci.ser"))) {
 			for (Klient klient : listaKlientow) {
 				writeob.writeObject(klient);
 			}
@@ -130,9 +130,9 @@ public class Metody {
 		}
 	}
 
-	public static void zapiszPracownikow() {
+	private static void zapiszPracownikow() {
 
-		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Pracownicy.ser"))) {
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Pracownicy.ser"))) {
 			for (OsobaZarzadzajaca osobaZarzadzajaca : listaOsobZarzadzajacych) {
 				if (osobaZarzadzajaca instanceof Pracownik)
 					writeob.writeObject(osobaZarzadzajaca);
@@ -144,9 +144,9 @@ public class Metody {
 
 	}
 
-	public static void zapiszKierownikow() {
+	private static void zapiszKierownikow() {
 
-		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("BazaDanych/Kierownicy.ser"))) {
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Kierownicy.ser"))) {
 			for (OsobaZarzadzajaca osobaZarzadzajaca : listaOsobZarzadzajacych) {
 				if (osobaZarzadzajaca instanceof Kierownik)
 					writeob.writeObject(osobaZarzadzajaca);

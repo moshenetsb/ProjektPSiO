@@ -3,7 +3,7 @@ package osoba;
 
 import adres.Adres;
 
-public class Klient extends Osoba{
+public class Klient extends Osoba {
 	
 
 	private String promocjeKlienta;

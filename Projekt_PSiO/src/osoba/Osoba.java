@@ -1,8 +1,12 @@
 package osoba;
 
 import adres.Adres;
+import java.io.Serializable;
 
-public abstract class Osoba {
+public abstract class Osoba implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private String email;
 	private String haslo;
 	private String login;
@@ -11,10 +15,7 @@ public abstract class Osoba {
 	private Adres[] adres;
 
 	private double saldoKonta;
-	
-	
-	
-	
+
 	public Osoba(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres[] adres,
 			double saldoKonta) {
 		this.email = email;
@@ -26,20 +27,15 @@ public abstract class Osoba {
 		this.saldoKonta = saldoKonta;
 	}
 
-
 	public String toString() {
-		return "Klient: Nazwisko: " + NazwiskoImie +
-				" adres: "+ adres +
-				" email: " + email +
-				" wiek: " + wiek +
-				" saldo konta : " + saldoKonta;
+		return "Klient: Nazwisko: " + NazwiskoImie + " adres: " + adres + " email: " + email + " wiek: " + wiek
+				+ " saldo konta : " + saldoKonta;
 	}
-	
-	
+
 	public String getImieNazwisko() {
 		return NazwiskoImie;
 	}
-	
+
 	public void setNaziwskoImie(String NazwiskoImie) {
 		this.NazwiskoImie = NazwiskoImie;
 	}
@@ -84,11 +80,9 @@ public abstract class Osoba {
 		this.adres = adres;
 	}
 
-
 	public String getLogin() {
 		return login;
 	}
-
 
 	public void setLogin(String login) {
 		this.login = login;
