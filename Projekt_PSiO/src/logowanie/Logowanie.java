@@ -1,4 +1,4 @@
-package Logowanie;
+package logowanie;
 
 public interface Logowanie {
 	

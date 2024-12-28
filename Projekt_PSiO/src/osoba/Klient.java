@@ -6,12 +6,14 @@ public class Klient extends Osoba {
 
 	private static final long serialVersionUID = 1L;
 
+	// Składowe kłasy
 	private String promocjeKlienta;
 	private String[] historiaZakupow;
 	private String ranga;
 	// ranga Nowy, Średniozaawansowany, Stały
 
-	public Klient(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres[] adres,
+	// Konstruktor
+	public Klient(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
 			double saldoKonta, String promocjeKlienta, String[] historiaZakupow, String ranga) {
 		super(email, haslo, login, nazwiskoImie, wiek, adres, saldoKonta);
 		this.promocjeKlienta = promocjeKlienta;
@@ -19,6 +21,7 @@ public class Klient extends Osoba {
 		this.ranga = ranga;
 	}
 
+	// Getters and Setters
 	public String getPromocjeKlienta() {
 		return promocjeKlienta;
 	}

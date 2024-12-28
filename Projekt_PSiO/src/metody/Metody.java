@@ -1,10 +1,10 @@
-package Metody;
+package metody;
 
 import osoba.*;
-import Produkty.*;
-import Logowanie.*;
+import produkty.*;
+import logowanie.*;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.*;
 
 public class Metody {

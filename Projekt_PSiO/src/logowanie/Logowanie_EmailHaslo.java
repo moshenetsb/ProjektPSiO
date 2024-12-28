@@ -1,8 +1,8 @@
-package Logowanie;
+package logowanie;
 
 import javax.swing.JOptionPane;
 
-import Metody.Metody;
+import metody.Metody;
 import osoba.Kierownik;
 
 public class Logowanie_EmailHaslo implements Logowanie {

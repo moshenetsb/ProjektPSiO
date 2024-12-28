@@ -1,6 +1,6 @@
-package Logowanie;
+package logowanie;
 
-import Metody.Metody;
+import metody.Metody;
 
 public class MenuLogowanie {
 

@@ -4,19 +4,20 @@ import adres.Adres;
 import java.io.Serializable;
 
 public abstract class Osoba implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
+	// Składowe kłasy
 	private String email;
 	private String haslo;
 	private String login;
 	private String NazwiskoImie;
 	private int wiek;
-	private Adres[] adres;
-
+	private Adres adres;
 	private double saldoKonta;
 
-	public Osoba(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres[] adres,
+	// Konstruktor
+	public Osoba(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
 			double saldoKonta) {
 		this.email = email;
 		this.haslo = haslo;
@@ -32,6 +33,7 @@ public abstract class Osoba implements Serializable {
 				+ " saldo konta : " + saldoKonta;
 	}
 
+	// Getters and Setters
 	public String getImieNazwisko() {
 		return NazwiskoImie;
 	}
@@ -72,11 +74,11 @@ public abstract class Osoba implements Serializable {
 		this.haslo = haslo;
 	}
 
-	public Adres[] getAdres() {
+	public Adres getAdres() {
 		return adres;
 	}
 
-	public void setAdres(Adres[] adres) {
+	public void setAdres(Adres adres) {
 		this.adres = adres;
 	}
 

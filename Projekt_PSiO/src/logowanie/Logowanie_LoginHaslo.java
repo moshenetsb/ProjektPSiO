@@ -1,8 +1,9 @@
-package Logowanie;
+package logowanie;
 
-import Metody.Metody;
 import osoba.*;
 import javax.swing.*;
+
+import metody.Metody;
 
 public class Logowanie_LoginHaslo implements Logowanie {
 

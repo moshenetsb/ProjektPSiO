@@ -1,4 +1,4 @@
-package Produkty;
+package produkty;
 
 public abstract class Produkty{
 

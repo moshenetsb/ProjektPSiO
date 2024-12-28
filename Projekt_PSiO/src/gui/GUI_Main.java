@@ -1,7 +1,9 @@
 package gui;
 
-import Metody.*;
 import javax.swing.*;
+
+import metody.*;
+
 import java.awt.*;
 
 public class GUI_Main extends JFrame {

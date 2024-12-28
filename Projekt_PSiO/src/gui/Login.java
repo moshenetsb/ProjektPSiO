@@ -1,8 +1,9 @@
 package gui;
 
-import Metody.*;
+import logowanie.*;
+import metody.*;
 import osoba.*;
-import Logowanie.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

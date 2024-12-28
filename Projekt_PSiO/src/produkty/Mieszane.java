@@ -1,4 +1,4 @@
-package Produkty;
+package produkty;
 
 public class Mieszane extends Produkty {
 
