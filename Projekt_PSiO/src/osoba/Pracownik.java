@@ -7,9 +7,9 @@ public class Pracownik extends OsobaZarzadzajaca {
 	private static final long serialVersionUID = 1L;
 
 	// Konstruktor
-	public Pracownik(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
+	public Pracownik(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
 			double saldoKonta, String pesel, float ocena) {
-		super(email, haslo, login, nazwiskoImie, wiek, adres, saldoKonta, pesel, ocena);
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta, pesel, ocena);
 	}
 
 	// Przesłonięcie metod abstrakcyjnych
@@ -18,7 +18,7 @@ public class Pracownik extends OsobaZarzadzajaca {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void wyswietlStanProduktu() {
 		// TODO Auto-generated method stub

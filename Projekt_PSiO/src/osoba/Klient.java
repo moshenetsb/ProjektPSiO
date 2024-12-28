@@ -13,9 +13,9 @@ public class Klient extends Osoba {
 	// ranga Nowy, Średniozaawansowany, Stały
 
 	// Konstruktor
-	public Klient(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
+	public Klient(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
 			double saldoKonta, String promocjeKlienta, String[] historiaZakupow, String ranga) {
-		super(email, haslo, login, nazwiskoImie, wiek, adres, saldoKonta);
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
 		this.promocjeKlienta = promocjeKlienta;
 		this.historiaZakupow = historiaZakupow;
 		this.ranga = ranga;
@@ -47,7 +47,7 @@ public class Klient extends Osoba {
 	}
 
 	public String toString() {
-		return "Klient [promocjeKlienta=" + getPromocjeKlienta() + "]";
+		return "Klient: " + super.toString() + ", Promocje klienta: " + getPromocjeKlienta();
 	}
 
 	public void kup(int id) {

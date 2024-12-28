@@ -11,9 +11,9 @@ public abstract class OsobaZarzadzajaca extends Osoba {
 	private float ocena;
 
 	// Konstruktor
-	public OsobaZarzadzajaca(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
-			double saldoKonta, String pesel, float ocena) {
-		super(email, haslo, login, nazwiskoImie, wiek, adres, saldoKonta);
+	public OsobaZarzadzajaca(String email, String haslo, String login, String nazwisko, String imie, int wiek,
+			Adres adres, double saldoKonta, String pesel, float ocena) {
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
 		this.pesel = pesel;
 		this.ocena = ocena;
 	}
@@ -35,7 +35,7 @@ public abstract class OsobaZarzadzajaca extends Osoba {
 		this.ocena = ocena;
 	}
 
-	//Metody abstrakcyjne
+	// Metody abstrakcyjne
 	abstract public void wyswietlProdukty();
 
 	abstract public void wyswietlStanProduktu();

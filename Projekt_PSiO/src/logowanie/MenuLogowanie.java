@@ -20,8 +20,8 @@ public class MenuLogowanie {
 	// istnieje
 	public static int czyIstniejeLoginOsobyZarzadzajacej(String login) {
 
-		for (int i = 0; i < Metody.listaOsobZarzadzajacych.size(); i++) {
-			if (login.equals(Metody.listaOsobZarzadzajacych.get(i).getLogin()))
+		for (int i = 0; i < Metody.getListaOsobZarzadzajacych().size(); i++) {
+			if (login.equals(Metody.getListaOsobZarzadzajacych().get(i).getLogin()))
 				return i;
 		}
 
@@ -32,8 +32,8 @@ public class MenuLogowanie {
 	// istnieje
 	public static int czyIstniejeLoginKlienta(String login) {
 
-		for (int i = 0; i < Metody.listaKlientow.size(); i++) {
-			if (login.equals(Metody.listaKlientow.get(i).getLogin()))
+		for (int i = 0; i < Metody.getListaKlientow().size(); i++) {
+			if (login.equals(Metody.getListaKlientow().get(i).getLogin()))
 				return i;
 		}
 
@@ -44,8 +44,8 @@ public class MenuLogowanie {
 	// istnieje
 	public static int czyIstniejeEmailOsobyZarzadzajacej(String email) {
 
-		for (int i = 0; i < Metody.listaOsobZarzadzajacych.size(); i++) {
-			if (email.equals(Metody.listaOsobZarzadzajacych.get(i).getEmail()))
+		for (int i = 0; i < Metody.getListaOsobZarzadzajacych().size(); i++) {
+			if (email.equals(Metody.getListaOsobZarzadzajacych().get(i).getEmail()))
 				return i;
 		}
 
@@ -56,8 +56,8 @@ public class MenuLogowanie {
 	// istnieje
 	public static int czyIstniejeEmailKlienta(String email) {
 
-		for (int i = 0; i < Metody.listaKlientow.size(); i++) {
-			if (email.equals(Metody.listaKlientow.get(i).getEmail()))
+		for (int i = 0; i < Metody.getListaKlientow().size(); i++) {
+			if (email.equals(Metody.getListaKlientow().get(i).getEmail()))
 				return i;
 		}
 

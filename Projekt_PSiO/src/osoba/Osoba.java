@@ -11,35 +11,45 @@ public abstract class Osoba implements Serializable {
 	private String email;
 	private String haslo;
 	private String login;
-	private String NazwiskoImie;
+	private String nazwisko;
+	private String imie;
 	private int wiek;
 	private Adres adres;
 	private double saldoKonta;
 
 	// Konstruktor
-	public Osoba(String email, String haslo, String login, String nazwiskoImie, int wiek, Adres adres,
+	public Osoba(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
 			double saldoKonta) {
 		this.email = email;
 		this.haslo = haslo;
 		this.login = login;
-		NazwiskoImie = nazwiskoImie;
+		this.nazwisko = nazwisko;
+		this.imie = imie;
 		this.wiek = wiek;
 		this.adres = adres;
 		this.saldoKonta = saldoKonta;
 	}
 
 	public String toString() {
-		return "Klient: Nazwisko: " + NazwiskoImie + " adres: " + adres + " email: " + email + " wiek: " + wiek
-				+ " saldo konta : " + saldoKonta;
+		return "Nazwisko: " + nazwisko + ", Imie: " + imie + ", " + adres + ", Email: " + email + ", Wiek: "
+				+ wiek + ", Saldo konta : " + saldoKonta;
 	}
 
 	// Getters and Setters
-	public String getImieNazwisko() {
-		return NazwiskoImie;
+	public String getNazwisko() {
+		return nazwisko;
 	}
 
-	public void setNaziwskoImie(String NazwiskoImie) {
-		this.NazwiskoImie = NazwiskoImie;
+	public void setNazwisko(String nazwisko) {
+		this.nazwisko = nazwisko;
+	}
+
+	public String getImie() {
+		return imie;
+	}
+
+	public void setImie(String imie) {
+		this.imie = imie;
 	}
 
 	public int getWiek() {
