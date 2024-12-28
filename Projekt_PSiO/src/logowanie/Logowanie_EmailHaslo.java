@@ -23,11 +23,11 @@ public class Logowanie_EmailHaslo implements Logowanie {
 		// Logowanie klienta i sprawdzenie hasła
 		if (idKontaOsobyZarzadzajacej == -1) {
 
-			if (haslo.equals(Metody.listaKlientow.get(idKontaKlienta).getHaslo())) {
-				Metody.aktywnaOsobaDostep = "klient";
-				Metody.idAktywnejOsoby = idKontaKlienta;
+			if (haslo.equals(Metody.getListaKlientow().get(idKontaKlienta).getHaslo())) {
+				Metody.setAktywnaOsobaDostep("klient");
+				Metody.setLoginAktywnejOsoby(Metody.getListaKlientow().get(idKontaKlienta).getLogin());
 				JOptionPane.showMessageDialog(null,
-						"Witamy, " + Metody.listaKlientow.get(idKontaKlienta).getImieNazwisko());
+						"Witamy, " + Metody.getListaKlientow().get(idKontaKlienta).getImieNazwisko());
 
 			}
 
@@ -40,14 +40,14 @@ public class Logowanie_EmailHaslo implements Logowanie {
 
 		// Logowanie osoby zarządzającej i sprawdzenie hasła
 		else {
-			if (haslo.equals(Metody.listaOsobZarzadzajacych.get(idKontaOsobyZarzadzajacej).getHaslo())) {
-				Metody.idAktywnejOsoby = idKontaOsobyZarzadzajacej;
-				if (Metody.listaOsobZarzadzajacych.get(Metody.idAktywnejOsoby) instanceof Kierownik)
-					Metody.aktywnaOsobaDostep = "kierownik";
+			if (haslo.equals(Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getHaslo())) {
+				Metody.setLoginAktywnejOsoby(Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getLogin());
+				if (Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej) instanceof Kierownik)
+					Metody.setAktywnaOsobaDostep("kierownik");
 				else
-					Metody.aktywnaOsobaDostep = "pracownik";
-				JOptionPane.showMessageDialog(null, "Witamy, " + Metody.listaOsobZarzadzajacych.get(Metody.idAktywnejOsoby).getImieNazwisko());
-
+					Metody.setAktywnaOsobaDostep("pracownik");
+				JOptionPane.showMessageDialog(null, "Witamy, " + Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getImieNazwisko());
+			
 			}
 
 			else {

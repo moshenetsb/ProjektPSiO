@@ -9,11 +9,11 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Login extends JDialog {
-	// ___________TESTOWANIE_____________________________
-	//public static void main(String[] args) {
-	//	Metody.listaOsobZarzadzajacych.add(new Pracownik("ghf@gmail.com", "1234", "chleb", "Jan Padalecki", 18, null, 0, null, 0));
-	//	Login login = new Login();
-	//}
+	 //___________TESTOWANIE_____________________________
+	public static void main(String[] args) {
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ghf@gmail.com", "1234", "chleb", "Jan Padalecki", 18, null, 0, null, 0));
+		Login login = new Login();
+	}
 
 	// ____________________________________________________
 
