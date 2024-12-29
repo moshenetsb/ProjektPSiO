@@ -48,14 +48,17 @@ public class Klient extends Osoba {
 		this.ranga = ranga;
 	}
 
+	// Inne metody
 	@Override
 	public String toString() {
-		return "Klient [Promocje klienta: " + promocjeKlienta + ", Historia zakupow: " + historiaZakupow + ", Ranga: "
+		return "Klient [" + super.toString() +", Promocje klienta: " + promocjeKlienta + ", Historia zakupow: " + historiaZakupow + ", Ranga: "
 				+ ranga + "]";
 	}
 
 	public void kup(int id) {
 
 	}
+
+	
 
 }

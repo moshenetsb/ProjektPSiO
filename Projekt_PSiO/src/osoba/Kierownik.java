@@ -12,6 +12,11 @@ public class Kierownik extends OsobaZarzadzajaca {
 		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta, pesel, ocena);
 	}
 
+	@Override
+	public String toString() {
+		return "Kierownik [" + super.toString() + "]";
+	}
+
 	// Przesłonięcie metod abstrakcyjnych
 	@Override
 	public void wyswietlProdukty() {

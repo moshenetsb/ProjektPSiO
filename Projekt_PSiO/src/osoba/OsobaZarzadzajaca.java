@@ -18,6 +18,12 @@ public abstract class OsobaZarzadzajaca extends Osoba {
 		this.ocena = ocena;
 	}
 
+	// Inne metody
+	@Override
+	public String toString() {
+		return super.toString() + ", PESEL: " + pesel + ", Ocena: " + ocena;
+	}
+
 	// Getters and Setters
 	public String getPesel() {
 		return pesel;

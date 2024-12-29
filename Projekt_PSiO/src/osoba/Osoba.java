@@ -30,10 +30,12 @@ public abstract class Osoba implements Serializable {
 		this.saldoKonta = saldoKonta;
 	}
 
+	@Override
 	public String toString() {
-		return "Nazwisko: " + nazwisko + ", Imie: " + imie + ", " + adres + ", Email: " + email + ", Wiek: "
-				+ wiek + ", Saldo konta : " + saldoKonta;
+		return "Email: " + email + ", Haslo: " + haslo + ", Login: " + login + ", Nazwisko: " + nazwisko + ", Imie: "
+				+ imie + ", Wiek: " + wiek + ", " + adres + ", Saldo konta: " + saldoKonta;
 	}
+
 
 	// Getters and Setters
 	public String getNazwisko() {

@@ -12,13 +12,19 @@ public class Pracownik extends OsobaZarzadzajaca {
 		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta, pesel, ocena);
 	}
 
+	// Inne metody
+	@Override
+	public String toString() {
+		return "Pracownik [" + super.toString() + "]";
+	}
+
 	// Przesłonięcie metod abstrakcyjnych
 	@Override
 	public void wyswietlProdukty() {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void wyswietlStanProduktu() {
 		// TODO Auto-generated method stub
