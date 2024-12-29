@@ -14,10 +14,19 @@ public abstract class Produkty implements Serializable {
 	private int ilosc;
 	private String opis;
 
-	// Konstruktor
+	// Konstruktor dla utworzenia produktu na listaProduktow
 	public Produkty(String nazwa, float cena, int ilosc, String opis) {
 		this.kodProduktu = id;
 		id++;
+		this.nazwa = nazwa;
+		this.cena = cena;
+		this.ilosc = ilosc;
+		this.opis = opis;
+	}
+
+	// Konstruktor dla utworzenia produktu do listy Zakupy
+	public Produkty(int kodProduktu, String nazwa, float cena, int ilosc, String opis) {
+		this.kodProduktu = kodProduktu;
 		this.nazwa = nazwa;
 		this.cena = cena;
 		this.ilosc = ilosc;
