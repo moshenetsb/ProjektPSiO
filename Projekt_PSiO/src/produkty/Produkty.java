@@ -7,7 +7,7 @@ public abstract class Produkty implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// Składowe klasy
-	private static int id = 1;
+	public static int id = 1;
 	private int kodProduktu;
 	private String nazwa;
 	private float cena;

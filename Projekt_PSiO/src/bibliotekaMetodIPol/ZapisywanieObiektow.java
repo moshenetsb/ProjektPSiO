@@ -14,6 +14,7 @@ public class ZapisywanieObiektow {
 		zapiszProduktyFotografia();
 		zapiszProduktyGaming();
 		zapiszProduktyMieszane();
+		zapiszIDProoduktu();
 	}
 
 	public static void zapiszSposobLogowania() {
@@ -23,7 +24,19 @@ public class ZapisywanieObiektow {
 			} else {
 				write.write("email");
 			}
+			write.close();
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void zapiszIDProoduktu() {
+		try (BufferedWriter write = new BufferedWriter(new FileWriter("./BazaDanych/IDProduktu.txt"))) {
+			write.write(Produkty.id + "");
+			write.close();
+			System.out.println("ID produktu wczytano pomyślnie.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -81,7 +94,7 @@ public class ZapisywanieObiektow {
 					writeob.writeObject(produkt);
 			}
 			System.out.println("Lista produktów kłasy fotografia zapisana pomyślnie.");
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

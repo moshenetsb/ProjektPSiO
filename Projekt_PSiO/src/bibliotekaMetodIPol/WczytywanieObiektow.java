@@ -14,6 +14,7 @@ public class WczytywanieObiektow {
 		wczytajProduktyFotografia();
 		wczytajProduktyGaming();
 		wczytajProduktyMieszane();
+		wczytajIDProduktu();
 	}
 
 	public static void wczytajSposobLogowania() {
@@ -24,6 +25,18 @@ public class WczytywanieObiektow {
 				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_EmailHaslo());
 			else
 				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_LoginHaslo());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void wczytajIDProduktu() {
+		try (BufferedReader is = new BufferedReader(new FileReader("./BazaDanych/IDProduktu.txt"))) {
+			int id = Integer.parseInt(is.readLine());
+			Produkty.id = id;
+			is.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
