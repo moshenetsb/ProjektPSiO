@@ -1,64 +1,74 @@
 package produkty;
 
-public abstract class Produkty{
+import java.io.Serializable;
 
-	private static int id=1;
+public abstract class Produkty implements Serializable {
 
-	private int idProduktu;
-	private String nazwaProduktu;
-	private float cenaProduktu;
-	private int liczbaProduktu;
-	private String opisProduktu;
-	
-	public Produkty(String nazwaProduktu, float cenaProduktu, int liczbaProduktu, String opisProduktu) {
+	private static final long serialVersionUID = 1L;
+
+	// Składowe klasy
+	private static int id = 1;
+	private int kodProduktu;
+	private String nazwa;
+	private float cena;
+	private int ilosc;
+	private String opis;
+
+	// Konstruktor
+	public Produkty(String nazwa, float cena, int ilosc, String opis) {
+		this.kodProduktu = id;
 		id++;
-		this.nazwaProduktu=id;
-		this.nazwaProduktu = nazwaProduktu;
-		this.cenaProduktu = cenaProduktu;
-		this.liczbaProduktu = liczbaProduktu;
-		this.opisProduktu = opisProduktu;
+		this.nazwa = nazwa;
+		this.cena = cena;
+		this.ilosc = ilosc;
+		this.opis = opis;
 	}
 
+	// Getters and Setters
 	public int getIdProduktu() {
-		return idProduktu;
+		return kodProduktu;
 	}
 
 	public void setIdProduktu(int idProduktu) {
-		this.idProduktu = idProduktu;
+		this.kodProduktu = idProduktu;
 	}
 
 	public String getNazwaProduktu() {
-		return nazwaProduktu;
+		return nazwa;
 	}
+
 	public void setNazwaProduktu(String nazwaProduktu) {
-		this.nazwaProduktu = nazwaProduktu;
+		this.nazwa = nazwaProduktu;
 	}
+
 	public float getCenaProduktu() {
-		return cenaProduktu;
+		return cena;
 	}
+
 	public void setCenaProduktu(float cenaProduktu) {
-		this.cenaProduktu = cenaProduktu;
+		this.cena = cenaProduktu;
 	}
+
 	public int getLiczbaProduktu() {
-		return liczbaProduktu;
+		return ilosc;
 	}
+
 	public void setLiczbaProduktu(int liczbaProduktu) {
-		this.liczbaProduktu = liczbaProduktu;
+		this.ilosc = liczbaProduktu;
 	}
+
 	public String getOpisProduktu() {
-		return opisProduktu;
+		return opis;
 	}
+
 	public void setOpisProduktu(String opisProduktu) {
-		this.opisProduktu = opisProduktu;
+		this.opis = opisProduktu;
 	}
 
-
+	@Override
 	public String toString() {
-		return "Id: " + getIdProduktu() + "Produkty [nazwaProduktu=" + getNazwaProduktu() + ", cenaProduktu=" + getCenaProduktu() + ", liczbaProduktu="
-				+ getLiczbaProduktu() + ", opisProduktu=" + getOpisProduktu();
+		return "Kod: " + kodProduktu + ", Nazwa: " + nazwa + ", Cena: " + cena + ", Ilosc: " + ilosc + ", Opis: "
+				+ opis;
 	}
-	
-	
 
-	
 }

@@ -2,12 +2,15 @@ package produkty;
 
 public class Fotografia extends Produkty {
 
-	public Fotografia(int idProduktu, String nazwaProduktu, float cenaProduktu, int liczbaProduktu, String opisProduktu) {
-		super(idProduktu, nazwaProduktu, cenaProduktu, liczbaProduktu, opisProduktu);
+	private static final long serialVersionUID = 1L;
+
+	// Konstruktor
+	public Fotografia(String nazwa, float cena, int ilosc, String opis) {
+		super(nazwa, cena, ilosc, opis);
 	}
 
 	public String toString() {
-		return "Kategoria: fotografia" + super.toString();
+		return "Kategoria: fotografia, " + super.toString();
 	}
 
 }

@@ -2,12 +2,15 @@ package produkty;
 
 public class Gaming extends Produkty {
 
-	public Gaming(int idProduktu, String nazwaProduktu, float cenaProduktu, int liczbaProduktu, String opisProduktu) {
-		super(idProduktu, nazwaProduktu, cenaProduktu, liczbaProduktu, opisProduktu);
+	private static final long serialVersionUID = 1L;
+
+	// Konstruktor
+	public Gaming(String nazwa, float cena, int ilosc, String opis) {
+		super(nazwa, cena, ilosc, opis);
 	}
 
 	public String toString() {
-		return "Kategoria: gaming" + super.toString();
+		return "Kategoria: gaming, " + super.toString();
 	}
 
 }
