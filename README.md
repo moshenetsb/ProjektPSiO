@@ -1,1 +1,2 @@
-Zrobilem pierwsze klasy i pierwsza strategie
+Projekt PSiO
+Temat: zarządzanie online sklepem

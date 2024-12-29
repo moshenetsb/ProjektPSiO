@@ -13,7 +13,7 @@ public class Gaming extends Produkty {
 	public Gaming(int kodProduktu, String nazwa, float cena, int ilosc, String opis) {
 		super(kodProduktu, nazwa, cena, ilosc, opis);
 	}
-
+  
 	public String toString() {
 		return "Kategoria: gaming, " + super.toString();
 	}

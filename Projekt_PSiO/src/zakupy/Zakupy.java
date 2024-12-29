@@ -37,11 +37,11 @@ public class Zakupy implements Serializable {
 		this.cena = cena;
 	}
 
-	public double getCenaDoZapłaty() {
+	public double getCenaDoZaplaty() {
 		return cenaDoZaplaty;
 	}
 
-	public void setCenaDoZapłaty(double cenaDoZaplaty) {
+	public void setCenaDoZaplaty(double cenaDoZaplaty) {
 		this.cenaDoZaplaty = cenaDoZaplaty;
 	}
 

@@ -4,7 +4,7 @@ public class Fotografia extends Produkty {
 
 	private static final long serialVersionUID = 1L;
 
-	// Konstruktor dla utworzenia produktu na listaProduktow
+  // Konstruktor dla utworzenia produktu na listaProduktow
 	public Fotografia(String nazwa, float cena, int ilosc, String opis) {
 		super(nazwa, cena, ilosc, opis);
 	}
@@ -13,7 +13,7 @@ public class Fotografia extends Produkty {
 	public Fotografia(int kodProduktu, String nazwa, float cena, int ilosc, String opis) {
 		super(kodProduktu, nazwa, cena, ilosc, opis);
 	}
-
+  
 	public String toString() {
 		return "Kategoria: fotografia, " + super.toString();
 	}
