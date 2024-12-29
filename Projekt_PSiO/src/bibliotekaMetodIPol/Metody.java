@@ -2,12 +2,13 @@ package bibliotekaMetodIPol;
 
 import osoba.*;
 import produkty.*;
+import strategiaGUI.*;
 import java.util.ArrayList;;
 
 public class Metody {
 
 	// Pola_statyczne______________________________________________________________________________
-	private static String aktywnaOsobaDostep;
+	private static GUIstrategia wybraneGUI;;
 	private static String loginAktywnejOsoby;
 
 	private static ArrayList<OsobaZarzadzajaca> listaOsobZarzadzajacych = new ArrayList<>();
@@ -16,12 +17,12 @@ public class Metody {
 
 	// Gettery_i_Settery_pól_statycznych____________________________________________________
 
-	public static String getAktywnaOsobaDostep() {
-		return aktywnaOsobaDostep;
+	public static GUIstrategia getWybraneGUI() {
+		return wybraneGUI;
 	}
 
-	public static void setAktywnaOsobaDostep(String aktywnaOsobaDostep) {
-		Metody.aktywnaOsobaDostep = aktywnaOsobaDostep;
+	public static void setWybraneGUI(GUIstrategia wybraneGUI) {
+		Metody.wybraneGUI = wybraneGUI;
 	}
 
 	public static String getLoginAktywnejOsoby() {

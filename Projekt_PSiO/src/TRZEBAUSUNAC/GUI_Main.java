@@ -1,4 +1,4 @@
-package gui;
+package TRZEBAUSUNAC;
 
 import javax.swing.*;
 
@@ -13,8 +13,6 @@ public class GUI_Main extends JFrame {
 	private GUI_Main() {
 		// Tworzymy okno
 		frame = new JFrame("Nasz sklep");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(896, 576));
 		frame.setSize(1120, 720);
 		
 		// Menu Główne
@@ -40,11 +38,4 @@ public class GUI_Main extends JFrame {
 		menuBar.add(mnWyloguj);
 	}
 
-	public static void main(String[] args) {
-		// Metody.wczytajDane();
-		GUI_Main guiMain = new GUI_Main();
-		guiMain.frame.setVisible(true);
-
-		// Metody.zapiszDane();
-	}
 }

@@ -1,14 +1,15 @@
 package logowanie;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
+import strategiaGUI.*;
 import bibliotekaMetodIPol.Metody;
 import osoba.Kierownik;
 
 public class Logowanie_EmailHaslo implements Logowanie {
 
 	@Override
-	public void logowanie(String loginEmail, String haslo) {
+	public void logowanie(String loginEmail, String haslo, JFrame frame1) {
 
 		// Sprawdzenie istnienia użytkowników z podanym email
 		int idKontaOsobyZarzadzajacej = MenuLogowanie.szukajIDEmailZarzadzajacych(loginEmail);
@@ -24,7 +25,7 @@ public class Logowanie_EmailHaslo implements Logowanie {
 		if (idKontaOsobyZarzadzajacej == -1) {
 
 			if (haslo.equals(Metody.getListaKlientow().get(idKontaKlienta).getHaslo())) {
-				Metody.setAktywnaOsobaDostep("klient");
+				Metody.setWybraneGUI(new KlientGUI(frame1));
 				Metody.setLoginAktywnejOsoby(Metody.getListaKlientow().get(idKontaKlienta).getLogin());
 				JOptionPane.showMessageDialog(null,
 						"Witamy, " + Metody.getListaKlientow().get(idKontaKlienta).getImie() + " "
@@ -46,9 +47,9 @@ public class Logowanie_EmailHaslo implements Logowanie {
 				Metody.setLoginAktywnejOsoby(
 						Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getLogin());
 				if (Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej) instanceof Kierownik)
-					Metody.setAktywnaOsobaDostep("kierownik");
+					Metody.setWybraneGUI(new KierownikGUI(frame1));
 				else
-					Metody.setAktywnaOsobaDostep("pracownik");
+					Metody.setWybraneGUI(new PracownikGUI(frame1));
 				JOptionPane.showMessageDialog(null,
 						"Witamy, " + Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getImie() + " "
 								+ Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getNazwisko(),
