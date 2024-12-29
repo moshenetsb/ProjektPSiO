@@ -36,6 +36,7 @@ public class ZapisywanieObiektow {
 			for (Klient klient : Metody.getListaKlientow()) {
 				writeob.writeObject(klient);
 			}
+			System.out.println("Lista klientów zapisana pomyślnie.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -49,6 +50,7 @@ public class ZapisywanieObiektow {
 				if (osobaZarzadzajaca instanceof Pracownik)
 					writeob.writeObject(osobaZarzadzajaca);
 			}
+			System.out.println("Lista pracowników zapisana pomyślnie.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,6 +65,7 @@ public class ZapisywanieObiektow {
 				if (osobaZarzadzajaca instanceof Kierownik)
 					writeob.writeObject(osobaZarzadzajaca);
 			}
+			System.out.println("Lista kierowników zapisana pomyślnie.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -77,7 +80,8 @@ public class ZapisywanieObiektow {
 				if (produkt instanceof Fotografia)
 					writeob.writeObject(produkt);
 			}
-
+			System.out.println("Lista produktów kłasy fotografia zapisana pomyślnie.");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,6 +95,7 @@ public class ZapisywanieObiektow {
 				if (produkt instanceof Gaming)
 					writeob.writeObject(produkt);
 			}
+			System.out.println("Lista produktów kłasy gaming zapisana pomyślnie.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -105,6 +110,7 @@ public class ZapisywanieObiektow {
 				if (produkt instanceof Mieszane)
 					writeob.writeObject(produkt);
 			}
+			System.out.println("Lista produktów kłasy mieszane zapisana pomyślnie.");
 
 		} catch (IOException e) {
 			e.printStackTrace();

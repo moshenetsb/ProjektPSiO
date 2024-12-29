@@ -40,6 +40,7 @@ public class WczytywanieObiektow {
 					Metody.getListaKlientow().add((Klient) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista klientów wczytana pomyślnie.");
 					break;
 				}
 			}
@@ -62,6 +63,7 @@ public class WczytywanieObiektow {
 					Metody.getListaOsobZarzadzajacych().add((Pracownik) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista pracowników wczytana pomyślnie.");
 					break;
 				}
 			}
@@ -83,6 +85,7 @@ public class WczytywanieObiektow {
 					Metody.getListaOsobZarzadzajacych().add((Kierownik) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista kierowników wczytana pomyślnie.");
 					break;
 				}
 			}
@@ -103,6 +106,7 @@ public class WczytywanieObiektow {
 					Metody.getListaProduktow().add((Fotografia) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista produktów kłasy fotografia wczytana pomyślnie.");
 					break;
 				}
 			}
@@ -124,6 +128,7 @@ public class WczytywanieObiektow {
 					Metody.getListaProduktow().add((Gaming) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista produktów kłasy gaming wczytana pomyślnie.");
 					break;
 				}
 			}
@@ -145,6 +150,7 @@ public class WczytywanieObiektow {
 					Metody.getListaProduktow().add((Mieszane) obj1);
 
 				} catch (EOFException e) { // Pokazuje koniec pliku
+					System.out.println("Lista produktów kłasy mieszane wczytana pomyślnie.");
 					break;
 				}
 			}
