@@ -1,6 +1,8 @@
 package osoba;
 
+import java.util.ArrayList;
 import adres.Adres;
+import zakupy.Zakupy;
 
 public class Klient extends Osoba {
 
@@ -8,13 +10,13 @@ public class Klient extends Osoba {
 
 	// Składowe kłasy
 	private String promocjeKlienta;
-	private String[] historiaZakupow;
-	private String ranga;
+	private ArrayList<Zakupy> historiaZakupow;
+	private String ranga; // można zrobić strategie z rabatami
 	// ranga Nowy, Średniozaawansowany, Stały
 
 	// Konstruktor
 	public Klient(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
-			double saldoKonta, String promocjeKlienta, String[] historiaZakupow, String ranga) {
+			double saldoKonta, String promocjeKlienta, ArrayList<Zakupy> historiaZakupow, String ranga) {
 		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
 		this.promocjeKlienta = promocjeKlienta;
 		this.historiaZakupow = historiaZakupow;
@@ -30,11 +32,11 @@ public class Klient extends Osoba {
 		this.promocjeKlienta = promocjeKlienta;
 	}
 
-	public String[] getHistoriaZakupow() {
+	public ArrayList<Zakupy> getHistoriaZakupow() {
 		return historiaZakupow;
 	}
 
-	public void setHistoriaZakupow(String[] historiaZakupow) {
+	public void setHistoriaZakupow(ArrayList<Zakupy> historiaZakupow) {
 		this.historiaZakupow = historiaZakupow;
 	}
 
@@ -46,8 +48,10 @@ public class Klient extends Osoba {
 		this.ranga = ranga;
 	}
 
+	@Override
 	public String toString() {
-		return "Klient: " + super.toString() + ", Promocje klienta: " + getPromocjeKlienta();
+		return "Klient [Promocje klienta: " + promocjeKlienta + ", Historia zakupow: " + historiaZakupow + ", Ranga: "
+				+ ranga + "]";
 	}
 
 	public void kup(int id) {
