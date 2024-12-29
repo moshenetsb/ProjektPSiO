@@ -1,6 +1,6 @@
 package logowanie;
 
-import metody.Metody;
+import bibliotekaMetodIPol.Metody;
 
 public class MenuLogowanie {
 
@@ -18,7 +18,7 @@ public class MenuLogowanie {
 
 	// Zwraca -1, jeśli login nie istnieje lub indeks osoby w tablicy, jeśli
 	// istnieje
-	public static int czyIstniejeLoginOsobyZarzadzajacej(String login) {
+	public static int szukajIDLoginZarzadzajacych(String login) {
 
 		for (int i = 0; i < Metody.getListaOsobZarzadzajacych().size(); i++) {
 			if (login.equals(Metody.getListaOsobZarzadzajacych().get(i).getLogin()))
@@ -30,7 +30,7 @@ public class MenuLogowanie {
 
 	// Zwraca -1, jeśli login nie istnieje lub indeks osoby w tablicy, jeśli
 	// istnieje
-	public static int czyIstniejeLoginKlienta(String login) {
+	public static int szukajIDLoginKlienta(String login) {
 
 		for (int i = 0; i < Metody.getListaKlientow().size(); i++) {
 			if (login.equals(Metody.getListaKlientow().get(i).getLogin()))
@@ -42,7 +42,7 @@ public class MenuLogowanie {
 
 	// Zwraca -1, jeśli email nie istnieje lub indeks osoby w tablicy, jeśli
 	// istnieje
-	public static int czyIstniejeEmailOsobyZarzadzajacej(String email) {
+	public static int szukajIDEmailZarzadzajacych(String email) {
 
 		for (int i = 0; i < Metody.getListaOsobZarzadzajacych().size(); i++) {
 			if (email.equals(Metody.getListaOsobZarzadzajacych().get(i).getEmail()))
@@ -54,7 +54,7 @@ public class MenuLogowanie {
 
 	// Zwraca -1, jeśli email nie istnieje lub indeks osoby w tablicy, jeśli
 	// istnieje
-	public static int czyIstniejeEmailKlienta(String email) {
+	public static int szukajIDEmailKlienta(String email) {
 
 		for (int i = 0; i < Metody.getListaKlientow().size(); i++) {
 			if (email.equals(Metody.getListaKlientow().get(i).getEmail()))

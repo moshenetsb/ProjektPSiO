@@ -1,6 +1,11 @@
 package adres;
 
-public class Adres {
+import java.io.Serializable;
+
+public class Adres implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	// Składowe kłasy
 	private String panstwo;
 	private String kodPocztowy;

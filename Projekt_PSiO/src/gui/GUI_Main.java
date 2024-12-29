@@ -2,7 +2,7 @@ package gui;
 
 import javax.swing.*;
 
-import metody.*;
+import bibliotekaMetodIPol.*;
 
 import java.awt.*;
 

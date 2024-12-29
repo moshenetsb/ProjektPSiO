@@ -2,7 +2,7 @@ package logowanie;
 
 import javax.swing.JOptionPane;
 
-import metody.Metody;
+import bibliotekaMetodIPol.Metody;
 import osoba.Kierownik;
 
 public class Logowanie_EmailHaslo implements Logowanie {
@@ -11,12 +11,12 @@ public class Logowanie_EmailHaslo implements Logowanie {
 	public void logowanie(String loginEmail, String haslo) {
 
 		// Sprawdzenie istnienia użytkowników z podanym email
-		int idKontaOsobyZarzadzajacej = MenuLogowanie.czyIstniejeEmailOsobyZarzadzajacej(loginEmail);
-		int idKontaKlienta = MenuLogowanie.czyIstniejeEmailKlienta(loginEmail);
+		int idKontaOsobyZarzadzajacej = MenuLogowanie.szukajIDEmailZarzadzajacych(loginEmail);
+		int idKontaKlienta = MenuLogowanie.szukajIDEmailKlienta(loginEmail);
 
 		// Jeśli błędny email
 		if (idKontaOsobyZarzadzajacej == -1 && idKontaKlienta == -1) {
-			JOptionPane.showMessageDialog(null, "Podany email nie istnieje!");
+			JOptionPane.showMessageDialog(null, "Podany email nie istnieje!", "Błąd", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
@@ -27,12 +27,14 @@ public class Logowanie_EmailHaslo implements Logowanie {
 				Metody.setAktywnaOsobaDostep("klient");
 				Metody.setLoginAktywnejOsoby(Metody.getListaKlientow().get(idKontaKlienta).getLogin());
 				JOptionPane.showMessageDialog(null,
-						"Witamy, " + Metody.getListaKlientow().get(idKontaKlienta).getImieNazwisko());
+						"Witamy, " + Metody.getListaKlientow().get(idKontaKlienta).getImie() + " "
+								+ Metody.getListaKlientow().get(idKontaKlienta).getNazwisko(),
+						"Informacja logowania", JOptionPane.INFORMATION_MESSAGE);
 
 			}
 
 			else {
-				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!");
+				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!", "Błąd", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -41,17 +43,21 @@ public class Logowanie_EmailHaslo implements Logowanie {
 		// Logowanie osoby zarządzającej i sprawdzenie hasła
 		else {
 			if (haslo.equals(Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getHaslo())) {
-				Metody.setLoginAktywnejOsoby(Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getLogin());
+				Metody.setLoginAktywnejOsoby(
+						Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getLogin());
 				if (Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej) instanceof Kierownik)
 					Metody.setAktywnaOsobaDostep("kierownik");
 				else
 					Metody.setAktywnaOsobaDostep("pracownik");
-				JOptionPane.showMessageDialog(null, "Witamy, " + Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getImieNazwisko());
-			
+				JOptionPane.showMessageDialog(null,
+						"Witamy, " + Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getImie() + " "
+								+ Metody.getListaOsobZarzadzajacych().get(idKontaOsobyZarzadzajacej).getNazwisko(),
+						"Informacja logowania", JOptionPane.INFORMATION_MESSAGE);
+
 			}
 
 			else {
-				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!");
+				JOptionPane.showMessageDialog(null, "Zostało podane błędne hasło!", "Błąd", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}

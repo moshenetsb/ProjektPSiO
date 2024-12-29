@@ -1,17 +1,20 @@
 package gui;
 
 import logowanie.*;
-import metody.*;
 import osoba.*;
 
 import javax.swing.*;
+
+import bibliotekaMetodIPol.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class Login extends JDialog {
-	 //___________TESTOWANIE_____________________________
+	// ___________TESTOWANIE_____________________________
 	public static void main(String[] args) {
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ghf@gmail.com", "1234", "chleb", "Jan Padalecki", 18, null, 0, null, 0));
+		Metody.getListaOsobZarzadzajacych()
+				.add(new Pracownik("ghf@gmail.com", "1234", "chleb", "Padalecki", "Jan", 18, null, 0, null, 0));
 		Login login = new Login();
 	}
 
@@ -33,7 +36,7 @@ public class Login extends JDialog {
 
 		this.setLayout(null);
 
-		Metody.wczytajSposobLogowania();
+		WczytywanieObiektow.wczytajSposobLogowania();
 		lbLoginEmail = new JLabel();
 		if (MenuLogowanie.getPreferowaneLogowanie() instanceof Logowanie_LoginHaslo) {
 			lbLoginEmail.setText("Login:");
@@ -75,7 +78,7 @@ public class Login extends JDialog {
 					MenuLogowanie.setPreferowaneLogowanie(new Logowanie_LoginHaslo());
 					lbLoginEmail.setText("Login:");
 				}
-				Metody.zapiszSposobLogowania();
+				ZapisywanieObiektow.zapiszSposobLogowania();
 
 			}
 		});
@@ -83,7 +86,8 @@ public class Login extends JDialog {
 		// Logowanie
 		btnZaloguj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText(), new String(haslo.getPassword()));
+				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText(),
+						new String(haslo.getPassword()));
 			}
 		});
 
