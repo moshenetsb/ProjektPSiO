@@ -8,8 +8,8 @@ public class Pracownik extends OsobaZarzadzajaca {
 
 	// Konstruktor
 	public Pracownik(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
-			double saldoKonta, String pesel, float ocena) {
-		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta, pesel, ocena);
+			double saldoKonta, String pesel) {
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta, pesel);
 	}
 
 	// Inne metody

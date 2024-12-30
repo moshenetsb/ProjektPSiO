@@ -26,6 +26,8 @@ public class WczytywanieObiektow {
 			else
 				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_LoginHaslo());
 
+			System.out.println("Sposób logowania został wczytany pomyślnie.");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

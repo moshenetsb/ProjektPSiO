@@ -1,6 +1,9 @@
 package bibliotekaMetodIPol;
 
 import java.io.*;
+
+import javax.swing.JOptionPane;
+
 import logowanie.*;
 import osoba.*;
 import produkty.*;
@@ -15,6 +18,8 @@ public class ZapisywanieObiektow {
 		zapiszProduktyGaming();
 		zapiszProduktyMieszane();
 		zapiszIDProoduktu();
+		JOptionPane.showMessageDialog(null, "Wszystkie zmiany zostały zapisane", "Informacja zapisywania danych",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public static void zapiszSposobLogowania() {
@@ -24,6 +29,7 @@ public class ZapisywanieObiektow {
 			} else {
 				write.write("email");
 			}
+			System.out.println("Sposób logowania został zapisany pomyślnie.");
 			write.close();
 
 		} catch (IOException e) {

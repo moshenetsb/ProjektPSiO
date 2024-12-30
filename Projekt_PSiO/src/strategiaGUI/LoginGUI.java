@@ -20,8 +20,9 @@ public class LoginGUI implements GUIstrategia {
 	// Konstruktor
 	public LoginGUI(JFrame frame1) {
 		frame1.getContentPane().removeAll();
-		frame1.repaint();
 		GUIcreate(frame1);
+		frame1.revalidate();
+		frame1.repaint();
 	}
 
 	@Override

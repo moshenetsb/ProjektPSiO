@@ -1,8 +1,10 @@
 package strategiaGUI;
 
+import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.*;
 import bibliotekaMetodIPol.*;
+import inneGUI.*;
 
 public abstract class WspolneGUI implements GUIstrategia {
 	// Składowe kłasy
@@ -11,8 +13,9 @@ public abstract class WspolneGUI implements GUIstrategia {
 	// Konstruktor
 	public WspolneGUI(JFrame frame1) {
 		frame1.getContentPane().removeAll();
-		frame1.repaint();
 		GUIcreate(frame1);
+		frame1.revalidate();
+		frame1.repaint();
 	}
 
 	@Override
@@ -40,10 +43,18 @@ public abstract class WspolneGUI implements GUIstrategia {
 		// Informacja z konta użytkownika
 		mntmMojeKonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frame1.getContentPane().removeAll();
+				InfoOOsobieGUI strona = new InfoOOsobieGUI(frame1);
+				strona.getLbTytul().setText("---MOJE KONTO---");
+				JButton btnZmiany = new JButton("Zapisz zmiany");
+				frame1.getContentPane().add(BorderLayout.SOUTH, btnZmiany);
+				frame1.revalidate();
+				frame1.repaint();
+
 				// TODO dostęp do danych konta
 			}
 		});
-    
+
 		// Zapisywanie zmian obiektów
 		mntmZapisz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

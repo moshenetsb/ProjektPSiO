@@ -8,20 +8,18 @@ public abstract class OsobaZarzadzajaca extends Osoba {
 
 	// Składowe kłasy
 	private String pesel;
-	private float ocena;
 
 	// Konstruktor
 	public OsobaZarzadzajaca(String email, String haslo, String login, String nazwisko, String imie, int wiek,
-			Adres adres, double saldoKonta, String pesel, float ocena) {
+			Adres adres, double saldoKonta, String pesel) {
 		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
 		this.pesel = pesel;
-		this.ocena = ocena;
 	}
 
 	// Inne metody
 	@Override
 	public String toString() {
-		return super.toString() + ", PESEL: " + pesel + ", Ocena: " + ocena;
+		return super.toString() + ", PESEL: " + pesel;
 	}
 
 	// Getters and Setters
@@ -29,18 +27,10 @@ public abstract class OsobaZarzadzajaca extends Osoba {
 		return pesel;
 	}
 
-	public float getOcena() {
-		return ocena;
-	}
-
 	public void setPesel(String pesel) {
 		this.pesel = pesel;
 	}
-
-	public void setOcena(float ocena) {
-		this.ocena = ocena;
-	}
-
+	
 	// Metody abstrakcyjne
 	abstract public void wyswietlProdukty();
 

@@ -19,7 +19,7 @@ public class Main {
 		// Pierwsze konto w sklepie, jeśli jeszcze nie było
 		if (Metody.getListaOsobZarzadzajacych().isEmpty() && Metody.getListaKlientow().isEmpty())
 			Metody.getListaOsobZarzadzajacych()
-					.add(new Kierownik("admin@gmail.com", "admin", "admin", "Nazwisko", "Imie", 18, null, 0, "", 0));
+					.add(new Kierownik("admin@gmail.com", "admin", "admin", "Nazwisko", "Imie", 18, null, 0, ""));
 
 		@SuppressWarnings("unused")
 		GUImain oknoGlowne = new GUImain();
