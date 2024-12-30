@@ -2,17 +2,17 @@ package strategiaGUI;
 
 import javax.swing.JFrame;
 
-public class KlientGUI implements GUIstrategia {
+public class KlientGUI extends WspolneGUI {
 
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
-		frame1.getContentPane().removeAll();
-		frame1.repaint();
-		GUIcreate(frame1);
+		super(frame1);
 	}
 
 	@Override
 	public void GUIcreate(JFrame frame1) {
+		super.GUIcreate(frame1);
+		
 		// TODO Auto-generated method stub
 
 	}

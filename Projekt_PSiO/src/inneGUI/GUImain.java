@@ -1,8 +1,8 @@
-package strategiaGUI;
+package inneGUI;
 
 import javax.swing.*;
 import bibliotekaMetodIPol.*;
-
+import strategiaGUI.*;
 
 public class GUImain {
 

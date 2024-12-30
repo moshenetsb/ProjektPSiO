@@ -1,18 +1,19 @@
 package strategiaGUI;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 
-public abstract class OsobaZarzadzajacaGUI implements GUIstrategia {
+	// Konstruktor
+	public OsobaZarzadzajacaGUI(JFrame frame1) {
+		super(frame1);
+	}
 
 	@Override
 	public void GUIcreate(JFrame frame1) {
-		frame1.setTitle("Nasz Sklep");
-
+		super.GUIcreate(frame1);
+		
 		// TODO wygłąd menu dla osoby zarządzającej (współne)
 		// jeśli trzeba, to można zmienić rozmiar
 

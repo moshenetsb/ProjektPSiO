@@ -3,9 +3,7 @@ package strategiaGUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
 import bibliotekaMetodIPol.*;
 import logowanie.*;
 
@@ -51,6 +49,7 @@ public class LoginGUI implements GUIstrategia {
 		panel1.add(lbHaslo);
 
 		haslo = new JPasswordField(15);
+		haslo.setEchoChar('*');
 		panel1.add(haslo);
 
 		btnZaloguj = new JButton("Zaloguj");
@@ -59,8 +58,22 @@ public class LoginGUI implements GUIstrategia {
 		btnSposobLog = new JButton("Inny sposob logowania");
 		panel1.add(btnSposobLog);
 
+		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
+		haslo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				haslo.setEchoChar((char) 0);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				haslo.setEchoChar('*');
+			}
+		});
+
 		// Zmiana sposobu logowania
 		btnSposobLog.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (MenuLogowanie.getPreferowaneLogowanie() instanceof Logowanie_LoginHaslo) {
 					MenuLogowanie.setPreferowaneLogowanie(new Logowanie_EmailHaslo());
@@ -76,6 +89,7 @@ public class LoginGUI implements GUIstrategia {
 
 		// Logowanie
 		btnZaloguj.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText(),
 						new String(haslo.getPassword()), frame1);

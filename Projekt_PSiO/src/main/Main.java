@@ -1,12 +1,14 @@
 package main;
 
 import bibliotekaMetodIPol.*;
+import inneGUI.*;
 import osoba.*;
-import strategiaGUI.*;
 
 public class Main {
 
 	public static void main(String[] args) {
+		//Metody.getListaKlientow().add(new Klient("admin@gmail.com", "klient", "klient", "Nazwisko", "Imie", 18, null, 0, null, null, null));
+
 		start();
 		
 	}
@@ -19,6 +21,7 @@ public class Main {
 			Metody.getListaOsobZarzadzajacych()
 					.add(new Kierownik("admin@gmail.com", "admin", "admin", "Nazwisko", "Imie", 18, null, 0, "", 0));
 
+		@SuppressWarnings("unused")
 		GUImain oknoGlowne = new GUImain();
 	}
 
