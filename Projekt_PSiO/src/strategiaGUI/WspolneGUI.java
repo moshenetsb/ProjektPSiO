@@ -27,6 +27,7 @@ public abstract class WspolneGUI implements GUIstrategia {
 		// Menu ogólne (dla wszystkich)
 		JMenu mnOgolne = new JMenu("Ogólne");
 		menuBar.add(mnOgolne);
+
 		JMenuItem mntmMojeKonto = new JMenuItem("Moje konto");
 		mnOgolne.add(mntmMojeKonto);
 
@@ -42,7 +43,7 @@ public abstract class WspolneGUI implements GUIstrategia {
 				// TODO dostęp do danych konta
 			}
 		});
-
+    
 		// Zapisywanie zmian obiektów
 		mntmZapisz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
