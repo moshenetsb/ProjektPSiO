@@ -27,7 +27,7 @@ public class WczytywanieObiektow {
 				MenuLogowanie.setPreferowaneLogowanie(new Logowanie_LoginHaslo());
 
 			System.out.println("Sposób logowania został wczytany pomyślnie.");
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,8 +36,13 @@ public class WczytywanieObiektow {
 
 	private static void wczytajIDProduktu() {
 		try (BufferedReader is = new BufferedReader(new FileReader("./BazaDanych/IDProduktu.txt"))) {
-			int id = Integer.parseInt(is.readLine());
-			Produkty.id = id;
+			try {
+				int id = Integer.parseInt(is.readLine());
+				Produkty.id = id;
+			} catch (NumberFormatException e) {
+				System.out.println("Błędna informacja w bazie danych o ID Produktu.");
+			}
+
 			is.close();
 
 		} catch (IOException e) {

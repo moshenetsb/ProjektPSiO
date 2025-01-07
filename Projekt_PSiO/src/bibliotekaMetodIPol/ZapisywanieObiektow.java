@@ -1,16 +1,14 @@
 package bibliotekaMetodIPol;
 
 import java.io.*;
-
-import javax.swing.JOptionPane;
-
+import javax.swing.*;
 import logowanie.*;
 import osoba.*;
 import produkty.*;
 
 public class ZapisywanieObiektow {
 
-	public static void zapiszDane() {
+	public static void zapiszDane(JFrame frame1) {
 		zapiszKlientow();
 		zapiszPracownikow();
 		zapiszKierownikow();
@@ -18,7 +16,7 @@ public class ZapisywanieObiektow {
 		zapiszProduktyGaming();
 		zapiszProduktyMieszane();
 		zapiszIDProoduktu();
-		JOptionPane.showMessageDialog(null, "Wszystkie zmiany zostały zapisane", "Informacja zapisywania danych",
+		JOptionPane.showMessageDialog(frame1, "Zmiany zostały zapisane", "Informacja zapisywania danych",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -42,7 +40,7 @@ public class ZapisywanieObiektow {
 		try (BufferedWriter write = new BufferedWriter(new FileWriter("./BazaDanych/IDProduktu.txt"))) {
 			write.write(Produkty.id + "");
 			write.close();
-			System.out.println("ID produktu wczytano pomyślnie.");
+			System.out.println("ID produktu zapisano pomyślnie.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

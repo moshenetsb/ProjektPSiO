@@ -59,31 +59,72 @@ public abstract class WspolneGUI implements GUIstrategia {
 		// Zapisywanie zmian obiektów
 		mntmZapisz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ZapisywanieObiektow.zapiszDane();
+				int confirm = JOptionPane.showConfirmDialog(frame1, "Czy chcesz zapisać zmiany?",
+						"Potwierdzenie zapisywania danych", JOptionPane.YES_NO_OPTION);
+
+				if (confirm == JOptionPane.YES_OPTION)
+					ZapisywanieObiektow.zapiszDane(frame1);
+			}
+		});
+
+		// Zapisywanie zmian po zamknięciu programu
+		frame1.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				int confirm = JOptionPane.showConfirmDialog(frame1, "Czy chcesz zapisać zmiany?",
+						"Potwierdzenie zapisywania danych", JOptionPane.YES_NO_OPTION);
+
+				if (confirm == JOptionPane.YES_OPTION) {
+					ZapisywanieObiektow.zapiszDane(frame1);
+					frame1.dispose();
+				} else if (confirm == JOptionPane.NO_OPTION)
+					frame1.dispose();
+
 			}
 		});
 
 		// Wylogowanie
 		mntmWyloguj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				closeAllExceptMain(frame1);
-				
-				Metody.setLoginAktywnejOsoby(null);
-				frame1.setJMenuBar(null);
-				Metody.setWybraneGUI(new LoginGUI(frame1));
+
+				int confirmWyloguj = JOptionPane.showConfirmDialog(frame1, "Czy na pewno chcesz się wylogować?",
+						"Potwierdzenie wylogowania", JOptionPane.YES_NO_OPTION);
+
+				if (confirmWyloguj == JOptionPane.YES_OPTION) {
+
+					// Pytamy czy zapisać zmiany
+					int confirmSave = JOptionPane.showConfirmDialog(frame1, "Czy chcesz zapisać zmiany?",
+							"Potwierdzenie zapisywania danych", JOptionPane.YES_NO_OPTION);
+
+					if (confirmSave == JOptionPane.YES_OPTION)
+						ZapisywanieObiektow.zapiszDane(frame1);
+
+					// Usuwamy możliwość zapisać dane przez zamknięcie okna
+					for (WindowListener listener : frame1.getWindowListeners())
+		                frame1.removeWindowListener(listener);
+
+					// Zostawiamy tylko główny frame
+					closeAllExceptMain(frame1);
+
+					// Zmieniamy wypełnienie okna
+					Metody.setLoginAktywnejOsoby(null);
+					frame1.setJMenuBar(null);
+					Metody.setWybraneGUI(new LoginGUI(frame1));
+
+				}
+
 			}
 		});
 
 	}
-	
+
 	private void closeAllExceptMain(JFrame oknoGlowne) {
-        for (Window window : Window.getWindows()) {
-            // Sprawdzamy, czy okno nie jest głównym i czy jest widoczne
-            if (window != oknoGlowne && window.isVisible()) {
-                // Zamykamy okno
-                window.dispose();
-            }
-        }
+		for (Window window : Window.getWindows()) {
+			// Sprawdzamy, czy okno nie jest głównym i czy jest widoczne
+			if (window != oknoGlowne && window.isVisible()) {
+				// Zamykamy okno
+				window.dispose();
+			}
+		}
 	}
 
 }
