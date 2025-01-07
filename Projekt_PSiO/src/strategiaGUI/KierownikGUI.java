@@ -68,7 +68,9 @@ public class KierownikGUI extends OsobaZarzadzajacaGUI {
         String[] columnNames = {"ID", "Imię", "Nazwisko", "Email", "Ranga"};    
         
         klientTableModel = new DefaultTableModel(columnNames, 0) {
-        	public boolean isCellEditable(int row, int column) {
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
@@ -168,7 +170,9 @@ public class KierownikGUI extends OsobaZarzadzajacaGUI {
         String[] columnNames = {"ID", "Imię", "Nazwisko", "Email", "Ranga"};
         
         DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0){
-        	public boolean isCellEditable(int row, int column) {
+        	private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };

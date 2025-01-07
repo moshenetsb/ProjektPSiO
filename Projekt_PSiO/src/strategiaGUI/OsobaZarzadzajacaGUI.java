@@ -13,13 +13,12 @@ import java.util.ArrayList;
 public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 
 	// Składowe kłasy
+	private JFrame frame1;
 	private JPanel contentPanel;
 	private JPanel mainProductPanel;
 	private JPanel searchPanel;
 	private DefaultTableModel tableModel;
 	private JTable productsTable;
-	private CardLayout cardLayout;
-	private JPanel cardPanel;
 	private JTextField nameField;
 	private JTextField priceField;
 	private JTextField quantityField;
@@ -30,24 +29,8 @@ public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 	// Konstruktor
 	public OsobaZarzadzajacaGUI(JFrame frame1) {
 		super(frame1);
-		contentPanel = new JPanel(new BorderLayout());
-		frame1.getContentPane().add(contentPanel, BorderLayout.CENTER);
-		initializeComponents();
+		this.frame1 = frame1;
 
-	}
-
-	private void initializeComponents() {
-		cardLayout = new CardLayout();
-		cardPanel = new JPanel(cardLayout);
-		mainProductPanel = createMainProductPanel();
-		searchPanel = createSearchPanel();
-
-		JScrollPane mainScrollPane = new JScrollPane(mainProductPanel);
-		JScrollPane searchScrollPane = new JScrollPane(searchPanel);
-
-		cardPanel.add(mainScrollPane, "products");
-		cardPanel.add(searchScrollPane, "search");
-		contentPanel.add(cardPanel, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -56,9 +39,14 @@ public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 		createToolsMenu(frame1);
 	}
 
+	private void initializeComponents() {
+		contentPanel = new JPanel(new BorderLayout());
+		frame1.getContentPane().add(contentPanel, BorderLayout.CENTER);
+
+	}
+
 	private void createToolsMenu(JFrame frame1) {
 		JMenu toolsMenu = new JMenu("Produkty");
-		JMenu productsSubmenu = new JMenu("Produkty");
 
 		JMenuItem manageProducts = new JMenuItem("Zarządzaj produktami");
 		JMenuItem searchProducts = new JMenuItem("Wyszukaj produkty");
@@ -66,11 +54,10 @@ public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 		manageProducts.addActionListener(e -> showProductManagement());
 		searchProducts.addActionListener(e -> showProductSearch());
 
-		productsSubmenu.add(manageProducts);
-		productsSubmenu.add(searchProducts);
-		toolsMenu.add(productsSubmenu);
-
+		toolsMenu.add(manageProducts);
+		toolsMenu.add(searchProducts);
 		frame1.getJMenuBar().add(toolsMenu);
+
 	}
 
 	private JPanel createMainProductPanel() {
@@ -286,9 +273,9 @@ public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 		sortOrder.addActionListener(e -> searchListener.changedUpdate(null));
 
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		JButton backButton = new JButton("Powrót");
-		backButton.addActionListener(e -> showProductManagement());
-		buttonPanel.add(backButton);
+		JButton backProductManagementButton = new JButton("Zarządzanie produktami");
+		backProductManagementButton.addActionListener(e -> showProductManagement());
+		buttonPanel.add(backProductManagementButton);
 
 		panel.add(searchControls, BorderLayout.NORTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
@@ -559,10 +546,29 @@ public abstract class OsobaZarzadzajacaGUI extends WspolneGUI {
 	}
 
 	private void showProductManagement() {
-		cardLayout.show(cardPanel, "products");
+		frame1.getContentPane().removeAll();
+
+		initializeComponents();
+
+		mainProductPanel = createMainProductPanel();
+		JScrollPane mainScrollPane = new JScrollPane(mainProductPanel);
+		contentPanel.add(mainScrollPane, BorderLayout.CENTER);
+
+		frame1.revalidate();
+		frame1.repaint();
 	}
 
 	private void showProductSearch() {
-		cardLayout.show(cardPanel, "search");
+		frame1.getContentPane().removeAll();
+
+		initializeComponents();
+
+		searchPanel = createSearchPanel();
+		JScrollPane searchScrollPane = new JScrollPane(searchPanel);
+		contentPanel.add(searchScrollPane, BorderLayout.CENTER);
+
+		frame1.revalidate();
+		frame1.repaint();
+
 	}
 }

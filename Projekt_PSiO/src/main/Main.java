@@ -29,17 +29,17 @@ public class Main {
 	private static void testoweDane() {
 		// Osoby
 		Metody.getListaKlientow()
-				.add(new Klient("b@gmail.com", "ananas", "aaa", "Nazwisko", "Imie", 18, null, 0, null, null));
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ccc@gmail.com", "aaaaaa", "bbbbbb", "Nazwiskooooo",
-				"Imieeeee", 22, null, 200.0, "423432324324"));
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ccc@gmail.com", "aaaaaa", "bbbbbb", "Nazwiskooooo",
-				"Imieeeee", 22, null, 200.0, "423432324324"));
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ccc@gmail.com", "aaaaaa", "bbbbbb", "Nazwiskooooo",
-				"Imieeeee", 22, null, 200.0, "423432324324"));
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ccc@gmail.com", "aaaaaa", "bbbbbb", "Nazwiskooooo",
-				"Imieeeee", 22, null, 200.0, "423432324324"));
-		Metody.getListaOsobZarzadzajacych().add(new Pracownik("ccc@gmail.com", "aaaaaa", "bbbbbb", "Nazwiskooooo",
-				"Imieeeee", 22, null, 200.0, "423432324324"));
+				.add(new Klient("klient1@gmail.com", "word", "mójlogin", "Ivanov", "Ivan", 18, null, 0, null, null));
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("pracownik1@gmail.com", "1234", "plogin1", "Poręba",
+				"Piotr", 25, null, 200.0, "423432324324"));
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("pracownik2@gmail.com", "12345", "plogin2", "Lenkiewicz",
+				"Oleksandr", 28, null, 900.0, "42376232432"));
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("pracownik3@gmail.com", "123456", "plogin3", "Witecka",
+				"Amelia", 22, null, 100.0, "24343232432"));
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("pracownik4@gmail.com", "1234567", "plogin4", "Vova",
+				"Antoni", 27, null, 700.0, "98343232432"));
+		Metody.getListaOsobZarzadzajacych().add(new Pracownik("pracownik5@gmail.com", "1234567", "plogin5", "Kotok",
+				"Julia", 18, null, 1100.0, "27343232432"));
 
 		// Produkty
 		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null));

@@ -2,6 +2,7 @@ package strategiaGUI;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
+import java.awt.*;
 import javax.swing.*;
 import bibliotekaMetodIPol.*;
 import inneGUI.*;
@@ -65,12 +66,24 @@ public abstract class WspolneGUI implements GUIstrategia {
 		// Wylogowanie
 		mntmWyloguj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				closeAllExceptMain(frame1);
+				
 				Metody.setLoginAktywnejOsoby(null);
 				frame1.setJMenuBar(null);
 				Metody.setWybraneGUI(new LoginGUI(frame1));
 			}
 		});
 
+	}
+	
+	private void closeAllExceptMain(JFrame oknoGlowne) {
+        for (Window window : Window.getWindows()) {
+            // Sprawdzamy, czy okno nie jest głównym i czy jest widoczne
+            if (window != oknoGlowne && window.isVisible()) {
+                // Zamykamy okno
+                window.dispose();
+            }
+        }
 	}
 
 }

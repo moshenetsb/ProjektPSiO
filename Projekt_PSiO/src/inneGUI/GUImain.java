@@ -20,7 +20,6 @@ public class GUImain {
 	private void wspolneDlaGUI() {
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.setResizable(false);
-		frame1.setLocationRelativeTo(null);
 		frame1.setVisible(true);
 	}
 }
