@@ -85,6 +85,10 @@ public class LoginGUI implements GUIstrategia {
 				}
 				ZapisywanieObiektow.zapiszSposobLogowania();
 
+				// Oczyszczenie tekstu
+				txfLoginEmail.setText("");
+				haslo.setText("");
+
 			}
 		});
 

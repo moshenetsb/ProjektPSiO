@@ -22,7 +22,7 @@ public abstract class WspolneGUI implements GUIstrategia {
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		frame1.setTitle("Nasz Sklep");
-		frame1.setSize(900, 700); // TODO ustawić potrzebny rozmiar
+		frame1.setSize(900, 700);
 
 		// Główne menu
 		menuBar = new JMenuBar();
