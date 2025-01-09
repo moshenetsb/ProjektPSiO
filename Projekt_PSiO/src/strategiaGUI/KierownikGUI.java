@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import osoba.*;
 import adres.Adres;
+import promocjaStrategia.*;
 
 public class KierownikGUI extends OsobaZarzadzajacaGUI {
 
@@ -151,7 +152,7 @@ public class KierownikGUI extends OsobaZarzadzajacaGUI {
         int result = JOptionPane.showConfirmDialog(null, panel, "Dodaj Klienta", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             Klient nowyKlient = new Klient(emailField.getText(), "", "", nazwiskoField.getText(),
-                    imieField.getText(), 0, new Adres("", "", "", null, null, null), 0, "", new ArrayList<>());
+                    imieField.getText(), 0, new Adres("", "", "", null, null, null), 0, new PromocjaPodstawowa(), new ArrayList<>(), new ArrayList<>());
             listaKlientow.add(nowyKlient);
             refreshClientTable();
         }

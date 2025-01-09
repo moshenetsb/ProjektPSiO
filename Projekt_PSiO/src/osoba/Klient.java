@@ -3,30 +3,33 @@ package osoba;
 import java.util.ArrayList;
 import adres.Adres;
 import zakupy.Zakupy;
+import promocjaStrategia.*;
 
 public class Klient extends Osoba {
 
 	private static final long serialVersionUID = 1L;
 
 	// Składowe kłasy
-	private String promocjeKlienta;// ranga Nowy, Średniozaawansowany, Stały
+	private Promocja promocjaKlienta;// PromocjaPodstawowa (0%) PromocjaStudenta(10%) PromocjaStalegoKlienta (20%)
 	private ArrayList<Zakupy> historiaZakupow;
+	private ArrayList<Zakupy> koszyk;
 
 	// Konstruktor
 	public Klient(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
-			double saldoKonta, String promocjeKlienta, ArrayList<Zakupy> historiaZakupow) {
+			double saldoKonta, Promocja promocjaKlienta, ArrayList<Zakupy> historiaZakupow, ArrayList<Zakupy> koszyk) {
 		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
-		this.promocjeKlienta = promocjeKlienta;
+		this.promocjaKlienta = promocjaKlienta;
 		this.historiaZakupow = historiaZakupow;
+		this.koszyk = koszyk;
 	}
 
 	// Getters and Setters
-	public String getPromocjeKlienta() {
-		return promocjeKlienta;
+	public Promocja getPromocjaKlienta() {
+		return promocjaKlienta;
 	}
 
-	public void setPromocjeKlienta(String promocjeKlienta) {
-		this.promocjeKlienta = promocjeKlienta;
+	public void setPromocjaKlienta(Promocja promocjaKlienta) {
+		this.promocjaKlienta = promocjaKlienta;
 	}
 
 	public ArrayList<Zakupy> getHistoriaZakupow() {
@@ -37,16 +40,23 @@ public class Klient extends Osoba {
 		this.historiaZakupow = historiaZakupow;
 	}
 
+	public ArrayList<Zakupy> getKoszyk() {
+		return koszyk;
+	}
+
+	public void setKoszyk(ArrayList<Zakupy> koszyk) {
+		this.koszyk = koszyk;
+	}
+
 	// Inne metody
 	@Override
 	public String toString() {
-		return "Klient [" + super.toString() +", Promocje klienta: " + promocjeKlienta + ", Historia zakupow: " + historiaZakupow + "]";
+		return "Klient [" + super.toString() + ", Promocje klienta: " + promocjaKlienta.promocja() + "%, Historia zakupow: "
+				+ historiaZakupow + ", Koszyk klienta: " + koszyk + "]";
 	}
 
-	public void kup(int id) {
-
+	public void kup() {
+		
 	}
-
-	
 
 }
