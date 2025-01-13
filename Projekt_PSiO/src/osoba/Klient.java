@@ -64,7 +64,7 @@ public class Klient extends Osoba {
 
 			koszyk.setCenaDoZaplaty(koszyk.obliczCene() * (1 - this.promocjaKlienta.promocja() / 100.0));
 
-			if (super.getSaldoKonta() < koszyk.getCenaDoZaplaty()) {
+			if (!Metody.czyWystarczyPieniedzy(super.getLogin(), koszyk.getCenaDoZaplaty())) {
 				JOptionPane.showMessageDialog(frame1, "Brakuje pięniędzy! Doładuj konto i wróć.", "Proces kupowania",
 						JOptionPane.ERROR_MESSAGE);
 
@@ -80,17 +80,17 @@ public class Klient extends Osoba {
 	}
 
 	private void odswiezIloscProduktow() {
-		
+
 		for (Produkty produkt : koszyk.getListaProduktow()) {
 			Produkty temp = Metody.znajdzProduktPoID(produkt.getIdProduktu());
 			temp.setLiczbaProduktu(temp.getLiczbaProduktu() - produkt.getLiczbaProduktu());
 		}
-		
+
 	}
 
 	private boolean czyWystarczyTowarow(JFrame frame1) {
 
-		//koszyk.setListaProduktow(null); // testowanie assert
+		// koszyk.setListaProduktow(null); // testowanie assert
 		assert (koszyk.getListaProduktow() != null) : "Lista produktów w koszyku jest null!";
 
 		for (Produkty produkt : koszyk.getListaProduktow()) {

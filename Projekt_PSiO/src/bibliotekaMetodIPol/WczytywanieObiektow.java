@@ -4,10 +4,12 @@ import java.io.*;
 import logowanie.*;
 import osoba.*;
 import produkty.*;
+import loteria.*;
 
 public class WczytywanieObiektow {
 
 	public static void wczytajDane() {
+		wczytajLoterie();
 		wczytajKlientow();
 		wczytajPracownikow();
 		wczytajKierownikow();
@@ -15,6 +17,21 @@ public class WczytywanieObiektow {
 		wczytajProduktyGaming();
 		wczytajProduktyMieszane();
 		wczytajIDProduktu();
+	}
+
+	private static void wczytajLoterie() {
+		try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("./BazaDanych/Loteria.ser"))) {
+			Object obj1 = is.readObject();
+			Metody.setLoteria((Loteria) obj1);
+			System.out.println("Loteria wczytana pomyślnie.");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void wczytajSposobLogowania() {

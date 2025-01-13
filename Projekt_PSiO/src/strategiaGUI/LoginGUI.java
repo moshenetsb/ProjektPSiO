@@ -16,21 +16,21 @@ public class LoginGUI implements GUIstrategia {
 	private JPasswordField haslo;
 	private JTextField txfLoginEmail;
 	private JLabel lbLoginEmail, lbHaslo;
-	private JButton btnZaloguj, btnSposobLog;
+	private JButton btnZaloguj, btnSposobLog, btnRejestracja;
 	// ____________________________________________________
 
 	// Konstruktor
 	public LoginGUI(JFrame frame1) {
-		
-		//frame1 = null; // testowanie assert
+
+		// frame1 = null; // testowanie assert
 		assert (frame1 != null) : "Frame1 jest nullem!";
-		
+
 		try {
-		    frame1.setIconImage(ImageIO.read(new File("Grafika/login.jpg")));
+			frame1.setIconImage(ImageIO.read(new File("Grafika/login.jpg")));
 		} catch (Exception e) {
-		    System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
+			System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
 		}
-		
+
 		frame1.getContentPane().removeAll();
 		GUIcreate(frame1);
 		frame1.revalidate();
@@ -40,12 +40,12 @@ public class LoginGUI implements GUIstrategia {
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		frame1.setTitle("Logowanie");
-		frame1.setSize(400, 200);
+		frame1.setSize(390, 200);
 
 		panel1 = new JPanel();
-		panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panel1.setBorder(new EmptyBorder(0, 10, 0, 10));
 		frame1.getContentPane().add(BorderLayout.CENTER, panel1);
-		panel1.setLayout(new GridLayout(3, 2));
+		panel1.setLayout(new GridLayout(4, 1));
 
 		WczytywanieObiektow.wczytajSposobLogowania();
 		lbLoginEmail = new JLabel();
@@ -65,11 +65,18 @@ public class LoginGUI implements GUIstrategia {
 		haslo.setEchoChar('*');
 		panel1.add(haslo);
 
+		JPanel panel2 = new JPanel();
+		panel2.setBorder(new EmptyBorder(10, 10, 10, 10));
+		frame1.getContentPane().add(BorderLayout.SOUTH, panel2);
+
 		btnZaloguj = new JButton("Zaloguj");
-		panel1.add(btnZaloguj);
+		panel2.add(btnZaloguj);
 
 		btnSposobLog = new JButton("Inny sposob logowania");
-		panel1.add(btnSposobLog);
+		panel2.add(btnSposobLog);
+
+		btnRejestracja = new JButton("Rejestracja");
+		panel2.add(btnRejestracja);
 
 		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
 		haslo.addMouseListener(new MouseAdapter() {
@@ -110,6 +117,13 @@ public class LoginGUI implements GUIstrategia {
 			public void actionPerformed(ActionEvent e) {
 				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText(),
 						new String(haslo.getPassword()), frame1);
+			}
+		});
+
+		btnRejestracja.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Metody.setWybraneGUI(new Rejestracja(frame1));
 			}
 		});
 

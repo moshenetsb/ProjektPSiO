@@ -2,7 +2,7 @@ package osoba;
 
 import adres.Adres;
 
-public class Kierownik extends OsobaZarzadzajaca {
+public class Kierownik extends Pracownik {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,7 +14,7 @@ public class Kierownik extends OsobaZarzadzajaca {
 
 	@Override
 	public String toString() {
-		return "Kierownik [" + super.toString() + "]";
+		return "Rola: kierownik, " + super.toString();
 	}
 
 }

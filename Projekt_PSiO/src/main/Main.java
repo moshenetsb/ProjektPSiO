@@ -7,6 +7,7 @@ import osoba.*;
 import produkty.*;
 import zakupy.*;
 import promocjaStrategia.*;
+import loteria.*;
 
 public class Main {
 
@@ -31,6 +32,8 @@ public class Main {
 	}
 
 	private static void testoweDane() {
+		Metody.setLoteria(new Loteria(1, 5, 50.0, 200.0));
+		
 		// Osoby
 		Metody.getListaKlientow().add(new Klient("klient1@gmail.com", "haslo1", "klogin1", "Ivanov", "Ivan", 18, null,
 				2334, new PromocjaStudenta(), new ArrayList<>(), new Zakupy()));

@@ -1,17 +1,24 @@
 package strategiaGUI;
 
 import javax.swing.*;
+import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
 import bibliotekaMetodIPol.*;
 import produkty.*;
+import promocjaStrategia.PromocjaPodstawowa;
+import zakupy.Zakupy;
+
 import java.util.ArrayList;
 import logowanie.*;
+import osoba.Klient;
 
 public class KlientGUI extends WspolneGUI {
 
-	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
+	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i
+	// kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
 
+	private JLabel lbSaldoKonta;
 	private boolean expanded = false;
 	private JPanel contentPanel;
 	private JButton toggleButton;
@@ -40,73 +47,136 @@ public class KlientGUI extends WspolneGUI {
 		frame1.getContentPane().add(contentPanel, BorderLayout.CENTER);
 		frame1.add(new JScrollPane(contentPanel));
 
-		/*
-		 * toggleButton = new JButton(title); toggleButton.setFocusPainted(false);
-		 * toggleButton.setContentAreaFilled(false);
-		 * toggleButton.setBorderPainted(false);
-		 * toggleButton.setHorizontalAlignment(SwingConstants.LEFT);
-		 * 
-		 * toggleButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) { toggleContent(); } });
-		 * 
-		 * contentPanel.add(toggleButton, BorderLayout.NORTH);
-		 * contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-		 * contentPanel.setVisible(false);
-		 * 
-		 * for(Produkty produkt : products) {
-		 * contentPanel.add(createItemPanel(produkt.getNazwaProduktu()));
-		 * 
-		 * }
-		 * 
-		 * scrollPane = new JScrollPane(contentPanel);
-		 * scrollPane.setVerticalScrollBarPolicy(JScrollPane.
-		 * VERTICAL_SCROLLBAR_AS_NEEDED); scrollPane.setPreferredSize(new Dimension(380,
-		 * 150)); // Fixed height for scrollable area scrollPane.setVisible(false); //
-		 * Initially hidden
-		 * 
-		 * contentPanel.add(scrollPane, BorderLayout.CENTER);
-		 */
 	}
 
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
 		createManagementMenu(frame1);
+
 		// TODO Auto-generated method stub
 
 	}
-	
-	private void createManagementMenu(JFrame frame1) {
-        JMenuBar menuBar = frame1.getJMenuBar();
 
-        JMenu mnProdukty = new JMenu("Produkty");
-        menuBar.add(mnProdukty);
-        
-        JMenuItem mntmWszystkieProdukty = new JMenuItem("Wszystkie produkty");
-        mnProdukty.add(mntmWszystkieProdukty);
-        
-        JMenuItem mntmUlubioneProdukty = new JMenuItem("Ulubione produkty");
-        mnProdukty.add(mntmUlubioneProdukty);
-        
-        JMenu mnKoszyk = new JMenu("Koszyk");
-        menuBar.add(mnKoszyk);
-        
-        JMenu mnKonto = new JMenu("Konto");
-        menuBar.add(mnKonto);
-        
-        double saldoKonta = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta("klogin1")).getSaldoKonta();
-        String saldoString = String.valueOf(Math.round(saldoKonta * 100) / 100.0);
-        
-        JMenuItem mntmSaldoKonta = new JMenuItem("Saldo konta: " + saldoString);
-        mnKonto.add(mntmSaldoKonta);
-        
-        JMenuItem mntmDoladujKonto = new JMenuItem("Doładuj konto");
-        mnKonto.add(mntmDoladujKonto);
-        
-        JMenuItem mntmLoteria = new JMenuItem("Loteria");
-        mnKonto.add(mntmLoteria);
-    }
+	private void createManagementMenu(JFrame frame1) {
+		JMenuBar menuBar = frame1.getJMenuBar();
+
+		JMenu mnProdukty = new JMenu("Produkty");
+		menuBar.add(mnProdukty);
+
+		JMenuItem mntmWszystkieProdukty = new JMenuItem("Wszystkie produkty");
+		mnProdukty.add(mntmWszystkieProdukty);
+
+		JMenuItem mntmUlubioneProdukty = new JMenuItem("Ulubione produkty");
+		mnProdukty.add(mntmUlubioneProdukty);
+
+		JMenu mnKoszyk = new JMenu("Koszyk");
+		menuBar.add(mnKoszyk);
+
+		JMenu mnKonto = new JMenu("Konto");
+		menuBar.add(mnKonto);
+
+		lbSaldoKonta = new JLabel();
+		refreshSaldoKonta(lbSaldoKonta);
+		mnKonto.add(lbSaldoKonta);
+
+		JMenuItem mntmDoladujKonto = new JMenuItem("Doładuj konto");
+		mnKonto.add(mntmDoladujKonto);
+		mntmDoladujKonto.addActionListener(e -> doladujKonto(frame1));
+
+		JMenuItem mntmLoteria = new JMenuItem("Loteria");
+		mnKonto.add(mntmLoteria);
+		mntmLoteria.addActionListener(e -> loteria(frame1));
+	}
+
+	private void doladujKonto(JFrame frame1) {
+		JTextField kwotaField = new JTextField(10);
+		JPanel panel = new JPanel(new GridLayout(2, 1));
+		panel.add(new JLabel("Kwota doładowania:"));
+		panel.add(kwotaField);
+
+		int result = JOptionPane.showConfirmDialog(frame1, panel, "Doładowanie konta", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			try {
+				Metody.updateSaldoKonta(Double.parseDouble(kwotaField.getText()), Metody.getLoginAktywnejOsoby());
+
+				refreshSaldoKonta(lbSaldoKonta);
+
+				JOptionPane.showMessageDialog(frame1, "Konto zostało doładowane pomyślnie. Dziękujemy!",
+						"Info doładowania", JOptionPane.INFORMATION_MESSAGE);
+
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(frame1, "Kwota musi być liczbą!", "Błąd formatu",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	private void loteria(JFrame frame1) {
+		if (loteriaCzyChceszGrac(frame1)) {
+			graWLoterie(frame1);
+			refreshSaldoKonta(lbSaldoKonta);
+
+		}
+
+	}
+
+	private boolean loteriaCzyChceszGrac(JFrame frame1) {
+		JPanel panel = new JPanel(new GridLayout(4, 1));
+		panel.add(new JLabel("Witamy w naszej loterii!"));
+		panel.add(new JLabel("Nasza maszyna wylosuje liczbę od " + Metody.getLoteria().getMinLiczba() + " do "
+				+ Metody.getLoteria().getMaxLiczba() + ", jeśli zgadniesz ją, to otrzymasz "
+				+ Metody.getLoteria().getSumaDoWygrania() + " PLN."));
+		panel.add(new JLabel("Jedna gra kosztuje " + Metody.getLoteria().getWartosc() + " PLN."));
+		panel.add(new JLabel("Chcesz zagrać?"));
+
+		int result = JOptionPane.showConfirmDialog(frame1, panel, "Loteria", JOptionPane.YES_NO_CANCEL_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+
+			// Sprawdzamy, czy wystarczy pieniędzy
+			if (!Metody.czyWystarczyPieniedzy(Metody.getLoginAktywnejOsoby(), Metody.getLoteria().getWartosc())) {
+				JOptionPane.showMessageDialog(frame1, "Brakuje pieniędzy dla gry! Doładuj konto i wróć.", "Loteria",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+
+			} else
+				return true;
+		}
+		return false;
+	}
+
+	private void graWLoterie(JFrame frame1) {
+
+		JTextField liczbaField = new JTextField(10);
+		JPanel panel = new JPanel(new GridLayout(2, 1));
+		panel.add(new JLabel("Zgadnij liczbę od " + Metody.getLoteria().getMinLiczba() + " do "
+				+ Metody.getLoteria().getMaxLiczba() + ":"));
+		panel.add(liczbaField);
+
+		int result = JOptionPane.showConfirmDialog(frame1, panel, "Loteria", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			try {
+				int liczbaUzytkownika = Integer.parseInt(liczbaField.getText());
+				Metody.getLoteria().grajLoteria(frame1, liczbaUzytkownika, Metody.getLoginAktywnejOsoby());
+
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(frame1,
+						"Błędny format liczby! Pieniądze zostały zwrócone. Spróbuj jeszcze raz.", "Błąd formatu",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
+	}
+
+	private void refreshSaldoKonta(JLabel lbSaldoKonta) {
+		double saldoKonta = Metody.getListaKlientow()
+				.get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby())).getSaldoKonta();
+		String saldoString = String.valueOf(Math.round(saldoKonta * 100) / 100.0);
+		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
+	}
+
+	// _____________________________________________________________
+	// TODO przeczytać podalsze i zrobić coś z tym
 
 	private JPanel createKategoria(String title, ArrayList<Produkty> products) {
 

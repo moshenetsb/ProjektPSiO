@@ -9,6 +9,7 @@ import produkty.*;
 public class ZapisywanieObiektow {
 
 	public static void zapiszDane(JFrame frame1) {
+		zapiszLoterie();
 		zapiszKlientow();
 		zapiszPracownikow();
 		zapiszKierownikow();
@@ -18,6 +19,17 @@ public class ZapisywanieObiektow {
 		zapiszIDProoduktu();
 		JOptionPane.showMessageDialog(frame1, "Zmiany zostały zapisane", "Informacja zapisywania danych",
 				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private static void zapiszLoterie() {
+		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Loteria.ser"))) {
+			writeob.writeObject(Metody.getLoteria());
+			System.out.println("Loteria zapisana pomyślnie.");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void zapiszSposobLogowania() {
@@ -47,7 +59,7 @@ public class ZapisywanieObiektow {
 
 	}
 
-	private static void zapiszKlientow() {
+	public static void zapiszKlientow() {
 
 		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Klienci.ser"))) {
 			for (Klient klient : Metody.getListaKlientow()) {
@@ -63,8 +75,8 @@ public class ZapisywanieObiektow {
 	private static void zapiszPracownikow() {
 
 		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Pracownicy.ser"))) {
-			for (OsobaZarzadzajaca osobaZarzadzajaca : Metody.getListaOsobZarzadzajacych()) {
-				if (osobaZarzadzajaca instanceof Pracownik)
+			for (Pracownik osobaZarzadzajaca : Metody.getListaOsobZarzadzajacych()) {
+				if ((osobaZarzadzajaca instanceof Pracownik) && !(osobaZarzadzajaca instanceof Kierownik))
 					writeob.writeObject(osobaZarzadzajaca);
 			}
 			System.out.println("Lista pracowników zapisana pomyślnie.");
@@ -78,7 +90,7 @@ public class ZapisywanieObiektow {
 	private static void zapiszKierownikow() {
 
 		try (ObjectOutputStream writeob = new ObjectOutputStream(new FileOutputStream("./BazaDanych/Kierownicy.ser"))) {
-			for (OsobaZarzadzajaca osobaZarzadzajaca : Metody.getListaOsobZarzadzajacych()) {
+			for (Pracownik osobaZarzadzajaca : Metody.getListaOsobZarzadzajacych()) {
 				if (osobaZarzadzajaca instanceof Kierownik)
 					writeob.writeObject(osobaZarzadzajaca);
 			}
