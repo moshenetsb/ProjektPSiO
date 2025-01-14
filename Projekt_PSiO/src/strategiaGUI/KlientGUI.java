@@ -28,7 +28,7 @@ public class KlientGUI extends WspolneGUI {
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
-	private Klient klient;
+	private Klient klient = (Metody.getListaKlientow()).get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
 	private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
 
 	// Konstruktor
