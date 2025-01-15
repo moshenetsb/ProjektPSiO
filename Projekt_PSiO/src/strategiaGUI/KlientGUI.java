@@ -5,6 +5,7 @@ import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
 import bibliotekaMetodIPol.*;
+import inneGUI.KoszykGUI;
 import produkty.*;
 import promocjaStrategia.PromocjaPodstawowa;
 import zakupy.Zakupy;
@@ -245,28 +246,28 @@ public class KlientGUI extends WspolneGUI {
         return itemPanel;
     }
 
-	private void pokazKoszyk(JFrame frame1) {
-        if (koszyk.isEmpty()) {
-            JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            StringBuilder zawartosc = new StringBuilder("Zawartość koszyka:\n\n");
-            for (Produkty produkt : koszyk) {
-                zawartosc.append(produkt.getNazwaProduktu()).append("\n");
-            }
-
-			JButton kupButton = new JButton("Kup");
-
-			kupButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					klient.kup(frame1);
-					koszyk.clear();
-				}
-			});
-
-            JOptionPane.showMessageDialog(frame1, zawartosc.toString(), "Koszyk", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+	public void pokazKoszyk(JFrame frame1) {
+		koszyk.add(new Gaming("PS5", 3000, 7, null));
+		frame1.getContentPane().removeAll();
+	
+		KoszykGUI koszykGUI = new KoszykGUI(frame1);
+	
+		if (koszyk.isEmpty()) {
+			koszykGUI.wyswietlKoszyk("Koszyk jest pusty.");
+		} else {
+			StringBuilder zawartoscKoszyka = new StringBuilder("Zawartość koszyka:\n\n");
+	
+			for (Produkty produkt : koszyk) {
+				zawartoscKoszyka.append(produkt.getNazwaProduktu()).append("\n");
+				koszykGUI.dodajProdukt(produkt);
+			}
+	
+			koszykGUI.wyswietlKoszyk(zawartoscKoszyka.toString());
+		}
+	
+		frame1.revalidate();
+		frame1.repaint();
+	}
 
 	private void toggleContent() {
 		expanded = !expanded;
