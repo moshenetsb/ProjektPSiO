@@ -33,8 +33,8 @@ public class KlientGUI extends WspolneGUI {
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
-	private Klient klient;
-	private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
+	//private Klient klient;
+	//private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
 
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
@@ -82,7 +82,7 @@ public class KlientGUI extends WspolneGUI {
 
 		JMenuItem mntmPokazKoszyk = new JMenuItem("Pokaż koszyk");
 		mnKoszyk.add(mntmPokazKoszyk);
-		mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
+		//mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
 
 		JMenu mnKonto = new JMenu("Konto");
 		menuBar.add(mnKonto);
@@ -201,7 +201,7 @@ public class KlientGUI extends WspolneGUI {
 		toggleButton.setHorizontalAlignment(SwingConstants.LEFT);
 
 		JPanel itemListPanel = new JPanel();
-		itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
+		itemListPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		itemListPanel.setVisible(false);
 		for (Produkty produkt : products) {
 			itemListPanel.add(createItemPanel(produkt));
@@ -236,7 +236,7 @@ public class KlientGUI extends WspolneGUI {
 		// TUTAJ SĄ OBRAZY,TRZEBA DODAĆ ICH W BAZĘ DANYCH
 		ImageIcon originalIcon = null;
 		try {
-			originalIcon = new ImageIcon(ImageIO.read(new File("./Grafika/Produkty/Fotografia/KartaPamieci.png")));
+			originalIcon = new ImageIcon(ImageIO.read(new File(produkt.getSciezkaObrazu())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -246,7 +246,7 @@ public class KlientGUI extends WspolneGUI {
 		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
 		JLabel nameLabel = new JLabel(produkt.getNazwaProduktu());
 		JButton itemButton = new JButton("Dodaj do koszyka");
-		itemButton.addActionListener(e -> koszyk.add(produkt));
+		//itemButton.addActionListener(e -> koszyk.add(produkt));
 
 		nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -264,7 +264,7 @@ public class KlientGUI extends WspolneGUI {
 		return itemPanel;
 	}
 
-	private void pokazKoszyk(JFrame frame1) {
+	/*private void pokazKoszyk(JFrame frame1) {
 		if (koszyk.isEmpty()) {
 			JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
 		} else {
@@ -282,11 +282,11 @@ public class KlientGUI extends WspolneGUI {
 					koszyk.clear();
 				}
 			});
-
 			JOptionPane.showMessageDialog(frame1, zawartosc.toString(), "Koszyk", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
+	 */
 	private void toggleContent() {
 		expanded = !expanded;
 		scrollPane.setVisible(expanded);

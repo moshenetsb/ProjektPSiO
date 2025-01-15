@@ -17,14 +17,14 @@ public class Main {
 	}
 
 	private static void start() {
-		WczytywanieObiektow.wczytajDane();
+		// WczytywanieObiektow.wczytajDane();
 
 		// Pierwsze konto w sklepie, jeśli jeszcze nie było (admin)
 		if (Metody.getListaOsobZarzadzajacych().isEmpty())
 			Metody.getListaOsobZarzadzajacych().add(new Kierownik("admin@gmail.com", "admin", "admin", "Nazwisko",
 					"Imie", 18, null, 0, "000000000000"));
 
-		// testoweDane();
+		testoweDane();
 
 		@SuppressWarnings("unused")
 		GUImain oknoGlowne = new GUImain();
