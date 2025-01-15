@@ -167,7 +167,7 @@ public class InfoOOsobieGUI {
 
 		// Добавляем placeholder (подсказку)
 		textField.setText(placeholder);
-		textField.setForeground(Color.GRAY);
+		textField.setForeground(Color.BLACK);
 
 		// Сброс текста при фокусе
 		textField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -310,7 +310,7 @@ public class InfoOOsobieGUI {
 
 		// Цвет текста и фона
 		passwordField.setBackground(new Color(245, 245, 245)); // Светло-серый фон
-		passwordField.setForeground(Color.GRAY);
+		passwordField.setForeground(Color.BLACK);
 
 		// Установка подсказки (placeholder)
 		passwordField.setText(placeholder);
@@ -348,6 +348,14 @@ public class InfoOOsobieGUI {
 			haslo.setText(osoba.getHaslo());
 			txfLogin.setText(osoba.getLogin());
 			txfWiek.setText(String.valueOf(osoba.getWiek()));
+			if(osoba.getAdres()!=null) {
+				txfPanstwo.setText(osoba.getAdres().getPanstwo());
+				txfKodPocztowy.setText(osoba.getAdres().getKodPocztowy());
+				txfRegion.setText(osoba.getAdres().getRegion());
+				txfMiasto.setText(osoba.getAdres().getMiasto());
+				txfUlica.setText(osoba.getAdres().getUlica());
+				txfNumerBudynku.setText(osoba.getAdres().getNumerBudynku());
+			}else{JOptionPane.showMessageDialog(frame1, "Prosze dodać adres użytkownika.", "Błąd", JOptionPane.ERROR_MESSAGE);}
 
 		} else {
 			JOptionPane.showMessageDialog(frame1, "Brak danych użytkownika.", "Błąd", JOptionPane.ERROR_MESSAGE);

@@ -28,6 +28,8 @@ public class KlientGUI extends WspolneGUI {
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
+	private Klient klient;
+	private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
 
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
@@ -72,6 +74,10 @@ public class KlientGUI extends WspolneGUI {
 
 		JMenu mnKoszyk = new JMenu("Koszyk");
 		menuBar.add(mnKoszyk);
+
+		JMenuItem mntmPokazKoszyk = new JMenuItem("Pokaż koszyk");
+        mnKoszyk.add(mntmPokazKoszyk);
+        mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
 
 		JMenu mnKonto = new JMenu("Konto");
 		menuBar.add(mnKonto);
@@ -169,87 +175,98 @@ public class KlientGUI extends WspolneGUI {
 	}
 
 	private void refreshSaldoKonta(JLabel lbSaldoKonta) {
-		double saldoKonta = Metody.getListaKlientow()
-				.get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby())).getSaldoKonta();
-		String saldoString = String.valueOf(Math.round(saldoKonta * 100) / 100.0);
-		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
-	}
+        double saldoKonta = Metody.getListaKlientow()
+                .get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby())).getSaldoKonta();
+        String saldoString = String.valueOf(Math.round(saldoKonta * 100) / 100.0);
+        lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
+    }
 
 	// _____________________________________________________________
 	// TODO przeczytać podalsze i zrobić coś z tym
 
 	private JPanel createKategoria(String title, ArrayList<Produkty> products) {
+        JPanel categoryPanel = new JPanel();
+        categoryPanel.setLayout(new BorderLayout());
+        categoryPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-		JPanel categoryPanel = new JPanel();
-		categoryPanel.setLayout(new BorderLayout());
-		categoryPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        toggleButton = new JButton(title);
+        toggleButton.setFocusPainted(false);
+        toggleButton.setContentAreaFilled(false);
+        toggleButton.setBorderPainted(false);
+        toggleButton.setHorizontalAlignment(SwingConstants.LEFT);
 
-		toggleButton = new JButton(title);
-		toggleButton.setFocusPainted(false);
-		toggleButton.setContentAreaFilled(false);
-		toggleButton.setBorderPainted(false);
-		toggleButton.setHorizontalAlignment(SwingConstants.LEFT);
+        JPanel itemListPanel = new JPanel();
+        itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
+        itemListPanel.setVisible(false);
+        for (Produkty produkt : products) {
+            itemListPanel.add(createItemPanel(produkt));
+        }
 
-		// Panel zawierający elementy kategorii
-		JPanel itemListPanel = new JPanel();
-		itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
-		itemListPanel.setVisible(false);
-		for (Produkty produkt : products) {
-			itemListPanel.add(createItemPanel(produkt.getNazwaProduktu()));
+        scrollPane = new JScrollPane(itemListPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(new Dimension(380, 100));
+        scrollPane.setVisible(false);
 
-		}
+        categoryPanel.add(itemListPanel);
+        categoryPanel.add(toggleButton, BorderLayout.NORTH);
 
-		scrollPane = new JScrollPane(itemListPanel);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(380, 100)); // Fixed height for scrollable area
-		scrollPane.setVisible(false); // Initially hidden
+        toggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                expanded = !expanded;
+                itemListPanel.setVisible(expanded);
+                toggleButton.setText((expanded ? "▼ " : "► ") + title);
+                categoryPanel.revalidate();
+                categoryPanel.repaint();
+            }
+        });
+        return categoryPanel;
+    }
 
-		categoryPanel.add(itemListPanel);
-		categoryPanel.add(toggleButton, BorderLayout.NORTH);
-		// categoryPanel.add(scrollPane, BorderLayout.CENTER);
+	private JPanel createItemPanel(Produkty produkt) {
+        JPanel itemPanel = new JPanel();
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+        itemPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		toggleButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				expanded = !expanded;
-				itemListPanel.setVisible(expanded);
-				// scrollPane.setVisible(expanded);
-				toggleButton.setText((expanded ? "▼ " : "► ") + title);
-				categoryPanel.revalidate();
-				categoryPanel.repaint();
-			}
-		});
-		return categoryPanel;
-	}
+        JLabel nameLabel = new JLabel(produkt.getNazwaProduktu());
+        JButton itemButton = new JButton("Dodaj do koszyka");
+        itemButton.addActionListener(e -> koszyk.add(produkt));
+        
+        nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-	private JPanel createItemPanel(String name) {
-		JPanel itemPanel = new JPanel();
-		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-		itemPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        itemPanel.add(Box.createVerticalStrut(5));
+        itemPanel.add(nameLabel);
+        itemPanel.add(Box.createVerticalStrut(5));
+        itemPanel.add(itemButton);
+        itemPanel.add(Box.createVerticalStrut(5));
+        itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		// TUTAJ SĄ OBRAZY,TRZEBA DODAĆ ICH W BAZĘ DANYCH
-		// ImageIcon originalIcon = new
-		// ImageIcon(getClass().getResource("/images/images.jpg"));
-		// Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100,
-		// Image.SCALE_SMOOTH);
-		// JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
-		JLabel nameLabel = new JLabel(name);
-		JButton itemButton = new JButton("Dodaj do koszyka");
-		itemButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-		nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        return itemPanel;
+    }
 
-		itemPanel.add(Box.createVerticalStrut(5));
-		// itemPanel.add(iconLabel);
-		itemPanel.add(Box.createVerticalStrut(5));
-		itemPanel.add(nameLabel);
-		itemPanel.add(Box.createVerticalStrut(5));
-		itemPanel.add(itemButton);
-		itemPanel.add(Box.createVerticalStrut(5));
-		itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	private void pokazKoszyk(JFrame frame1) {
+        if (koszyk.isEmpty()) {
+            JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            StringBuilder zawartosc = new StringBuilder("Zawartość koszyka:\n\n");
+            for (Produkty produkt : koszyk) {
+                zawartosc.append(produkt.getNazwaProduktu()).append("\n");
+            }
 
-		return itemPanel;
-	}
+			JButton kupButton = new JButton("Kup");
+
+			kupButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					klient.kup(frame1);
+					koszyk.clear();
+				}
+			});
+
+            JOptionPane.showMessageDialog(frame1, zawartosc.toString(), "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
 	private void toggleContent() {
 		expanded = !expanded;
@@ -267,15 +284,15 @@ public class KlientGUI extends WspolneGUI {
 	}
 
 	private void sortArrayList() {
-		for (Produkty produkt : products) {
-			if (produkt instanceof Gaming) {
-				productsGaming.add(produkt);
-			} else if (produkt instanceof Fotografia) {
-				productsFotografia.add(produkt);
-			} else if (produkt instanceof Mieszane) {
-				productsMieszane.add(produkt);
-			}
-		}
-	}
+        for (Produkty produkt : products) {
+            if (produkt instanceof Gaming) {
+                productsGaming.add(produkt);
+            } else if (produkt instanceof Fotografia) {
+                productsFotografia.add(produkt);
+            } else if (produkt instanceof Mieszane) {
+                productsMieszane.add(produkt);
+            }
+        }
+    }
 
 }

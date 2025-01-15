@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
+import logowanie.MenuLogowanie;
 import osoba.*;
 import adres.Adres;
 import promocjaStrategia.*;
@@ -91,7 +92,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		toolIcon(clientFrame);
 
-		String[] columnNames = { "ID", "Imię", "Nazwisko", "Email", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
 
 		klientTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
@@ -111,8 +112,8 @@ public class KierownikGUI extends PracownikGUI {
 		buttonPanel.add(editButton);
 
 		addButton.addActionListener(e -> addClient());
-		removeButton.addActionListener(e -> removeClient(klientTable));
-		editButton.addActionListener(e -> editClient(klientTable));
+		removeButton.addActionListener(e -> removeClient(klientTable, clientFrame));
+		editButton.addActionListener(e -> editClient(klientTable, clientFrame));
 
 		refreshClientTable();
 
@@ -152,15 +153,24 @@ public class KierownikGUI extends PracownikGUI {
 		}
 	}
 
-	private void removeClient(JTable klientTable) {
+	private void removeClient(JTable klientTable, JFrame clientFrame) {
 		int selectedRow = klientTable.getSelectedRow();
 		if (selectedRow != -1) {
-			listaKlientow.remove(selectedRow);
-			refreshClientTable();
+			int confirm = JOptionPane.showConfirmDialog(clientFrame, "Czy na pewno chcesz usunąć konto tego klienta?",
+					"Potwierdzenie usunięcia", JOptionPane.YES_NO_OPTION);
+
+			if (confirm == JOptionPane.YES_OPTION) {
+				listaKlientow.remove(selectedRow);
+				refreshClientTable();
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto do usunięcia!",
+					"Informacja usunięcia", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-	private void editClient(JTable klientTable) {
+	private void editClient(JTable klientTable, JFrame clientFrame) {
 		int selectedRow = klientTable.getSelectedRow();
 		if (selectedRow != -1) {
 			Klient klient = listaKlientow.get(selectedRow);
@@ -184,6 +194,9 @@ public class KierownikGUI extends PracownikGUI {
 				klient.setEmail(emailField.getText());
 				refreshClientTable();
 			}
+		} else {
+			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto dla edytowania!",
+					"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -197,11 +210,11 @@ public class KierownikGUI extends PracownikGUI {
 		JTextField searchField = new JTextField(20);
 		JButton searchButton = new JButton("Szukaj");
 
-		searchPanel.add(new JLabel("Wprowadź kryteria:"));
+		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 
-		String[] columnNames = { "ID", "Imię", "Nazwisko", "Email", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
 
 		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
@@ -231,9 +244,10 @@ public class KierownikGUI extends PracownikGUI {
 	private void searchClients(String criteria, DefaultTableModel tableModel) {
 		tableModel.setRowCount(0);
 		for (Klient klient : listaKlientow) {
-			if (klient.getEmail().contains(criteria) || klient.getNazwisko().contains(criteria)) {
-				tableModel.addRow(new Object[] { klient.hashCode(), klient.getImie(), klient.getNazwisko(),
-						klient.getEmail(), klient.getSaldoKonta() });
+			if (klient.getEmail().contains(criteria) || klient.getNazwisko().contains(criteria)
+					|| klient.getLogin().contains(criteria)) {
+				tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
+						klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta() });
 			}
 		}
 	}
@@ -245,7 +259,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		toolIcon(employeeFrame);
 
-		String[] columnNames = { "ID", "Imię", "Nazwisko", "Email", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
 		pracownikTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -264,8 +278,8 @@ public class KierownikGUI extends PracownikGUI {
 		buttonPanel.add(editButton);
 
 		addButton.addActionListener(e -> addEmployee());
-		removeButton.addActionListener(e -> removeEmployee(pracownikTable));
-		editButton.addActionListener(e -> editEmployee(pracownikTable));
+		removeButton.addActionListener(e -> removeEmployee(pracownikTable, employeeFrame));
+		editButton.addActionListener(e -> editEmployee(pracownikTable, employeeFrame));
 
 		refreshEmployeeTable();
 
@@ -308,15 +322,35 @@ public class KierownikGUI extends PracownikGUI {
 		}
 	}
 
-	private void removeEmployee(JTable pracownikTable) {
+	private void removeEmployee(JTable pracownikTable, JFrame employeeFrame) {
 		int selectedRow = pracownikTable.getSelectedRow();
 		if (selectedRow != -1) {
-			listaPracownikow.remove(selectedRow);
-			refreshEmployeeTable();
+			int confirm = JOptionPane.showConfirmDialog(employeeFrame,
+					"Czy na pewno chcesz usunąć konto tego pracownika?", "Potwierdzenie usunięcia",
+					JOptionPane.YES_NO_OPTION);
+			if (confirm == JOptionPane.YES_OPTION) {
+
+				Pracownik wybranyPracownik = (Pracownik) listaPracownikow.get(selectedRow);
+				Pracownik aktywnyPracownik = Metody.getListaOsobZarzadzajacych()
+						.get(MenuLogowanie.szukajIDLoginZarzadzajacych(Metody.getLoginAktywnejOsoby()));
+
+				if (wybranyPracownik.getLogin().equals(aktywnyPracownik.getLogin()))
+					JOptionPane.showMessageDialog(employeeFrame, "Nie można usunąć swojego konta!",
+							"Błąd usunięcia", JOptionPane.ERROR_MESSAGE);
+				else {
+					listaPracownikow.remove(selectedRow);
+					refreshEmployeeTable();
+				}
+
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto do usunięcia!",
+					"Informacja usunięcia", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-	private void editEmployee(JTable pracownikTable) {
+	private void editEmployee(JTable pracownikTable, JFrame employeeFrame) {
 		int selectedRow = pracownikTable.getSelectedRow();
 		if (selectedRow != -1) {
 			Pracownik pracownik = (Pracownik) listaPracownikow.get(selectedRow);
@@ -344,6 +378,9 @@ public class KierownikGUI extends PracownikGUI {
 				pracownik.setSaldoKonta(Double.parseDouble(saldoField.getText()));
 				refreshEmployeeTable();
 			}
+		} else {
+			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto dla edytowania!",
+					"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -357,11 +394,11 @@ public class KierownikGUI extends PracownikGUI {
 		JTextField searchField = new JTextField(20);
 		JButton searchButton = new JButton("Szukaj");
 
-		searchPanel.add(new JLabel("Wprowadź kryteria:"));
+		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 
-		String[] columnNames = { "ID", "Imię", "Nazwisko", "Email", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
 		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -391,9 +428,10 @@ public class KierownikGUI extends PracownikGUI {
 	private void searchEmployees(String criteria, DefaultTableModel tableModel) {
 		tableModel.setRowCount(0);
 		for (Pracownik pracownik : listaPracownikow) {
-			if (pracownik.getEmail().contains(criteria) || pracownik.getNazwisko().contains(criteria)) {
-				tableModel.addRow(new Object[] { pracownik.hashCode(), pracownik.getImie(), pracownik.getNazwisko(),
-						pracownik.getEmail(), pracownik.getSaldoKonta() });
+			if (pracownik.getEmail().contains(criteria) || pracownik.getNazwisko().contains(criteria)
+					|| pracownik.getLogin().contains(criteria)) {
+				tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
+						pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta() });
 			}
 		}
 	}
@@ -401,8 +439,8 @@ public class KierownikGUI extends PracownikGUI {
 	private void refreshClientTable() {
 		klientTableModel.setRowCount(0);
 		for (Klient klient : listaKlientow) {
-			klientTableModel.addRow(new Object[] { klient.hashCode(), klient.getImie(), klient.getNazwisko(),
-					klient.getEmail(), klient.getSaldoKonta() });
+			klientTableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
+					klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta() });
 		}
 	}
 
@@ -411,8 +449,8 @@ public class KierownikGUI extends PracownikGUI {
 		for (Pracownik osoba : listaPracownikow) {
 			if (osoba instanceof Pracownik) {
 				Pracownik pracownik = (Pracownik) osoba;
-				pracownikTableModel.addRow(new Object[] { pracownik.hashCode(), pracownik.getImie(),
-						pracownik.getNazwisko(), pracownik.getEmail(), pracownik.getSaldoKonta() });
+				pracownikTableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(),
+						pracownik.getLogin(), pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta() });
 			}
 		}
 	}
