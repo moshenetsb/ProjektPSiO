@@ -36,8 +36,6 @@ public class KierownikGUI extends PracownikGUI {
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
 
-		this.initializeKlientTableModel();
-		this.initializePracownikTableModel();
 		createManagementMenu(frame1);
 	}
 
@@ -68,7 +66,6 @@ public class KierownikGUI extends PracownikGUI {
 				this.initializeKlientTableModel();
 				showSearch(klientTableModel, searchClients, listaKlientow);
 			}
-				
 
 		});
 
@@ -91,7 +88,7 @@ public class KierownikGUI extends PracownikGUI {
 				this.initializePracownikTableModel();
 				showSearch(pracownikTableModel, searchEmployees, listaPracownikow);
 			}
-				
+
 		});
 
 		employeesSubmenu.add(manageEmployees);
@@ -356,13 +353,11 @@ public class KierownikGUI extends PracownikGUI {
 
 		JFrame searchFrame = new JFrame();
 
-		if (!lista.isEmpty()) {
-			T firstElement = lista.get(0);
-			if (firstElement instanceof Pracownik) {
-				searchFrame.setTitle("Wyszukiwanie Pracowników");
-			} else {
-				searchFrame.setTitle("Wyszukiwanie Klientów");
-			}
+		T firstElement = lista.get(0);
+		if (firstElement instanceof Pracownik) {
+			searchFrame.setTitle("Wyszukiwanie Pracowników");
+		} else {
+			searchFrame.setTitle("Wyszukiwanie Klientów");
 		}
 
 		searchFrame.setSize(1000, 600);
@@ -376,7 +371,7 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
-		
+
 		JTable searchTable = new JTable(searchTableModel);
 
 		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, lista));
