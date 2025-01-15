@@ -12,7 +12,6 @@ import osoba.*;
 import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
-import promocjaStrategia.*;
 
 public class KierownikGUI extends PracownikGUI {
 
@@ -60,8 +59,13 @@ public class KierownikGUI extends PracownikGUI {
 
 		JMenuItem searchClients = new JMenuItem("Wyszukaj klientów");
 		searchClients.addActionListener(e -> {
-			searchClients.setEnabled(false);
-			showClientSearch(searchClients);
+			if (listaPracownikow.isEmpty())
+				JOptionPane.showMessageDialog(frame1, "Lista klientów jest pusta", "Informacja wyszukiwania",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			else
+				showSearch(searchClients, listaKlientow);
+
 		});
 
 		clientsSubmenu.add(manageClients);
@@ -76,8 +80,12 @@ public class KierownikGUI extends PracownikGUI {
 
 		JMenuItem searchEmployees = new JMenuItem("Wyszukaj pracowników");
 		searchEmployees.addActionListener(e -> {
-			searchEmployees.setEnabled(false);
-			showEmployeeSearch(searchEmployees);
+			if (listaPracownikow.isEmpty())
+				JOptionPane.showMessageDialog(frame1, "Lista pracowników jest pusta", "Informacja wyszukiwania",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			else
+				showSearch(searchEmployees, listaPracownikow);
 		});
 
 		employeesSubmenu.add(manageEmployees);
@@ -95,7 +103,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		toolIcon(clientFrame);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek", "Typ promocji" };
+		String[] columnNames = columnNames(listaKlientow);
 
 		klientTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
@@ -203,47 +211,6 @@ public class KierownikGUI extends PracownikGUI {
 		}
 	}
 
-	private void showClientSearch(JMenuItem searchClients) {
-		JFrame searchFrame = new JFrame("Wyszukiwanie Klientów");
-		searchFrame.setSize(1000, 600);
-
-		toolIcon(searchFrame);
-
-		JPanel searchPanel = new JPanel(new FlowLayout());
-		JTextField searchField = new JTextField(20);
-		JButton searchButton = new JButton("Szukaj");
-
-		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
-		searchPanel.add(searchField);
-		searchPanel.add(searchButton);
-
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek", "Typ promocji" };
-
-		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
-			private static final long serialVersionUID = 1L;
-
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		JTable searchTable = new JTable(searchTableModel);
-
-		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, listaKlientow));
-
-		searchFrame.add(searchPanel, BorderLayout.NORTH);
-
-		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
-
-		searchFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				searchClients.setEnabled(true);
-			}
-		});
-
-		searchFrame.setVisible(true);
-	}
-
 	private void showEmployeeManagement(JMenuItem showEmployee) {
 		JFrame employeeFrame = new JFrame("Zarządzanie Pracownikami");
 		employeeFrame.setSize(1000, 600);
@@ -251,7 +218,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		toolIcon(employeeFrame);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
+		String[] columnNames = columnNames(listaPracownikow);
 		pracownikTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -376,8 +343,37 @@ public class KierownikGUI extends PracownikGUI {
 		}
 	}
 
-	private void showEmployeeSearch(JMenuItem searchEmployees) {
-		JFrame searchFrame = new JFrame("Wyszukiwanie Pracowników");
+	private <T> String[] columnNames(ArrayList<T> lista) {
+		String[] columnNames;
+
+		T firstElement = lista.get(0);
+		if (firstElement instanceof Pracownik)
+
+			columnNames = new String[] { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
+
+		else
+			columnNames = new String[] { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek",
+					"Typ promocji" };
+
+		return columnNames;
+	}
+
+	// Wyszukiwanie osób
+	private <T> void showSearch(JMenuItem mntmSearch, ArrayList<T> lista) {
+
+		mntmSearch.setEnabled(false);
+
+		JFrame searchFrame = new JFrame();
+
+		if (!lista.isEmpty()) {
+			T firstElement = lista.get(0);
+			if (firstElement instanceof Pracownik) {
+				searchFrame.setTitle("Wyszukiwanie Pracowników");
+			} else if (firstElement instanceof Klient) {
+				searchFrame.setTitle("Wyszukiwanie Klientów");
+			}
+		}
+
 		searchFrame.setSize(1000, 600);
 
 		toolIcon(searchFrame);
@@ -390,7 +386,8 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
+		String[] columnNames = columnNames(lista);
+
 		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -400,7 +397,7 @@ public class KierownikGUI extends PracownikGUI {
 		};
 		JTable searchTable = new JTable(searchTableModel);
 
-		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, listaPracownikow));
+		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, lista));
 
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
@@ -408,7 +405,7 @@ public class KierownikGUI extends PracownikGUI {
 		searchFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				searchEmployees.setEnabled(true);
+				mntmSearch.setEnabled(true);
 			}
 		});
 
@@ -417,7 +414,6 @@ public class KierownikGUI extends PracownikGUI {
 		searchFrame.setVisible(true);
 	}
 
-	// Wyszukiwanie osób
 	private <T> void search(String criteria, DefaultTableModel tableModel, ArrayList<T> lista) {
 		tableModel.setRowCount(0);
 
