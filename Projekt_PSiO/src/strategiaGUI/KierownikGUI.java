@@ -12,22 +12,25 @@ import osoba.*;
 import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
+import promocjaStrategia.*;
 
 public class KierownikGUI extends PracownikGUI {
 
-	private ArrayList<Klient> listaKlientow = Metody.getListaKlientow();
-	private ArrayList<Pracownik> listaPracownikow = Metody.getListaOsobZarzadzajacych();
+	private JFrame frame1;
+	private ArrayList<Klient> listaKlientow;
+	private ArrayList<Pracownik> listaPracownikow;
 	private DefaultTableModel klientTableModel;
 	private DefaultTableModel pracownikTableModel;
 
 	public KierownikGUI(JFrame frame1) {
 		super(frame1);
+		this.frame1 = frame1;
 
-		try {
-			frame1.setIconImage(ImageIO.read(new File("Grafika/dolarCzerwony.png")));
-		} catch (Exception e) {
-			System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
-		}
+		listaKlientow = Metody.getListaKlientow();
+		listaPracownikow = Metody.getListaOsobZarzadzajacych();
+
+		kierownikIcon();
+
 	}
 
 	@Override
@@ -87,12 +90,12 @@ public class KierownikGUI extends PracownikGUI {
 
 	private void showClientManagement(JMenuItem manageClients) {
 		JFrame clientFrame = new JFrame("Zarządzanie Klientami");
-		clientFrame.setSize(800, 600);
+		clientFrame.setSize(1000, 600);
 		clientFrame.setLayout(new BorderLayout());
 
 		toolIcon(clientFrame);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek", "Typ promocji" };
 
 		klientTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
@@ -115,7 +118,7 @@ public class KierownikGUI extends PracownikGUI {
 		removeButton.addActionListener(e -> removeClient(klientTable, clientFrame));
 		editButton.addActionListener(e -> editClient(klientTable, clientFrame));
 
-		refreshClientTable();
+		refreshTable(klientTableModel, listaKlientow);
 
 		clientFrame.add(new JScrollPane(klientTable), BorderLayout.CENTER);
 		clientFrame.add(buttonPanel, BorderLayout.SOUTH);
@@ -149,7 +152,7 @@ public class KierownikGUI extends PracownikGUI {
 					0, new Adres("", "", "", null, null, null), 0, new PromocjaPodstawowa(), new ArrayList<>(),
 					new Zakupy());
 			listaKlientow.add(nowyKlient);
-			refreshClientTable();
+			refreshTable(klientTableModel, listaKlientow);
 		}
 	}
 
@@ -161,12 +164,12 @@ public class KierownikGUI extends PracownikGUI {
 
 			if (confirm == JOptionPane.YES_OPTION) {
 				listaKlientow.remove(selectedRow);
-				refreshClientTable();
+				refreshTable(klientTableModel, listaKlientow);
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto do usunięcia!",
-					"Informacja usunięcia", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto do usunięcia!", "Informacja usunięcia",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -192,17 +195,17 @@ public class KierownikGUI extends PracownikGUI {
 				klient.setImie(imieField.getText());
 				klient.setNazwisko(nazwiskoField.getText());
 				klient.setEmail(emailField.getText());
-				refreshClientTable();
+				refreshTable(klientTableModel, listaKlientow);
 			}
 		} else {
-			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto dla edytowania!",
-					"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto dla edytowania!", "Informacja edytowania",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
 	private void showClientSearch(JMenuItem searchClients) {
 		JFrame searchFrame = new JFrame("Wyszukiwanie Klientów");
-		searchFrame.setSize(800, 600);
+		searchFrame.setSize(1000, 600);
 
 		toolIcon(searchFrame);
 
@@ -214,7 +217,7 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek", "Typ promocji" };
 
 		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
@@ -225,7 +228,7 @@ public class KierownikGUI extends PracownikGUI {
 		};
 		JTable searchTable = new JTable(searchTableModel);
 
-		searchButton.addActionListener(e -> searchClients(searchField.getText(), searchTableModel));
+		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, listaKlientow));
 
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 
@@ -241,25 +244,14 @@ public class KierownikGUI extends PracownikGUI {
 		searchFrame.setVisible(true);
 	}
 
-	private void searchClients(String criteria, DefaultTableModel tableModel) {
-		tableModel.setRowCount(0);
-		for (Klient klient : listaKlientow) {
-			if (klient.getEmail().contains(criteria) || klient.getNazwisko().contains(criteria)
-					|| klient.getLogin().contains(criteria)) {
-				tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
-						klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta() });
-			}
-		}
-	}
-
 	private void showEmployeeManagement(JMenuItem showEmployee) {
 		JFrame employeeFrame = new JFrame("Zarządzanie Pracownikami");
-		employeeFrame.setSize(800, 600);
+		employeeFrame.setSize(1000, 600);
 		employeeFrame.setLayout(new BorderLayout());
 
 		toolIcon(employeeFrame);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
 		pracownikTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -281,7 +273,7 @@ public class KierownikGUI extends PracownikGUI {
 		removeButton.addActionListener(e -> removeEmployee(pracownikTable, employeeFrame));
 		editButton.addActionListener(e -> editEmployee(pracownikTable, employeeFrame));
 
-		refreshEmployeeTable();
+		refreshTable(pracownikTableModel, listaPracownikow);
 
 		employeeFrame.add(new JScrollPane(pracownikTable), BorderLayout.CENTER);
 		employeeFrame.add(buttonPanel, BorderLayout.SOUTH);
@@ -318,7 +310,7 @@ public class KierownikGUI extends PracownikGUI {
 			Pracownik nowyPracownik = new Pracownik(emailField.getText(), "", "", nazwiskoField.getText(),
 					imieField.getText(), 0, new Adres("", "", "", null, null, null), saldo, "");
 			listaPracownikow.add(nowyPracownik);
-			refreshEmployeeTable();
+			refreshTable(pracownikTableModel, listaPracownikow);
 		}
 	}
 
@@ -335,18 +327,18 @@ public class KierownikGUI extends PracownikGUI {
 						.get(MenuLogowanie.szukajIDLoginZarzadzajacych(Metody.getLoginAktywnejOsoby()));
 
 				if (wybranyPracownik.getLogin().equals(aktywnyPracownik.getLogin()))
-					JOptionPane.showMessageDialog(employeeFrame, "Nie można usunąć swojego konta!",
-							"Błąd usunięcia", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(employeeFrame, "Nie można usunąć swojego konta!", "Błąd usunięcia",
+							JOptionPane.ERROR_MESSAGE);
 				else {
 					listaPracownikow.remove(selectedRow);
-					refreshEmployeeTable();
+					refreshTable(pracownikTableModel, listaPracownikow);
 				}
 
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto do usunięcia!",
-					"Informacja usunięcia", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto do usunięcia!", "Informacja usunięcia",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -376,17 +368,17 @@ public class KierownikGUI extends PracownikGUI {
 				pracownik.setNazwisko(nazwiskoField.getText());
 				pracownik.setEmail(emailField.getText());
 				pracownik.setSaldoKonta(Double.parseDouble(saldoField.getText()));
-				refreshEmployeeTable();
+				refreshTable(pracownikTableModel, listaPracownikow);
 			}
 		} else {
-			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto dla edytowania!",
-					"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto dla edytowania!", "Informacja edytowania",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
 	private void showEmployeeSearch(JMenuItem searchEmployees) {
 		JFrame searchFrame = new JFrame("Wyszukiwanie Pracowników");
-		searchFrame.setSize(800, 600);
+		searchFrame.setSize(1000, 600);
 
 		toolIcon(searchFrame);
 
@@ -398,7 +390,7 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 
-		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta" };
+		String[] columnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
 		DefaultTableModel searchTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -408,7 +400,7 @@ public class KierownikGUI extends PracownikGUI {
 		};
 		JTable searchTable = new JTable(searchTableModel);
 
-		searchButton.addActionListener(e -> searchEmployees(searchField.getText(), searchTableModel));
+		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, listaPracownikow));
 
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
@@ -425,39 +417,82 @@ public class KierownikGUI extends PracownikGUI {
 		searchFrame.setVisible(true);
 	}
 
-	private void searchEmployees(String criteria, DefaultTableModel tableModel) {
+	// Wyszukiwanie osób
+	private <T> void search(String criteria, DefaultTableModel tableModel, ArrayList<T> lista) {
 		tableModel.setRowCount(0);
-		for (Pracownik pracownik : listaPracownikow) {
-			if (pracownik.getEmail().contains(criteria) || pracownik.getNazwisko().contains(criteria)
-					|| pracownik.getLogin().contains(criteria)) {
-				tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
-						pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta() });
+
+		for (T osoba : lista) {
+			if (czySpelniaKryteria(criteria, (Osoba) osoba)) {
+
+				if (osoba instanceof Pracownik) {
+					Pracownik pracownik = (Pracownik) osoba;
+					tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
+							pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(),
+							pracownik.getPesel() });
+				} else if (osoba instanceof Klient) {
+					Klient klient = (Klient) osoba;
+					String promocja = typPromocji(klient.getPromocjaKlienta());
+
+					tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
+							klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
+				}
 			}
+
 		}
+
 	}
 
-	private void refreshClientTable() {
-		klientTableModel.setRowCount(0);
-		for (Klient klient : listaKlientow) {
-			klientTableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
-					klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta() });
-		}
+	private boolean czySpelniaKryteria(String criteria, Osoba osoba) {
+
+		if (osoba.getEmail().contains(criteria) || osoba.getNazwisko().contains(criteria)
+				|| osoba.getLogin().contains(criteria))
+			return true;
+
+		return false;
+
 	}
 
-	private void refreshEmployeeTable() {
-		pracownikTableModel.setRowCount(0);
-		for (Pracownik osoba : listaPracownikow) {
+	// Odświeżanie tabeli
+	private <T> void refreshTable(DefaultTableModel tableModel, ArrayList<T> lista) {
+		tableModel.setRowCount(0);
+		for (T osoba : lista) {
 			if (osoba instanceof Pracownik) {
 				Pracownik pracownik = (Pracownik) osoba;
-				pracownikTableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(),
-						pracownik.getLogin(), pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta() });
+				tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
+						pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(), pracownik.getPesel() });
+			} else if (osoba instanceof Klient) {
+				Klient klient = (Klient) osoba;
+				String promocja = typPromocji(klient.getPromocjaKlienta());
+
+				tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
+						klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
 			}
+
 		}
 	}
 
+	private String typPromocji(Promocja promocja) {
+		if (promocja instanceof PromocjaPodstawowa)
+			return "Podstawowa";
+
+		if (promocja instanceof PromocjaStalegoKlienta)
+			return "Stały klient";
+
+		return "Studencka";
+	}
+
+	// Ikony aplikacji
 	private void toolIcon(JFrame Frame) {
 		try {
 			Frame.setIconImage(ImageIO.read(new File("Grafika/toolIcon.png")));
+		} catch (Exception e) {
+			System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
+		}
+	}
+
+	private void kierownikIcon() {
+		try {
+			frame1.setIconImage(ImageIO.read(new File("Grafika/dolarCzerwony.png")));
 		} catch (Exception e) {
 			System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
 		}
