@@ -1,9 +1,14 @@
 package strategiaGUI;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
 import bibliotekaMetodIPol.*;
 import produkty.*;
 import promocjaStrategia.PromocjaPodstawowa;
@@ -192,10 +197,10 @@ public class KlientGUI extends WspolneGUI {
 
 		// Panel zawierający elementy kategorii
 		JPanel itemListPanel = new JPanel();
-		itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
+		itemListPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		itemListPanel.setVisible(false);
 		for (Produkty produkt : products) {
-			itemListPanel.add(createItemPanel(produkt.getNazwaProduktu()));
+			itemListPanel.add(createItemPanel(produkt.getNazwaProduktu(),produkt.getSciezkaObrazu()));
 
 		}
 
@@ -222,17 +227,23 @@ public class KlientGUI extends WspolneGUI {
 		return categoryPanel;
 	}
 
-	private JPanel createItemPanel(String name) {
+	private JPanel createItemPanel(String name,String sciezkaObrazu) {
 		JPanel itemPanel = new JPanel();
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-		itemPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		itemPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 		// TUTAJ SĄ OBRAZY,TRZEBA DODAĆ ICH W BAZĘ DANYCH
-		// ImageIcon originalIcon = new
-		// ImageIcon(getClass().getResource("/images/images.jpg"));
-		// Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100,
-		// Image.SCALE_SMOOTH);
-		// JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
+		 ImageIcon originalIcon = null;
+		try {
+			originalIcon = new ImageIcon(ImageIO.read(new File("./Grafika/Produkty/Fotografia/KartaPamieci.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 originalIcon.getImage();
+		Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100,
+		Image.SCALE_SMOOTH);
+		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
 		JLabel nameLabel = new JLabel(name);
 		JButton itemButton = new JButton("Dodaj do koszyka");
 		itemButton.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -240,7 +251,7 @@ public class KlientGUI extends WspolneGUI {
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		itemPanel.add(Box.createVerticalStrut(5));
-		// itemPanel.add(iconLabel);
+		itemPanel.add(iconLabel);
 		itemPanel.add(Box.createVerticalStrut(5));
 		itemPanel.add(nameLabel);
 		itemPanel.add(Box.createVerticalStrut(5));

@@ -393,13 +393,13 @@ public class PracownikGUI extends WspolneGUI {
 				Produkty newProduct;
 				switch (productType) {
 				case "Gaming":
-					newProduct = new Gaming(name, price, quantity, description);
+					newProduct = new Gaming(name, price, quantity, description,"");
 					break;
 				case "Fotografia":
-					newProduct = new Fotografia(name, price, quantity, description);
+					newProduct = new Fotografia(name, price, quantity, description,"");
 					break;
 				case "Mieszane":
-					newProduct = new Mieszane(name, price, quantity, description);
+					newProduct = new Mieszane(name, price, quantity, description,"");
 					break;
 				default:
 					throw new IllegalArgumentException("Nieprawidłowy typ produktu");
@@ -443,13 +443,13 @@ public class PracownikGUI extends WspolneGUI {
 						Produkty modifiedProduct;
 						switch (productType) {
 						case "Gaming":
-							modifiedProduct = new Gaming(name, price, quantity, description);
+							modifiedProduct = new Gaming(name, price, quantity, description,"");
 							break;
 						case "Fotografia":
-							modifiedProduct = new Fotografia(name, price, quantity, description);
+							modifiedProduct = new Fotografia(name, price, quantity, description,"");
 							break;
 						case "Mieszane":
-							modifiedProduct = new Mieszane(name, price, quantity, description);
+							modifiedProduct = new Mieszane(name, price, quantity, description,"");
 							break;
 						default:
 							throw new IllegalArgumentException("Nieprawidłowy typ produktu");
