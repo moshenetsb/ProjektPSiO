@@ -33,6 +33,8 @@ public class KlientGUI extends WspolneGUI {
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
+	private Klient klient;
+	private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
 
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
@@ -77,6 +79,10 @@ public class KlientGUI extends WspolneGUI {
 
 		JMenu mnKoszyk = new JMenu("Koszyk");
 		menuBar.add(mnKoszyk);
+
+		JMenuItem mntmPokazKoszyk = new JMenuItem("Pokaż koszyk");
+		mnKoszyk.add(mntmPokazKoszyk);
+		mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
 
 		JMenu mnKonto = new JMenu("Konto");
 		menuBar.add(mnKonto);
@@ -184,7 +190,6 @@ public class KlientGUI extends WspolneGUI {
 	// TODO przeczytać podalsze i zrobić coś z tym
 
 	private JPanel createKategoria(String title, ArrayList<Produkty> products) {
-
 		JPanel categoryPanel = new JPanel();
 		categoryPanel.setLayout(new BorderLayout());
 		categoryPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -195,30 +200,26 @@ public class KlientGUI extends WspolneGUI {
 		toggleButton.setBorderPainted(false);
 		toggleButton.setHorizontalAlignment(SwingConstants.LEFT);
 
-		// Panel zawierający elementy kategorii
 		JPanel itemListPanel = new JPanel();
-		itemListPanel.setLayout(new GridLayout(0, 3, 10, 10));
+		itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
 		itemListPanel.setVisible(false);
 		for (Produkty produkt : products) {
-			itemListPanel.add(createItemPanel(produkt.getNazwaProduktu(),produkt.getSciezkaObrazu()));
-
+			itemListPanel.add(createItemPanel(produkt));
 		}
 
 		scrollPane = new JScrollPane(itemListPanel);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(380, 100)); // Fixed height for scrollable area
-		scrollPane.setVisible(false); // Initially hidden
+		scrollPane.setPreferredSize(new Dimension(380, 100));
+		scrollPane.setVisible(false);
 
 		categoryPanel.add(itemListPanel);
 		categoryPanel.add(toggleButton, BorderLayout.NORTH);
-		// categoryPanel.add(scrollPane, BorderLayout.CENTER);
 
 		toggleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				expanded = !expanded;
 				itemListPanel.setVisible(expanded);
-				// scrollPane.setVisible(expanded);
 				toggleButton.setText((expanded ? "▼ " : "► ") + title);
 				categoryPanel.revalidate();
 				categoryPanel.repaint();
@@ -227,30 +228,31 @@ public class KlientGUI extends WspolneGUI {
 		return categoryPanel;
 	}
 
-	private JPanel createItemPanel(String name,String sciezkaObrazu) {
+	private JPanel createItemPanel(Produkty produkt) {
 		JPanel itemPanel = new JPanel();
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
 		itemPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 		// TUTAJ SĄ OBRAZY,TRZEBA DODAĆ ICH W BAZĘ DANYCH
-		 ImageIcon originalIcon = null;
+		ImageIcon originalIcon = null;
 		try {
 			originalIcon = new ImageIcon(ImageIO.read(new File("./Grafika/Produkty/Fotografia/KartaPamieci.png")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 originalIcon.getImage();
-		Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100,
-		Image.SCALE_SMOOTH);
+		originalIcon.getImage();
+		Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
-		JLabel nameLabel = new JLabel(name);
+		JLabel nameLabel = new JLabel(produkt.getNazwaProduktu());
 		JButton itemButton = new JButton("Dodaj do koszyka");
-		itemButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		itemButton.addActionListener(e -> koszyk.add(produkt));
+
 		nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-		itemPanel.add(Box.createVerticalStrut(5));
+		itemButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
 		itemPanel.add(iconLabel);
 		itemPanel.add(Box.createVerticalStrut(5));
 		itemPanel.add(nameLabel);
@@ -260,6 +262,29 @@ public class KlientGUI extends WspolneGUI {
 		itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		return itemPanel;
+	}
+
+	private void pokazKoszyk(JFrame frame1) {
+		if (koszyk.isEmpty()) {
+			JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			StringBuilder zawartosc = new StringBuilder("Zawartość koszyka:\n\n");
+			for (Produkty produkt : koszyk) {
+				zawartosc.append(produkt.getNazwaProduktu()).append("\n");
+			}
+
+			JButton kupButton = new JButton("Kup");
+
+			kupButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					klient.kup(frame1);
+					koszyk.clear();
+				}
+			});
+
+			JOptionPane.showMessageDialog(frame1, zawartosc.toString(), "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	private void toggleContent() {

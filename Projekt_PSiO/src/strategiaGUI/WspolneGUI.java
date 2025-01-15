@@ -43,9 +43,6 @@ public abstract class WspolneGUI implements GUIstrategia {
 		JMenu mnOgolne = new JMenu("Ogólne");
 		menuBar.add(mnOgolne);
 
-		JMenuItem mntmMojeKonto = new JMenuItem("Zrobienie konta");
-		mnOgolne.add(mntmMojeKonto);
-
 		JMenuItem mntmMojeDane = new JMenuItem("Moje konto");
 		mnOgolne.add(mntmMojeDane);
 
@@ -78,35 +75,6 @@ public abstract class WspolneGUI implements GUIstrategia {
 
 				frame1.revalidate();
 				frame1.repaint();
-			}
-		});
-
-		// Informacja z konta użytkownika
-		mntmMojeKonto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-				frame1.getContentPane().removeAll();
-
-				InfoOOsobieGUI strona = new InfoOOsobieGUI(frame1);
-				strona.getLbTytul().setText("   MOJE KONTO   ");
-				strona.getLbTytul().setFont(new Font("Arial", Font.BOLD, 24)); // Изменяем шрифт на Arial, жирный и
-																				// размер 24
-				strona.getLbTytul().setForeground(Color.GREEN);
-
-				JButton saveButton = new JButton("Zapisz zmiany");
-				saveButton.setBackground(new Color(67, 160, 71)); // Зеленый фон
-				saveButton.setForeground(Color.WHITE); // Белый текст
-				saveButton.setFont(new Font("Arial", Font.BOLD, 14)); // Жирный шрифт
-				saveButton.setFocusPainted(false);
-				panel.add(saveButton);
-
-				frame1.getContentPane().add(panel, BorderLayout.SOUTH);
-
-				// Osoba osoba = Metody.getAktywnaOsoba();
-
-				frame1.revalidate();
-				frame1.repaint();
-
 			}
 		});
 		// TODO dostęp do danych konta
