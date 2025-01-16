@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
@@ -15,6 +14,8 @@ import osoba.*;
 import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 public class KierownikGUI extends PracownikGUI {
 
@@ -458,16 +459,35 @@ public class KierownikGUI extends PracownikGUI {
 		toolIcon(searchFrame);
 
 		JPanel searchPanel = new JPanel(new FlowLayout());
-		JTextField searchField = new JTextField(20);
-		JButton searchButton = new JButton("Szukaj");
+		JTextField searchField = new JTextField(30);
+
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                onTextChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                onTextChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                onTextChanged();
+            }
+
+            // Metoda wywoływana po każdej zmianie tekstu
+            private void onTextChanged() {
+            	search(searchField.getText(), searchTableModel, lista);
+            }
+        });
 
 		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
 		searchPanel.add(searchField);
-		searchPanel.add(searchButton);
+		searchPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		JTable searchTable = new JTable(searchTableModel);
-
-		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, lista));
 
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
