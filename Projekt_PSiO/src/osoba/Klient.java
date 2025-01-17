@@ -26,6 +26,13 @@ public class Klient extends Osoba {
 		this.koszyk = koszyk;
 	}
 
+	// Konstruktor
+	public Klient(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
+			double saldoKonta, Promocja promocjaKlienta) {
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
+		this.promocjaKlienta = promocjaKlienta;
+	}
+
 	// Getters and Setters
 	public Promocja getPromocjaKlienta() {
 		return promocjaKlienta;

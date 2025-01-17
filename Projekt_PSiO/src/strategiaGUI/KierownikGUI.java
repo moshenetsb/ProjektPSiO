@@ -24,6 +24,7 @@ public class KierownikGUI extends PracownikGUI {
 	private ArrayList<Pracownik> listaPracownikow;
 	private DefaultTableModel klientTableModel;
 	private DefaultTableModel pracownikTableModel;
+	private Osoba osoba;
 
 	public KierownikGUI(JFrame frame1) {
 		super(frame1);
@@ -176,6 +177,13 @@ public class KierownikGUI extends PracownikGUI {
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
+		if (typ.equals(Pracownik.class)) {
+			if (listaPracownikow.get(selectedRow) instanceof Kierownik) {
+				JOptionPane.showMessageDialog(frame, "Nie można edtować informacji o kierowniku w ten sposób!",
+						"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+		}
 
 		JDialog accountDialog = new JDialog(frame, "", true);
 
@@ -212,7 +220,6 @@ public class KierownikGUI extends PracownikGUI {
 
 		JPanel btnPanel = new JPanel(new FlowLayout());
 		JButton btnAdd = new JButton();
-		Osoba osoba = null;
 
 		btnPanel.add(btnAdd);
 
@@ -274,16 +281,24 @@ public class KierownikGUI extends PracownikGUI {
 				String saldoKonta = saldoField.getText().trim();
 
 				if (isValidDataSaldoKonta(frame, saldoKonta)
-						&& Metody.isValidData(frame, email, haslo, login, nazwisko, imie, wiek)) {
+						&& Metody.isValidData(frame, email, haslo, login, nazwisko, imie, wiek, true, osoba)) {
 
 					if (typ.equals(Pracownik.class)) {
 						String pesel = peselField.getText().trim();
 
 						if (isValidDataPracownik(frame, pesel)) {
-							Pracownik nowyPracownik = new Pracownik(email, haslo, login, nazwisko, imie,
-									Integer.parseInt(wiek), null, Double.parseDouble(saldoKonta), pesel);
+							Pracownik pracownik;
 
-							listaPracownikow.add(nowyPracownik);
+							if (czyEdytowanie) {
+								pracownik = new Pracownik(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+										osoba.getAdres(), Double.parseDouble(saldoKonta), pesel);
+								listaPracownikow.set(selectedRow, pracownik);
+
+							} else {
+								pracownik = new Pracownik(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+										null, Double.parseDouble(saldoKonta), pesel);
+								listaPracownikow.add(pracownik);
+							}
 							accountDialog.dispose();
 							refreshTable(pracownikTableModel, listaPracownikow);
 						}
@@ -300,10 +315,18 @@ public class KierownikGUI extends PracownikGUI {
 							promocja = new PromocjaStudenta();
 						}
 
-						Klient nowyKlient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
-								null, Integer.parseInt(saldoKonta), promocja, new ArrayList<>(), new Zakupy());
+						Klient klient;
 
-						listaKlientow.add(nowyKlient);
+						if (czyEdytowanie) {
+							klient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+									osoba.getAdres(), Double.parseDouble(saldoKonta), promocja);
+							listaKlientow.set(selectedRow, klient);
+						} else {
+							klient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek), null,
+									Double.parseDouble(saldoKonta), promocja, new ArrayList<>(), new Zakupy());
+							listaKlientow.add(klient);
+						}
+
 						accountDialog.dispose();
 						refreshTable(klientTableModel, listaKlientow);
 					}

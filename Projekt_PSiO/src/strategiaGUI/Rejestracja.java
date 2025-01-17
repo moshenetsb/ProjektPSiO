@@ -96,7 +96,7 @@ public class Rejestracja implements GUIstrategia {
 		String imie = imieField.getText().trim();
 		String wiek = wiekField.getText().trim();
 
-		if (Metody.isValidData(frame1, email, haslo, login, nazwisko, imie, wiek)) {
+		if (Metody.isValidData(frame1, email, haslo, login, nazwisko, imie, wiek, false, null)) {
 			Klient newClient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
 					new Adres("", "", "", "", "", ""), 0, new PromocjaPodstawowa(), new ArrayList<>(), new Zakupy());
 			Metody.getListaKlientow().add(newClient);

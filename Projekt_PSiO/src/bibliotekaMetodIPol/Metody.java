@@ -15,7 +15,7 @@ public class Metody {
 	// Pola_statyczne______________________________________________________________________________
 	private static GUIstrategia wybraneGUI;
 	private static String loginAktywnejOsoby;
-	
+
 	private static Loteria loteria;
 
 	private static ArrayList<Pracownik> listaOsobZarzadzajacych = new ArrayList<>();
@@ -90,16 +90,17 @@ public class Metody {
 		Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(login));
 		klient.setSaldoKonta(klient.getSaldoKonta() + zmiana);
 	}
-	
+
 	public static boolean czyWystarczyPieniedzy(String login, double ileTrzebaMiec) {
 		Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(login));
 		if (klient.getSaldoKonta() >= ileTrzebaMiec)
 			return true;
-		
+
 		return false;
 	}
 
-	public static boolean isValidData(JFrame frame1, String email, String haslo, String login, String nazwisko, String imie, String wiekStr) {
+	public static boolean isValidData(JFrame frame1, String email, String haslo, String login, String nazwisko,
+			String imie, String wiekStr, boolean czyEdytowanie, Osoba osobaEdytowana) {
 		if (email.isEmpty() || haslo.isEmpty() || login.isEmpty() || nazwisko.isEmpty() || imie.isEmpty()
 				|| wiekStr.isEmpty()) {
 			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być wypełnione!", "Błąd",
@@ -115,11 +116,26 @@ public class Metody {
 		boolean emailExists = true;
 		boolean loginExists = true;
 
-		if (MenuLogowanie.szukajIDEmailKlienta(email) == -1 && MenuLogowanie.szukajIDEmailZarzadzajacych(email) == -1)
-			emailExists = false;
+		if (czyEdytowanie) {
+			if ((MenuLogowanie.szukajIDEmailKlienta(email) == -1
+					&& MenuLogowanie.szukajIDEmailZarzadzajacych(email) == -1)
+					|| osobaEdytowana.getEmail().equals(email))
+				emailExists = false;
 
-		if (MenuLogowanie.szukajIDLoginKlienta(login) == -1 && MenuLogowanie.szukajIDLoginZarzadzajacych(login) == -1)
-			loginExists = false;
+			if ((MenuLogowanie.szukajIDLoginKlienta(login) == -1
+					&& MenuLogowanie.szukajIDLoginZarzadzajacych(login) == -1)
+					|| osobaEdytowana.getLogin().equals(login))
+				loginExists = false;
+
+		} else {
+			if (MenuLogowanie.szukajIDEmailKlienta(email) == -1
+					&& MenuLogowanie.szukajIDEmailZarzadzajacych(email) == -1)
+				emailExists = false;
+
+			if (MenuLogowanie.szukajIDLoginKlienta(login) == -1
+					&& MenuLogowanie.szukajIDLoginZarzadzajacych(login) == -1)
+				loginExists = false;
+		}
 
 		if (emailExists && loginExists) {
 			JOptionPane.showMessageDialog(frame1, "Konto z podanym emailem i loginem już istnieje!", "Błąd",
