@@ -282,7 +282,7 @@ public class KierownikGUI extends PracownikGUI {
 				String saldoKonta = saldoField.getText().trim();
 
 				if (isValidDataSaldoKonta(frame, saldoKonta)
-						&& Metody.isValidData(frame, email, haslo, login, nazwisko, imie, wiek, true, osoba)) {
+						&& Osoba.isValidData(frame, email, haslo, login, nazwisko, imie, wiek, true, osoba)) {
 
 					if (typ.equals(Pracownik.class)) {
 						String pesel = peselField.getText().trim();

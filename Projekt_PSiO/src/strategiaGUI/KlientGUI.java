@@ -12,6 +12,7 @@ import zakupy.Zakupy;
 import java.util.ArrayList;
 import logowanie.*;
 import osoba.Klient;
+import osoba.Osoba;
 
 public class KlientGUI extends WspolneGUI {
 
@@ -104,7 +105,8 @@ public class KlientGUI extends WspolneGUI {
 		int result = JOptionPane.showConfirmDialog(frame1, panel, "Doładowanie konta", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			try {
-				Metody.updateSaldoKonta(Double.parseDouble(kwotaField.getText()), Metody.getLoginAktywnejOsoby());
+				Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
+				klient.updateSaldoKonta(Double.parseDouble(kwotaField.getText()));
 
 				refreshSaldoKonta(lbSaldoKonta);
 
@@ -140,7 +142,8 @@ public class KlientGUI extends WspolneGUI {
 		if (result == JOptionPane.YES_OPTION) {
 
 			// Sprawdzamy, czy wystarczy pieniędzy
-			if (!Metody.czyWystarczyPieniedzy(Metody.getLoginAktywnejOsoby(), Metody.getLoteria().getWartosc())) {
+			Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
+			if (!klient.czyWystarczyPieniedzy(Metody.getLoteria().getWartosc())) {
 				JOptionPane.showMessageDialog(frame1, "Brakuje pieniędzy dla gry! Doładuj konto i wróć.", "Loteria",
 						JOptionPane.ERROR_MESSAGE);
 				return false;
