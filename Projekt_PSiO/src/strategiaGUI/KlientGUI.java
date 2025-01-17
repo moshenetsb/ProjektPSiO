@@ -1,28 +1,18 @@
 package strategiaGUI;
 
 import javax.imageio.ImageIO;
-
 import javax.swing.*;
-
-import Obserwator.Observer;
-import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import bibliotekaMetodIPol.*;
 import produkty.*;
-import promocjaStrategia.PromocjaPodstawowa;
-import zakupy.Zakupy;
-
 import java.util.ArrayList;
 import logowanie.*;
 import osoba.Klient;
-import osoba.Osoba;
 
-public class KlientGUI extends WspolneGUI implements Observer {
+public class KlientGUI extends WspolneGUI {
 
 	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i
 	// kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
@@ -36,6 +26,8 @@ public class KlientGUI extends WspolneGUI implements Observer {
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
+	private ArrayList<Produkty> koszyk = new ArrayList<Produkty>();
+
 	// private Klient klient;
 	// private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
 
@@ -44,23 +36,19 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		super(frame1);
 
 		JTabbedPane tabPanel = new JTabbedPane();
-
 		homePanel = new JPanel();
-		homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.Y_AXIS));
-
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		// contentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 		sortArrayList();
 
-		homePanel.add(createSingleItemSection("Wysprzedaż", productsGaming));
-
 		contentPanel.add(createKategoria("Gaming", productsGaming));
 		contentPanel.add(createKategoria("Fotografia", productsFotografia));
 		contentPanel.add(createKategoria("Mieszane", productsMieszane));
 
 		JScrollPane scrollPane = new JScrollPane(contentPanel);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		tabPanel.addTab("Widok Główny", homePanel);
@@ -76,6 +64,152 @@ public class KlientGUI extends WspolneGUI implements Observer {
 
 		// TODO Auto-generated method stub
 
+	}
+
+	private void pokazKoszyk(JFrame frame1) {
+		if (koszyk.isEmpty()) {
+			JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+
+		JFrame koszykFrame = null;
+		for (Window window : Window.getWindows()) {
+			if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Koszyk")) {
+				koszykFrame = (JFrame) window;
+				break;
+			}
+		}
+
+		if (koszykFrame == null) {
+			koszykFrame = new JFrame("Koszyk");
+			koszykFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			koszykFrame.setSize(700, 700);
+		}
+
+		try {
+			koszykFrame.setIconImage(ImageIO.read(new File("Grafika/koszyk.jpg")));
+		} catch (Exception e) {
+			System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
+		}
+
+		JPanel koszykPanel = new JPanel();
+		koszykPanel.setLayout(new BoxLayout(koszykPanel, BoxLayout.Y_AXIS));
+		koszykPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		final JFrame finalKoszykFrame = koszykFrame;
+
+		for (Produkty produkt : koszyk) {
+			JPanel produktPanel = new JPanel();
+			produktPanel.setLayout(new BoxLayout(produktPanel, BoxLayout.X_AXIS));
+			produktPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+			produktPanel.setPreferredSize(new Dimension(600, 150));
+			produktPanel.setMaximumSize(new Dimension(600, 150));
+
+			try {
+				File file = new File(produkt.getSciezkaObrazu());
+				ImageIcon originalIcon = new ImageIcon(ImageIO.read(file));
+
+				Image image = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+				JLabel obrazekLabel = new JLabel(new ImageIcon(image));
+				obrazekLabel.setHorizontalAlignment(SwingConstants.LEFT);
+				obrazekLabel.setPreferredSize(new Dimension(100, 100));
+				produktPanel.add(obrazekLabel);
+			} catch (IOException e) {
+				e.printStackTrace();
+				JLabel obrazekLabel = new JLabel(new ImageIcon("domyslny_obrazek.jpg"));
+				obrazekLabel.setHorizontalAlignment(SwingConstants.LEFT);
+				obrazekLabel.setPreferredSize(new Dimension(100, 100));
+				produktPanel.add(obrazekLabel);
+			}
+
+			JPanel tekstPanel = new JPanel();
+			tekstPanel.setLayout(new BoxLayout(tekstPanel, BoxLayout.Y_AXIS));
+			tekstPanel.setPreferredSize(new Dimension(300, 100));
+
+			JLabel nazwaLabel = new JLabel("Nazwa: " + produkt.getNazwaProduktu());
+			nazwaLabel.setFont(new Font("Arial", Font.BOLD, 14));
+			nazwaLabel.setPreferredSize(new Dimension(300, 20));
+			nazwaLabel.setMaximumSize(new Dimension(300, 20));
+			tekstPanel.add(nazwaLabel);
+
+			JLabel cenaLabel = new JLabel("Cena: " + produkt.getCenaProduktu() + " PLN");
+			cenaLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+			tekstPanel.add(cenaLabel);
+
+			produktPanel.add(tekstPanel);
+
+			JTextArea opisText = new JTextArea(3, 30);
+			opisText.setText(produkt.getOpisProduktu());
+			opisText.setWrapStyleWord(true);
+			opisText.setLineWrap(true);
+			opisText.setCaretPosition(0);
+			opisText.setEditable(false);
+			opisText.setFont(new Font("Arial", Font.ITALIC, 12));
+
+			opisText.setPreferredSize(new Dimension(350, 60));
+			opisText.setMaximumSize(new Dimension(350, 100));
+			opisText.setMinimumSize(new Dimension(350, 60));
+
+			JScrollPane opisScroll = new JScrollPane(opisText);
+			opisScroll.setPreferredSize(new Dimension(350, 100));
+			opisScroll.setMaximumSize(new Dimension(350, 100));
+
+			produktPanel.add(opisScroll);
+
+			JButton usunButton = new JButton(new ImageIcon("Grafika/x.jpg"));
+			usunButton.setPreferredSize(new Dimension(40, 40));
+			usunButton.setFont(new Font("Arial", Font.BOLD, 16));
+			usunButton.addActionListener(e -> {
+				koszyk.remove(produkt);
+				if (koszyk.isEmpty()) {
+					finalKoszykFrame.dispose();
+					JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					koszykPanel.removeAll();
+					pokazKoszyk(frame1);
+				}
+			});
+
+			JPanel usunPanel = new JPanel();
+			usunPanel.setLayout(new BoxLayout(usunPanel, BoxLayout.Y_AXIS));
+			usunPanel.add(usunButton);
+			produktPanel.add(usunPanel);
+
+			koszykPanel.add(produktPanel);
+		}
+
+		JButton kupButton = new JButton("Kup");
+		kupButton.setPreferredSize(new Dimension(120, 40));
+		kupButton.addActionListener(e -> {
+			JOptionPane.showMessageDialog(frame1, "Zakup został dokonany.", "Zakup", JOptionPane.INFORMATION_MESSAGE);
+			koszyk.clear();
+			finalKoszykFrame.dispose();
+		});
+
+		JButton kontynuujButton = new JButton("Kontynuuj zakupy");
+		kontynuujButton.setPreferredSize(new Dimension(180, 40));
+		kontynuujButton.addActionListener(e -> {
+			finalKoszykFrame.setVisible(false);
+			frame1.setVisible(true);
+			try {
+				frame1.setIconImage(ImageIO.read(new File("./Grafika/dolarZielony.png")));
+			} catch (Exception e1) {
+				System.err.println("Błąd podczas wczytywania ikony: " + e1.getMessage());
+			}
+		});
+
+		JPanel przyciskiPanel = new JPanel();
+		przyciskiPanel.add(kupButton);
+		przyciskiPanel.add(kontynuujButton);
+
+		koszykPanel.add(przyciskiPanel);
+
+		koszykFrame.getContentPane().removeAll();
+		koszykFrame.add(new JScrollPane(koszykPanel));
+		koszykFrame.revalidate();
+		koszykFrame.repaint();
+		koszykFrame.setVisible(true);
 	}
 
 	private void createManagementMenu(JFrame frame1) {
@@ -95,7 +229,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 
 		JMenuItem mntmPokazKoszyk = new JMenuItem("Pokaż koszyk");
 		mnKoszyk.add(mntmPokazKoszyk);
-		// mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
+		mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
 
 		JMenu mnKonto = new JMenu("Konto");
 		menuBar.add(mnKonto);
@@ -122,7 +256,8 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		int result = JOptionPane.showConfirmDialog(frame1, panel, "Doładowanie konta", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			try {
-				Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
+				Klient klient = Metody.getListaKlientow()
+						.get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
 				klient.updateSaldoKonta(Double.parseDouble(kwotaField.getText()));
 
 				refreshSaldoKonta(lbSaldoKonta);
@@ -159,7 +294,8 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		if (result == JOptionPane.YES_OPTION) {
 
 			// Sprawdzamy, czy wystarczy pieniędzy
-			Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
+			Klient klient = Metody.getListaKlientow()
+					.get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
 			if (!klient.czyWystarczyPieniedzy(Metody.getLoteria().getWartosc())) {
 				JOptionPane.showMessageDialog(frame1, "Brakuje pieniędzy dla gry! Doładuj konto i wróć.", "Loteria",
 						JOptionPane.ERROR_MESSAGE);
@@ -201,88 +337,6 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
 	}
 
-	private JPanel GlownyWidok() {
-		JPanel znizkiPanel = new JPanel();
-		znizkiPanel.setLayout(new BorderLayout());
-		znizkiPanel = createSingleItemSection("Wysprzedaż", productsGaming);
-		return znizkiPanel;
-	}
-
-	private JPanel createSingleItemSection(String title, ArrayList<Produkty> products) {
-		JPanel section = new JPanel(new BorderLayout());
-
-		JLabel sectionTitle = new JLabel(title, JLabel.LEFT);
-		sectionTitle.setFont(new Font("Arial", Font.BOLD, 18));
-		section.add(sectionTitle, BorderLayout.NORTH);
-
-		// Panel do wyświetlania jednego elementu
-		JPanel itemPanel = new JPanel();
-		itemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		itemPanel.setPreferredSize(new Dimension(600, 200));
-
-		Produkty firstProdukt = products.get(0);
-
-		JLabel itemImageLabel = new JLabel();
-		itemImageLabel.setPreferredSize(new Dimension(150, 150));
-		itemImageLabel.setIcon(scaleImage(new ImageIcon(firstProdukt.getSciezkaObrazu()), 150, 150));
-		itemPanel.add(itemImageLabel);
-
-		JPanel textPanel = new JPanel();
-		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-
-		JLabel itemNameLabel = new JLabel(firstProdukt.getNazwaProduktu());
-		itemNameLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-		JLabel itemPriceLabel = new JLabel("Cena: " + firstProdukt.getCenaProduktu() + " PLN");
-		itemPriceLabel.setForeground(Color.RED);
-		itemPriceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-		JButton buyButton = new JButton("Kup");
-
-		textPanel.add(itemNameLabel);
-		textPanel.add(itemPriceLabel);
-		textPanel.add(buyButton);
-		itemPanel.add(textPanel);
-
-		section.add(itemPanel, BorderLayout.CENTER);
-
-		// Nawigacja za pomocą strzałek
-		JButton leftArrow = new JButton("<");
-		JButton rightArrow = new JButton(">");
-
-		int[] currentIndex = { 0 };
-
-		// Akcja dla lewej strzałki
-		leftArrow.addActionListener(e -> {
-			currentIndex[0] = (currentIndex[0] - 1 + products.size()) % products.size();
-			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
-		});
-		// Akcja dla prawej strzałki
-		rightArrow.addActionListener(e -> {
-			currentIndex[0] = (currentIndex[0] + 1 + products.size()) % products.size();
-			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
-		});
-
-		// Dodanie strzałek nawigacyjnych
-		JPanel arrowsPanel = new JPanel(new BorderLayout());
-		arrowsPanel.add(leftArrow, BorderLayout.WEST);
-		arrowsPanel.add(rightArrow, BorderLayout.EAST);
-		section.add(arrowsPanel, BorderLayout.SOUTH);
-
-		return section;
-	}
-
-	private void updateProductDisplay(Produkty produkt, JLabel imageLabel, JLabel nameLabel, JLabel priceLabel) {
-		nameLabel.setText(produkt.getNazwaProduktu());
-		priceLabel.setText("Cena: " + produkt.getCenaProduktu() + " PLN");
-		imageLabel.setIcon(scaleImage(new ImageIcon(produkt.getSciezkaObrazu()), 150, 150));
-	}
-
-	private static ImageIcon scaleImage(ImageIcon icon, int width, int height) {
-		Image image = icon.getImage();
-		Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH); // Skalowanie obrazu
-		return new ImageIcon(scaledImage);
-	}
-
 	// _____________________________________________________________
 	// TODO przeczytać podalsze i zrobić coś z tym
 
@@ -300,7 +354,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		JPanel itemListPanel = new JPanel();
 		itemListPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		itemListPanel.setVisible(false);
-		itemListPanel.setBackground(Color.BLACK);
+		// itemListPanel.setBackground(Color.BLACK);
 		for (Produkty produkt : products) {
 			itemListPanel.add(createItemPanel(produkt));
 		}
@@ -335,16 +389,21 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		JPanel itemPanel = new JPanel();
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
 		itemPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		itemPanel.setBackground(Color.DARK_GRAY);
+		// itemPanel.setBackground(Color.DARK_GRAY);
 
 		ImageIcon originalIcon = null;
-		originalIcon = new ImageIcon(produkt.getSciezkaObrazu());
+		try {
+			originalIcon = new ImageIcon(ImageIO.read(new File(produkt.getSciezkaObrazu())));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		originalIcon.getImage();
 		Image scaledImage = originalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
 		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
 		JLabel nameLabel = new JLabel(produkt.getNazwaProduktu());
 		JButton itemButton = new JButton("Dodaj do koszyka");
-		// itemButton.addActionListener(e -> koszyk.add(produkt));
+		itemButton.addActionListener(e -> koszyk.add(produkt));
 
 		nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -389,12 +448,6 @@ public class KlientGUI extends WspolneGUI implements Observer {
 				productsMieszane.add(produkt);
 			}
 		}
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
