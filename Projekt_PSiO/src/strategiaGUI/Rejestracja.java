@@ -3,17 +3,15 @@ package strategiaGUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import logowanie.MenuLogowanie;
-import adres.Adres;
 import bibliotekaMetodIPol.Metody;
 import bibliotekaMetodIPol.ZapisywanieObiektow;
+import inneGUI.GUImain;
 import osoba.*;
 import promocjaStrategia.PromocjaPodstawowa;
 import zakupy.Zakupy;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import bibliotekaMetodIPol.*;
 
 public class Rejestracja implements GUIstrategia {
 
@@ -53,6 +51,10 @@ public class Rejestracja implements GUIstrategia {
 
 		JTextField emailField = new JTextField();
 		JPasswordField hasloField = new JPasswordField();
+
+		hasloField.setEchoChar('*');
+		GUImain.ustawWyswietlelieHasla(hasloField);
+
 		JTextField loginField = new JTextField();
 		JTextField nazwiskoField = new JTextField();
 		JTextField imieField = new JTextField();
@@ -96,13 +98,13 @@ public class Rejestracja implements GUIstrategia {
 		String imie = imieField.getText().trim();
 		String wiek = wiekField.getText().trim();
 
-		if (Metody.isValidData(frame1, email, haslo, login, nazwisko, imie, wiek)) {
+		if (Osoba.isValidData(frame1, email, haslo, login, nazwisko, imie, wiek, false, null)) {
 			Klient newClient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
-					new Adres("", "", "", "", "", ""), 0, new PromocjaPodstawowa(), new ArrayList<>(), new Zakupy());
+					null, 0, new PromocjaPodstawowa(), new ArrayList<>(), new Zakupy());
 			Metody.getListaKlientow().add(newClient);
 			ZapisywanieObiektow.zapiszKlientow();
 
-			JOptionPane.showMessageDialog(frame1, "Rejestracja zakończona sukcesem.", "Sukces",
+			JOptionPane.showMessageDialog(frame1, "Rejestracja zakończona sukcesem.", "Informacja rejestracji",
 					JOptionPane.INFORMATION_MESSAGE);
 
 			Metody.setLoginAktywnejOsoby(login);
@@ -110,8 +112,6 @@ public class Rejestracja implements GUIstrategia {
 		}
 
 	}
-
-	
 
 	private void returnToLogin() {
 		Metody.setWybraneGUI(new LoginGUI(frame1));

@@ -26,7 +26,7 @@ public class PracownikGUI extends WspolneGUI {
 	private JTextField priceField;
 	private JTextField quantityField;
 	private JTextField descriptionField;
-	private JTextField imagePathField;
+	private JTextField pathImageField;
 	private JComboBox<String> productTypeComboBox;
 	private JTextField productIdField;
 	private JComboBox<String> actionComboBox;
@@ -144,14 +144,56 @@ public class PracownikGUI extends WspolneGUI {
 		gbc.gridx = 3;
 		panel.add(descriptionField, gbc);
 		
-		gbc.gridx = 5;
-		gbc.insets=new Insets(0, 0, 0, 0);
-		gbc.gridy = 1;
-		panel.add(new JLabel("Obraz:"), gbc);
-		imagePathField = new JTextField(20);
-		gbc.gridx = 4;
-		gbc.gridy=2;
-		panel.add(imagePathField, gbc);
+				gbc.gridx = 0;
+	    gbc.gridy = 4;
+	    panel.add(new JLabel("Ścieżka zdjęcia:"), gbc);
+	    pathImageField = new JTextField(20);
+	    gbc.gridx = 1;
+	    gbc.gridwidth = 2; 
+	    panel.add(pathImageField, gbc);
+	    
+	    gbc.gridy = 4;
+	    gbc.gridx = 3;
+	    gbc.gridwidth = 1;
+	    JButton browseButton = new JButton("Przeglądaj...");
+	    panel.add(browseButton, gbc);
+
+	    browseButton.addActionListener(new ActionListener() {
+
+	        public void actionPerformed(ActionEvent e) {
+	        	 UIManager.put("FileChooser.openDialogTitleText", "Wybierz plik");
+	             UIManager.put("FileChooser.openButtonText", "Wybierz");
+	             UIManager.put("FileChooser.cancelButtonText", "Anuluj");
+	            
+	            JFileChooser fileChooser = new JFileChooser(new File("Grafika/Produkty"));
+
+	            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            fileChooser.setAcceptAllFileFilterUsed(false);
+
+	            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+	                
+	                public boolean accept(File file) {
+	                    
+	                    return file.isDirectory() || file.getName().toLowerCase().matches(".*\\.(png|jpg|jpeg|gif)");
+	                }
+
+	                public String getDescription() {
+	                    return "Obrazy (PNG, JPG, GIF)";
+	                }
+	            });
+
+	            int returnValue = fileChooser.showOpenDialog(panel);
+	            if (returnValue == JFileChooser.APPROVE_OPTION) {
+	                File selectedFile = fileChooser.getSelectedFile();
+	                String fullPath = selectedFile.getAbsolutePath();
+
+	                int index = fullPath.indexOf("Grafika");
+	                if (index != -1) {
+	                    String relativePath = fullPath.substring(index);
+	                    pathImageField.setText(relativePath);
+	            }
+	        }
+	        }});
 	}
 
 	private void addActionButtons(JPanel panel, GridBagConstraints gbc) {
@@ -522,7 +564,7 @@ public class PracownikGUI extends WspolneGUI {
 		priceField.setText("");
 		quantityField.setText("");
 		descriptionField.setText("");
-		imagePathField.setText("");
+		pathImageField.setText("");
 		productTypeComboBox.setSelectedIndex(0);
 		productsTable.clearSelection();
 	}
@@ -556,18 +598,18 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
-				String imagePath=imagePathField.getText();
+				String pathImage=pathImageField.getText();
 
 				Produkty newProduct;
 				switch (productType) {
 				case "Gaming":
-					newProduct = new Gaming(name, price, quantity, description,imagePath);
+					newProduct = new Gaming(name, price, quantity, description,pathImage);
 					break;
 				case "Fotografia":
-					newProduct = new Fotografia(name, price, quantity, description,imagePath);
+					newProduct = new Fotografia(name, price, quantity, description,pathImage);
 					break;
 				case "Mieszane":
-					newProduct = new Mieszane(name, price, quantity, description,imagePath);
+					newProduct = new Mieszane(name, price, quantity, description,pathImage);
 					break;
 				default:
 					throw new IllegalArgumentException("Nieprawidłowy typ produktu");
@@ -602,7 +644,7 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
-				String imagePath=imagePathField.getText();
+				String imagePath=pathImage.getText();
 
 				ArrayList<Produkty> products = Metody.getListaProduktow();
 				boolean found = false;

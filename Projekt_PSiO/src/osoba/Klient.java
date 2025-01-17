@@ -26,6 +26,13 @@ public class Klient extends Osoba {
 		this.koszyk = koszyk;
 	}
 
+	// Konstruktor
+	public Klient(String email, String haslo, String login, String nazwisko, String imie, int wiek, Adres adres,
+			double saldoKonta, Promocja promocjaKlienta) {
+		super(email, haslo, login, nazwisko, imie, wiek, adres, saldoKonta);
+		this.promocjaKlienta = promocjaKlienta;
+	}
+
 	// Getters and Setters
 	public Promocja getPromocjaKlienta() {
 		return promocjaKlienta;
@@ -64,7 +71,7 @@ public class Klient extends Osoba {
 
 			koszyk.setCenaDoZaplaty(koszyk.obliczCene() * (1 - this.promocjaKlienta.promocja() / 100.0));
 
-			if (!Metody.czyWystarczyPieniedzy(super.getLogin(), koszyk.getCenaDoZaplaty())) {
+			if (!this.czyWystarczyPieniedzy(koszyk.getCenaDoZaplaty())) {
 				JOptionPane.showMessageDialog(frame1, "Brakuje pięniędzy! Doładuj konto i wróć.", "Proces kupowania",
 						JOptionPane.ERROR_MESSAGE);
 
@@ -124,6 +131,13 @@ public class Klient extends Osoba {
 		}
 
 		return true;
+	}
+
+	public boolean czyWystarczyPieniedzy(double ileTrzebaMiec) {
+		if (this.getSaldoKonta() >= ileTrzebaMiec)
+			return true;
+
+		return false;
 	}
 
 }

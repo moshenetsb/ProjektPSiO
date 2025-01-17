@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
 import osoba.*;
-import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
+import inneGUI.GUImain;
 
 public class KierownikGUI extends PracownikGUI {
 
@@ -24,6 +24,7 @@ public class KierownikGUI extends PracownikGUI {
 	private ArrayList<Pracownik> listaPracownikow;
 	private DefaultTableModel klientTableModel;
 	private DefaultTableModel pracownikTableModel;
+	private Osoba osoba;
 
 	public KierownikGUI(JFrame frame1) {
 		super(frame1);
@@ -45,10 +46,6 @@ public class KierownikGUI extends PracownikGUI {
 
 	private void createManagementMenu(JFrame frame1) {
 		JMenuBar menuBar = frame1.getJMenuBar();
-		if (menuBar == null) {
-			menuBar = new JMenuBar();
-			frame1.setJMenuBar(menuBar);
-		}
 
 		JMenu toolsMenu = new JMenu("Zarządzanie kontami");
 		JMenu clientsSubmenu = new JMenu("Klienci");
@@ -176,6 +173,13 @@ public class KierownikGUI extends PracownikGUI {
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
+		if (typ.equals(Pracownik.class)) {
+			if (listaPracownikow.get(selectedRow) instanceof Kierownik) {
+				JOptionPane.showMessageDialog(frame, "Nie można edtować informacji o kierowniku w ten sposób!",
+						"Informacja edytowania", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+		}
 
 		JDialog accountDialog = new JDialog(frame, "", true);
 
@@ -185,6 +189,7 @@ public class KierownikGUI extends PracownikGUI {
 		JTextField emailField = new JTextField(10);
 		JPasswordField hasloField = new JPasswordField(10);
 		hasloField.setEchoChar('*');
+		GUImain.ustawWyswietlelieHasla(hasloField);
 		JTextField saldoField = new JTextField(10);
 
 		JTextField wiekField = new JTextField(10);
@@ -212,7 +217,6 @@ public class KierownikGUI extends PracownikGUI {
 
 		JPanel btnPanel = new JPanel(new FlowLayout());
 		JButton btnAdd = new JButton();
-		Osoba osoba = null;
 
 		btnPanel.add(btnAdd);
 
@@ -274,16 +278,24 @@ public class KierownikGUI extends PracownikGUI {
 				String saldoKonta = saldoField.getText().trim();
 
 				if (isValidDataSaldoKonta(frame, saldoKonta)
-						&& Metody.isValidData(frame, email, haslo, login, nazwisko, imie, wiek)) {
+						&& Osoba.isValidData(frame, email, haslo, login, nazwisko, imie, wiek, true, osoba)) {
 
 					if (typ.equals(Pracownik.class)) {
 						String pesel = peselField.getText().trim();
 
 						if (isValidDataPracownik(frame, pesel)) {
-							Pracownik nowyPracownik = new Pracownik(email, haslo, login, nazwisko, imie,
-									Integer.parseInt(wiek), null, Double.parseDouble(saldoKonta), pesel);
+							Pracownik pracownik;
 
-							listaPracownikow.add(nowyPracownik);
+							if (czyEdytowanie) {
+								pracownik = new Pracownik(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+										osoba.getAdres(), Double.parseDouble(saldoKonta), pesel);
+								listaPracownikow.set(selectedRow, pracownik);
+
+							} else {
+								pracownik = new Pracownik(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+										null, Double.parseDouble(saldoKonta), pesel);
+								listaPracownikow.add(pracownik);
+							}
 							accountDialog.dispose();
 							refreshTable(pracownikTableModel, listaPracownikow);
 						}
@@ -300,27 +312,22 @@ public class KierownikGUI extends PracownikGUI {
 							promocja = new PromocjaStudenta();
 						}
 
-						Klient nowyKlient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
-								null, Integer.parseInt(saldoKonta), promocja, new ArrayList<>(), new Zakupy());
+						Klient klient;
 
-						listaKlientow.add(nowyKlient);
+						if (czyEdytowanie) {
+							klient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+									osoba.getAdres(), Double.parseDouble(saldoKonta), promocja);
+							listaKlientow.set(selectedRow, klient);
+						} else {
+							klient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek), null,
+									Double.parseDouble(saldoKonta), promocja, new ArrayList<>(), new Zakupy());
+							listaKlientow.add(klient);
+						}
+
 						accountDialog.dispose();
 						refreshTable(klientTableModel, listaKlientow);
 					}
 				}
-			}
-		});
-
-		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
-		hasloField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				hasloField.setEchoChar((char) 0);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				hasloField.setEchoChar('*');
 			}
 		});
 
@@ -489,7 +496,8 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		JTable searchTable = new JTable(searchTableModel);
-
+		search(searchField.getText(), searchTableModel, lista);
+		
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
 
