@@ -28,8 +28,16 @@ public class PracownikGUI extends WspolneGUI {
 	private JTextField descriptionField;
 	private JComboBox<String> productTypeComboBox;
 	private JTextField productIdField;
+	private JComboBox<String> actionComboBox;
+	
+	private JButton confirmButton;
+	private JButton cancelButton;
+	JButton deleteButton;
+	JButton clearButton;
+	JButton searchButton;
+	private boolean isAddingProduct = false;
+	private boolean isModifyingProduct = false;
 
-	// Konstruktor
 	public PracownikGUI(JFrame frame1) {
 		super(frame1);
 		this.frame1 = frame1;
@@ -44,6 +52,7 @@ public class PracownikGUI extends WspolneGUI {
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
+		frame1.getContentPane().setBackground(Color.LIGHT_GRAY);
 		createToolsMenu(frame1);
 	}
 
@@ -96,11 +105,12 @@ public class PracownikGUI extends WspolneGUI {
 		panel.add(productTypeComboBox, gbc);
 
 		gbc.gridx = 2;
-		panel.add(new JLabel("ID produktu:"), gbc);
-		productIdField = new JTextField(10);
-		gbc.gridx = 3;
-		panel.add(productIdField, gbc);
-
+	    panel.add(new JLabel("ID produktu:"), gbc);
+	    productIdField = new JTextField(10);
+	    productIdField.setEditable(false); // Ustawienie pola jako nieedytowalne
+	    gbc.gridx = 3;
+	    panel.add(productIdField, gbc);
+	    
 		addProductDetailsFields(panel, gbc);
 		addActionButtons(panel, gbc);
 	}
@@ -136,30 +146,171 @@ public class PracownikGUI extends WspolneGUI {
 	private void addActionButtons(JPanel panel, GridBagConstraints gbc) {
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		JButton addButton = new JButton("Dodaj");
-		JButton modifyButton = new JButton("Modyfikuj");
-		JButton deleteButton = new JButton("Usuń");
-		JButton searchButton = new JButton("Szukaj");
-		JButton clearButton = new JButton("Wyczyść");
+		actionComboBox = new JComboBox<>(new String[]{"Wybierz akcję", "Dodaj", "Modyfikuj"});
+		deleteButton = new JButton("Usuń");
+		clearButton = new JButton("Wyczyść");
+		searchButton = new JButton("Szukaj");
+		confirmButton = new JButton("Zatwierdź");
+		cancelButton = new JButton("Anuluj");
+        confirmButton.setVisible(false);
+        cancelButton.setVisible(false);
 
-		buttonPanel.add(addButton);
-		buttonPanel.add(modifyButton);
+		buttonPanel.add(actionComboBox);
 		buttonPanel.add(deleteButton);
-		buttonPanel.add(searchButton);
 		buttonPanel.add(clearButton);
+		buttonPanel.add(searchButton);
 
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.gridwidth = 4;
 		panel.add(buttonPanel, gbc);
+		
+		
+		JPanel confirmCancelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        confirmCancelPanel.add(confirmButton);
+        confirmCancelPanel.add(cancelButton);
+        
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        panel.add(confirmCancelPanel, gbc);
 
-		addButton.addActionListener(e -> handleAddProduct());
-		modifyButton.addActionListener(e -> handleModifyProduct());
+
+        actionComboBox.addActionListener(e -> {
+            String selectedAction = (String) actionComboBox.getSelectedItem();
+            if ("Dodaj".equals(selectedAction)) {
+                JOptionPane.showMessageDialog(frame1, "Wybrałeś opcję \"Dodaj produkt\"");
+                enableAddMode();
+            } else if ("Modyfikuj".equals(selectedAction)) {
+                if (!isAddingProduct) {
+                    enableModifyMode();
+                    handleModifyProduct();  // Inicjalizuje proces modyfikacji
+                }
+            }
+        });
+        
+        confirmButton.addActionListener(e -> {
+            if (isAddingProduct) {
+                handleAddProduct();  
+                handleNextProductDialog();  
+            } else if (isModifyingProduct) {
+                handleModifyProduct();
+                handleNextModifyProduct();
+            }
+        });
+
+        cancelButton.addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(
+                frame1,
+                "Czy na pewno chcesz anulować dodawanie produktu?",
+                "Potwierdzenie",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (choice == JOptionPane.YES_OPTION) {
+                disableAddMode();
+                clearFields();
+                actionComboBox.setSelectedIndex(0); 
+            }
+        });
+    
 		deleteButton.addActionListener(e -> handleDeleteProduct());
 		searchButton.addActionListener(e -> showProductSearch());
 		clearButton.addActionListener(e -> clearFields());
 	}
+	
+	private void handleNextProductDialog() {
+	    int response = JOptionPane.showConfirmDialog(
+	        frame1,
+	        "Czy chcesz dodać następny produkt?",
+	        "Dodaj następny produkt",
+	        JOptionPane.YES_NO_OPTION
+	    );
 
+	    if (response == JOptionPane.YES_OPTION) {
+	        clearFields();  
+	        enableAddMode();  
+	    } else {
+	        disableAddMode();  
+	        actionComboBox.setSelectedIndex(0);  
+	    }
+	}
+	
+	private void handleNextModifyProduct(){
+		int response = JOptionPane.showConfirmDialog(
+		        frame1,
+		        "Czy chcesz zmodyfikować następny produkt?",
+		        "Zmodyfikuj następny produkt",
+		        JOptionPane.YES_NO_OPTION
+		    );
+
+		    if (response == JOptionPane.YES_OPTION) {
+		        clearFields();  
+		        enableModifyMode();  
+		    } else {
+		        disableModifyMode();  
+		        actionComboBox.setSelectedIndex(0);  
+		    }
+	}
+	
+
+	private void enableAddMode() {
+	    isAddingProduct = true;
+	    clearFields();
+	    productsTable.setEnabled(false);
+	    confirmButton.setVisible(true);
+	    cancelButton.setVisible(true);
+	    deleteButton.setEnabled(false);
+	    searchButton.setEnabled(false);
+	    actionComboBox.setEnabled(false);
+	    
+	    for (int i = 0; i < menuBar.getMenuCount(); i++) {
+	        menuBar.getMenu(i).setEnabled(false);
+	    }
+	}
+
+    private void disableAddMode() {
+        isAddingProduct = false;
+        confirmButton.setVisible(false);
+        cancelButton.setVisible(false);  
+        deleteButton.setEnabled(true);
+	    searchButton.setEnabled(true);
+	    actionComboBox.setEnabled(true);
+        
+        for (int i = 0; i < menuBar.getMenuCount(); i++) {
+            menuBar.getMenu(i).setEnabled(true);
+        }
+    }
+    
+    private void enableModifyMode() {
+        isModifyingProduct = true;  
+        productsTable.setEnabled(true);
+        confirmButton.setVisible(true);
+        cancelButton.setVisible(true);
+        deleteButton.setEnabled(false);
+        searchButton.setEnabled(false);
+        actionComboBox.setEnabled(false);
+        
+        for (int i = 0; i < menuBar.getMenuCount(); i++) {
+            menuBar.getMenu(i).setEnabled(false);
+        }
+    }
+
+    private void disableModifyMode() {
+        isModifyingProduct = false;
+        productsTable.setEnabled(true);
+        confirmButton.setVisible(false);
+        cancelButton.setVisible(false);
+        deleteButton.setEnabled(true);
+        searchButton.setEnabled(true);
+        actionComboBox.setEnabled(true);
+        
+        for (int i = 0; i < menuBar.getMenuCount(); i++) {
+            menuBar.getMenu(i).setEnabled(true);
+        }
+    }
+
+    
 	private void createProductsTable() {
 		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria" };
 		tableModel = new DefaultTableModel(columns, 0) {
@@ -239,6 +390,12 @@ public class PracownikGUI extends WspolneGUI {
 		JComboBox<String> sortOrder = new JComboBox<>(orderOptions);
 		sortPanel.add(sortOrder);
 		searchControls.add(sortPanel, gbc);
+		
+		JButton backProductManagementButton = new JButton("Zarządzanie produktami");
+	    backProductManagementButton.addActionListener(e -> showProductManagement()); 
+	    sortPanel.add(backProductManagementButton);
+	    
+	    searchControls.add(sortPanel, gbc);
 
 		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria" };
 		DefaultTableModel searchTableModel = new DefaultTableModel(columns, 0) {
@@ -280,14 +437,11 @@ public class PracownikGUI extends WspolneGUI {
 		sortCriteria.addActionListener(e -> searchListener.changedUpdate(null));
 		sortOrder.addActionListener(e -> searchListener.changedUpdate(null));
 
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		JButton backProductManagementButton = new JButton("Zarządzanie produktami");
-		backProductManagementButton.addActionListener(e -> showProductManagement());
-		buttonPanel.add(backProductManagementButton);
+		
 
 		panel.add(searchControls, BorderLayout.NORTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
-		panel.add(buttonPanel, BorderLayout.SOUTH);
+
 
 		return panel;
 	}
@@ -481,11 +635,7 @@ public class PracownikGUI extends WspolneGUI {
 
 	private void handleDeleteProduct() {
 		try {
-			if (productIdField.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(contentPanel, "Wybierz produkt do usunięcia.", "Informacja",
-						JOptionPane.INFORMATION_MESSAGE);
-				return;
-			}
+			
 
 			int productId = Integer.parseInt(productIdField.getText());
 			ArrayList<Produkty> products = Metody.getListaProduktow();

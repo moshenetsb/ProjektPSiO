@@ -3,8 +3,10 @@ package strategiaGUI;
 import javax.imageio.ImageIO;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
@@ -12,6 +14,8 @@ import osoba.*;
 import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 public class KierownikGUI extends PracownikGUI {
 
@@ -114,7 +118,8 @@ public class KierownikGUI extends PracownikGUI {
 
 	private void initializePracownikTableModel() {
 
-		String[] employeeColumnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "PESEL" };
+		String[] employeeColumnNames = { "Imię", "Nazwisko", "Login", "Email", "Hasło", "Saldo Konta", "Wiek",
+				"PESEL" };
 		pracownikTableModel = new DefaultTableModel(employeeColumnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -127,7 +132,7 @@ public class KierownikGUI extends PracownikGUI {
 
 	private void showClientManagement(JMenuItem manageClients) {
 		JFrame clientFrame = new JFrame("Zarządzanie Klientami");
-		clientFrame.setSize(1000, 600);
+		clientFrame.setSize(1100, 600);
 		clientFrame.setLayout(new BorderLayout());
 
 		toolIcon(clientFrame);
@@ -144,9 +149,9 @@ public class KierownikGUI extends PracownikGUI {
 		buttonPanel.add(removeButton);
 		buttonPanel.add(editButton);
 
-		addButton.addActionListener(e -> addClient());
+		addButton.addActionListener(e -> addOrEditAccount(Klient.class, clientFrame, false, klientTable));
 		removeButton.addActionListener(e -> deleteAccount(klientTable, clientFrame));
-		editButton.addActionListener(e -> editClient(klientTable, clientFrame));
+		editButton.addActionListener(e -> addOrEditAccount(Klient.class, clientFrame, true, klientTable));
 
 		refreshTable(klientTableModel, listaKlientow);
 
@@ -163,27 +168,207 @@ public class KierownikGUI extends PracownikGUI {
 		clientFrame.setVisible(true);
 	}
 
-	private void addClient() {
-		JTextField imieField = new JTextField(20);
-		JTextField nazwiskoField = new JTextField(20);
-		JTextField emailField = new JTextField(20);
+	private void addOrEditAccount(Class<?> typ, JFrame frame, boolean czyEdytowanie, JTable table) {
 
-		JPanel panel = new JPanel(new GridLayout(4, 2));
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow == -1 && czyEdytowanie) {
+			JOptionPane.showMessageDialog(frame, "Nie wybrano konto dla edytowania!", "Informacja edytowania",
+					JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+
+		JDialog accountDialog = new JDialog(frame, "", true);
+
+		JTextField imieField = new JTextField(10);
+		JTextField nazwiskoField = new JTextField(10);
+		JTextField loginField = new JTextField(10);
+		JTextField emailField = new JTextField(10);
+		JPasswordField hasloField = new JPasswordField(10);
+		hasloField.setEchoChar('*');
+		JTextField saldoField = new JTextField(10);
+
+		JTextField wiekField = new JTextField(10);
+
+		JTextField peselField = new JTextField(10);
+		JComboBox<String> promocjaComboBox = new JComboBox<>(
+				new String[] { "Podstawowa", "Stały klient", "Studencka" });
+
+		JPanel panel = new JPanel(new GridLayout(16, 1));
+
 		panel.add(new JLabel("Imię:"));
 		panel.add(imieField);
 		panel.add(new JLabel("Nazwisko:"));
 		panel.add(nazwiskoField);
+		panel.add(new JLabel("Login:"));
+		panel.add(loginField);
 		panel.add(new JLabel("Email:"));
 		panel.add(emailField);
+		panel.add(new JLabel("Hasło:"));
+		panel.add(hasloField);
+		panel.add(new JLabel("Saldo konta:"));
+		panel.add(saldoField);
+		panel.add(new JLabel("Wiek:"));
+		panel.add(wiekField);
 
-		int result = JOptionPane.showConfirmDialog(null, panel, "Dodaj Klienta", JOptionPane.OK_CANCEL_OPTION);
-		if (result == JOptionPane.OK_OPTION) {
-			Klient nowyKlient = new Klient(emailField.getText(), "", "", nazwiskoField.getText(), imieField.getText(),
-					0, new Adres("", "", "", null, null, null), 0, new PromocjaPodstawowa(), new ArrayList<>(),
-					new Zakupy());
-			listaKlientow.add(nowyKlient);
-			refreshTable(klientTableModel, listaKlientow);
+		JPanel btnPanel = new JPanel(new FlowLayout());
+		JButton btnAdd = new JButton();
+		Osoba osoba = null;
+
+		btnPanel.add(btnAdd);
+
+		if (typ.equals(Pracownik.class)) {
+			if (czyEdytowanie) {
+				osoba = listaPracownikow.get(selectedRow);
+				accountDialog.setTitle("Edytuj Pracownika");
+				peselField.setText(((Pracownik) osoba).getPesel());
+			} else
+				accountDialog.setTitle("Dodaj Pracownika");
+			panel.add(new JLabel("PESEL:"));
+			panel.add(peselField);
+
+		} else if (typ.equals(Klient.class)) {
+			if (czyEdytowanie) {
+				osoba = listaKlientow.get(selectedRow);
+
+				Promocja promocja = ((Klient) osoba).getPromocjaKlienta();
+				if (promocja instanceof PromocjaPodstawowa)
+					promocjaComboBox.setSelectedItem("Podstawowa");
+
+				else if (promocja instanceof PromocjaStalegoKlienta)
+					promocjaComboBox.setSelectedItem("Stały klient");
+				else
+					promocjaComboBox.setSelectedItem("Studencka");
+
+				accountDialog.setTitle("Edytuj Klienta");
+
+			} else
+				accountDialog.setTitle("Dodaj Klienta");
+
+			panel.add(new JLabel("Typ promocji:"));
+			panel.add(promocjaComboBox);
 		}
+
+		if (czyEdytowanie) {
+
+			wypelnienieWspolneInfo(imieField, nazwiskoField, loginField, emailField, hasloField, saldoField, wiekField,
+					osoba);
+			btnAdd.setText("Edytuj");
+		} else {
+			btnAdd.setText("Dodaj");
+			wiekField.setText("0");
+			saldoField.setText("0");
+		}
+		panel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		accountDialog.add(BorderLayout.CENTER, panel);
+		accountDialog.add(BorderLayout.SOUTH, btnPanel);
+
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String email = emailField.getText().trim();
+				String haslo = new String(hasloField.getPassword()).trim();
+				String login = loginField.getText().trim();
+				String nazwisko = nazwiskoField.getText().trim();
+				String imie = imieField.getText().trim();
+				String wiek = wiekField.getText().trim();
+				String saldoKonta = saldoField.getText().trim();
+
+				if (isValidDataSaldoKonta(frame, saldoKonta)
+						&& Metody.isValidData(frame, email, haslo, login, nazwisko, imie, wiek)) {
+
+					if (typ.equals(Pracownik.class)) {
+						String pesel = peselField.getText().trim();
+
+						if (isValidDataPracownik(frame, pesel)) {
+							Pracownik nowyPracownik = new Pracownik(email, haslo, login, nazwisko, imie,
+									Integer.parseInt(wiek), null, Double.parseDouble(saldoKonta), pesel);
+
+							listaPracownikow.add(nowyPracownik);
+							accountDialog.dispose();
+							refreshTable(pracownikTableModel, listaPracownikow);
+						}
+
+					} else if (typ.equals(Klient.class)) {
+
+						Promocja promocja;
+						String selectedPromocja = (String) promocjaComboBox.getSelectedItem();
+						if (selectedPromocja.equals("Podstawowa")) {
+							promocja = new PromocjaPodstawowa();
+						} else if (selectedPromocja.equals("Stały klient")) {
+							promocja = new PromocjaStalegoKlienta();
+						} else {
+							promocja = new PromocjaStudenta();
+						}
+
+						Klient nowyKlient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
+								null, Integer.parseInt(saldoKonta), promocja, new ArrayList<>(), new Zakupy());
+
+						listaKlientow.add(nowyKlient);
+						accountDialog.dispose();
+						refreshTable(klientTableModel, listaKlientow);
+					}
+				}
+			}
+		});
+
+		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
+		hasloField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				hasloField.setEchoChar((char) 0);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				hasloField.setEchoChar('*');
+			}
+		});
+
+		accountDialog.setSize(300, 500);
+		accountDialog.setVisible(true);
+	}
+
+	private void wypelnienieWspolneInfo(JTextField imieField, JTextField nazwiskoField, JTextField loginField,
+			JTextField emailField, JPasswordField hasloField, JTextField saldoField, JTextField wiekField,
+			Osoba osoba) {
+		imieField.setText(osoba.getImie());
+		nazwiskoField.setText(osoba.getNazwisko());
+		loginField.setText(osoba.getLogin());
+		emailField.setText(osoba.getEmail());
+		hasloField.setText(osoba.getHaslo());
+		saldoField.setText(String.valueOf(Math.round(osoba.getSaldoKonta() * 100) / 100.0));
+		wiekField.setText(String.valueOf(osoba.getWiek()));
+	}
+
+	private boolean isValidDataPracownik(JFrame frame, String pesel) {
+		if (pesel.isEmpty()) {
+			JOptionPane.showMessageDialog(frame, "Wszystkie pola muszą być wypełnione!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (pesel.matches("\\d{11}")) {
+			JOptionPane.showMessageDialog(frame, "PESEL musi zawierać 11 cyfr", "Błąd", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean isValidDataSaldoKonta(JFrame frame, String saldo) {
+		if (saldo.isEmpty()) {
+			JOptionPane.showMessageDialog(frame, "Pole saldo konta musi być wypełnione!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		try {
+			Double.parseDouble(saldo);
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(frame, "Saldo konta musi być liczbą!", "Błąd", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
 	}
 
 	private void deleteAccount(JTable table, JFrame frame) {
@@ -218,39 +403,9 @@ public class KierownikGUI extends PracownikGUI {
 		}
 	}
 
-	private void editClient(JTable klientTable, JFrame clientFrame) {
-		int selectedRow = klientTable.getSelectedRow();
-		if (selectedRow != -1) {
-			Klient klient = listaKlientow.get(selectedRow);
-
-			JTextField imieField = new JTextField(klient.getImie(), 20);
-			JTextField nazwiskoField = new JTextField(klient.getNazwisko(), 20);
-			JTextField emailField = new JTextField(klient.getEmail(), 20);
-
-			JPanel panel = new JPanel(new GridLayout(4, 2));
-			panel.add(new JLabel("Imię:"));
-			panel.add(imieField);
-			panel.add(new JLabel("Nazwisko:"));
-			panel.add(nazwiskoField);
-			panel.add(new JLabel("Email:"));
-			panel.add(emailField);
-
-			int result = JOptionPane.showConfirmDialog(null, panel, "Edytuj Klienta", JOptionPane.OK_CANCEL_OPTION);
-			if (result == JOptionPane.OK_OPTION) {
-				klient.setImie(imieField.getText());
-				klient.setNazwisko(nazwiskoField.getText());
-				klient.setEmail(emailField.getText());
-				refreshTable(klientTableModel, listaKlientow);
-			}
-		} else {
-			JOptionPane.showMessageDialog(clientFrame, "Nie wybrano konto dla edytowania!", "Informacja edytowania",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
 	private void showEmployeeManagement(JMenuItem showEmployee) {
 		JFrame employeeFrame = new JFrame("Zarządzanie Pracownikami");
-		employeeFrame.setSize(1000, 600);
+		employeeFrame.setSize(1100, 600);
 		employeeFrame.setLayout(new BorderLayout());
 
 		toolIcon(employeeFrame);
@@ -267,9 +422,9 @@ public class KierownikGUI extends PracownikGUI {
 		buttonPanel.add(removeButton);
 		buttonPanel.add(editButton);
 
-		addButton.addActionListener(e -> addEmployee());
+		addButton.addActionListener(e -> addOrEditAccount(Pracownik.class, employeeFrame, false, pracownikTable));
 		removeButton.addActionListener(e -> deleteAccount(pracownikTable, employeeFrame));
-		editButton.addActionListener(e -> editEmployee(pracownikTable, employeeFrame));
+		editButton.addActionListener(e -> addOrEditAccount(Pracownik.class, employeeFrame, true, pracownikTable));
 
 		refreshTable(pracownikTableModel, listaPracownikow);
 
@@ -286,66 +441,6 @@ public class KierownikGUI extends PracownikGUI {
 		employeeFrame.setVisible(true);
 	}
 
-	private void addEmployee() {
-		JTextField imieField = new JTextField(10);
-		JTextField nazwiskoField = new JTextField(10);
-		JTextField emailField = new JTextField(10);
-		JTextField saldoField = new JTextField(10);
-
-		JPanel panel = new JPanel(new GridLayout(4, 2));
-		panel.add(new JLabel("Imię:"));
-		panel.add(imieField);
-		panel.add(new JLabel("Nazwisko:"));
-		panel.add(nazwiskoField);
-		panel.add(new JLabel("Email:"));
-		panel.add(emailField);
-		panel.add(new JLabel("Saldo:"));
-		panel.add(saldoField);
-
-		int result = JOptionPane.showConfirmDialog(null, panel, "Dodaj Pracownika", JOptionPane.OK_CANCEL_OPTION);
-		if (result == JOptionPane.OK_OPTION) {
-			double saldo = Double.parseDouble(saldoField.getText());
-			Pracownik nowyPracownik = new Pracownik(emailField.getText(), "", "", nazwiskoField.getText(),
-					imieField.getText(), 0, new Adres("", "", "", null, null, null), saldo, "");
-			listaPracownikow.add(nowyPracownik);
-			refreshTable(pracownikTableModel, listaPracownikow);
-		}
-	}
-
-	private void editEmployee(JTable pracownikTable, JFrame employeeFrame) {
-		int selectedRow = pracownikTable.getSelectedRow();
-		if (selectedRow != -1) {
-			Pracownik pracownik = (Pracownik) listaPracownikow.get(selectedRow);
-
-			JTextField imieField = new JTextField(pracownik.getImie(), 10);
-			JTextField nazwiskoField = new JTextField(pracownik.getNazwisko(), 10);
-			JTextField emailField = new JTextField(pracownik.getEmail(), 10);
-			JTextField saldoField = new JTextField(String.valueOf(pracownik.getSaldoKonta()), 10);
-
-			JPanel panel = new JPanel(new GridLayout(4, 2));
-			panel.add(new JLabel("Imię:"));
-			panel.add(imieField);
-			panel.add(new JLabel("Nazwisko:"));
-			panel.add(nazwiskoField);
-			panel.add(new JLabel("Email:"));
-			panel.add(emailField);
-			panel.add(new JLabel("Saldo:"));
-			panel.add(saldoField);
-
-			int result = JOptionPane.showConfirmDialog(null, panel, "Edytuj Pracownika", JOptionPane.OK_CANCEL_OPTION);
-			if (result == JOptionPane.OK_OPTION) {
-				pracownik.setImie(imieField.getText());
-				pracownik.setNazwisko(nazwiskoField.getText());
-				pracownik.setEmail(emailField.getText());
-				pracownik.setSaldoKonta(Double.parseDouble(saldoField.getText()));
-				refreshTable(pracownikTableModel, listaPracownikow);
-			}
-		} else {
-			JOptionPane.showMessageDialog(employeeFrame, "Nie wybrano konto dla edytowania!", "Informacja edytowania",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
 	// Wyszukiwanie osób
 	private <T> void showSearch(DefaultTableModel searchTableModel, JMenuItem mntmSearch, ArrayList<T> lista) {
 
@@ -360,21 +455,40 @@ public class KierownikGUI extends PracownikGUI {
 			searchFrame.setTitle("Wyszukiwanie Klientów");
 		}
 
-		searchFrame.setSize(1000, 600);
+		searchFrame.setSize(1100, 600);
 
 		toolIcon(searchFrame);
 
 		JPanel searchPanel = new JPanel(new FlowLayout());
-		JTextField searchField = new JTextField(20);
-		JButton searchButton = new JButton("Szukaj");
+		JTextField searchField = new JTextField(30);
+
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				onTextChanged();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				onTextChanged();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				onTextChanged();
+			}
+
+			// Metoda wywoływana po każdej zmianie tekstu
+			private void onTextChanged() {
+				search(searchField.getText(), searchTableModel, lista);
+			}
+		});
 
 		searchPanel.add(new JLabel("Wprowadź kryteria (email, login, nazwisko):"));
 		searchPanel.add(searchField);
-		searchPanel.add(searchButton);
+		searchPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		JTable searchTable = new JTable(searchTableModel);
-
-		searchButton.addActionListener(e -> search(searchField.getText(), searchTableModel, lista));
 
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
@@ -400,7 +514,7 @@ public class KierownikGUI extends PracownikGUI {
 				if (osoba instanceof Pracownik) {
 					Pracownik pracownik = (Pracownik) osoba;
 					tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
-							pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(),
+							pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(), pracownik.getWiek(),
 							pracownik.getPesel() });
 				} else if (osoba instanceof Klient) {
 					Klient klient = (Klient) osoba;
@@ -432,7 +546,8 @@ public class KierownikGUI extends PracownikGUI {
 			if (osoba instanceof Pracownik) {
 				Pracownik pracownik = (Pracownik) osoba;
 				tableModel.addRow(new Object[] { pracownik.getImie(), pracownik.getNazwisko(), pracownik.getLogin(),
-						pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(), pracownik.getPesel() });
+						pracownik.getEmail(), pracownik.getHaslo(), pracownik.getSaldoKonta(), pracownik.getWiek(),
+						pracownik.getPesel() });
 			} else if (osoba instanceof Klient) {
 				Klient klient = (Klient) osoba;
 				String promocja = typPromocji(klient.getPromocjaKlienta());

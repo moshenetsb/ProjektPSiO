@@ -156,9 +156,9 @@ public class Metody {
 			}
 		}
 
-		if (liczbaZnakow < 8 || liczbaMalychZnakow < 3 || liczbaDuzychZnakow < 3 || liczbaSpecjalnych < 3) {
+		if (liczbaZnakow < 8 || liczbaMalychZnakow < 3 || liczbaDuzychZnakow < 3 || liczbaSpecjalnych < 1) {
 			JOptionPane.showMessageDialog(frame1,
-					"Hasło nie spełnia standardów bezpieczeństwa.\nPowinno mieć minimum: 8 znaków (w tym po 3 znaki małe i duże), 3 różne znaki specjalne",
+					"Hasło nie spełnia standardów bezpieczeństwa.\nPowinno mieć minimum: 8 znaków (w tym po 3 znaki małe i duże), 1 znak specjalny",
 					"Błąd", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
