@@ -234,10 +234,11 @@ public class PracownikGUI extends WspolneGUI {
         actionComboBox.addActionListener(e -> {
             String selectedAction = (String) actionComboBox.getSelectedItem();
             if ("Dodaj".equals(selectedAction)) {
-                JOptionPane.showMessageDialog(frame1, "Wybrałeś opcję \"Dodaj produkt\"");
+                JOptionPane.showMessageDialog(frame1, "Wybrałeś opcję \"Dodaj produkt\"", "Wiadomosc administracyjna", JOptionPane.INFORMATION_MESSAGE);
                 enableAddMode();
             } else if ("Modyfikuj".equals(selectedAction)) {
                 if (!isAddingProduct) {
+                	JOptionPane.showMessageDialog(frame1, "Wybrałeś opcję \"Modyfikuj produkt\"", "Wiadomosc administracyjna", JOptionPane.INFORMATION_MESSAGE);
                     enableModifyMode();
                 }
             }
@@ -326,7 +327,7 @@ public class PracownikGUI extends WspolneGUI {
     private void disableAddMode() {
         isAddingProduct = false;
         productsTable.setEnabled(true);
-        confirmButton.setVisible(true);
+        confirmButton.setVisible(false);
         cancelButton.setVisible(false);  
         deleteButton.setEnabled(true);
 	    searchButton.setEnabled(true);
