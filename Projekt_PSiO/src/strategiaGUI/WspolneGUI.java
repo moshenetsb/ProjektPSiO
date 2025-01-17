@@ -14,7 +14,7 @@ import logowanie.MenuLogowanie;
 
 public abstract class WspolneGUI implements GUIstrategia {
 	// Składowe kłasy
-	private JMenuBar menuBar;
+	protected JMenuBar menuBar;
 
 	// Konstruktor
 	public WspolneGUI(JFrame frame1) {

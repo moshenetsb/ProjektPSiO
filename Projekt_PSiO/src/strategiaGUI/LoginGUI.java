@@ -115,8 +115,8 @@ public class LoginGUI implements GUIstrategia {
 		btnZaloguj.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText(),
-						new String(haslo.getPassword()), frame1);
+				MenuLogowanie.getPreferowaneLogowanie().logowanie(txfLoginEmail.getText().trim(),
+						new String(haslo.getPassword()).trim(), frame1);
 			}
 		});
 
