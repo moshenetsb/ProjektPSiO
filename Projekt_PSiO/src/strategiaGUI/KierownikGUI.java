@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
+import loteria.Loteria;
 import osoba.*;
 import promocjaStrategia.*;
 import zakupy.*;
@@ -98,6 +99,59 @@ public class KierownikGUI extends PracownikGUI {
 		toolsMenu.add(clientsSubmenu);
 		toolsMenu.add(employeesSubmenu);
 		menuBar.add(toolsMenu);
+
+		// Zarządzanie loterią
+		JMenuItem loteriaMenu = new JMenuItem("Ustawienia Loteria");
+		menuBar.add(loteriaMenu);
+		loteriaMenu.addActionListener(e -> zarzadzajLoteria(frame1));
+	}
+
+	private void zarzadzajLoteria(JFrame frame1) {
+		JDialog dialogLoteria = new JDialog(frame1, "Zarządzanie Loterią", true);
+
+		JTextField minLiczbaField = new JTextField(10);
+		JTextField maxLiczbaField = new JTextField(10);
+		JTextField wartoscField = new JTextField(10);
+		JTextField sumaDoWygraniaField = new JTextField(10);
+
+		JPanel panel = new JPanel(new GridLayout(8, 1));
+
+		panel.add(new JLabel("Najmniejsza liczba:"));
+		panel.add(minLiczbaField);
+		panel.add(new JLabel("Największa liczba:"));
+		panel.add(maxLiczbaField);
+		panel.add(new JLabel("Wartość jednej gry:"));
+		panel.add(wartoscField);
+		panel.add(new JLabel("Suma do wygrania:"));
+		panel.add(sumaDoWygraniaField);
+
+		Loteria loteria = Metody.getLoteria();
+		minLiczbaField.setText(String.valueOf(loteria.getMinLiczba()));
+		maxLiczbaField.setText(String.valueOf(loteria.getMaxLiczba()));
+		wartoscField.setText(String.valueOf(Math.round(loteria.getWartosc() * 100) / 100.0));
+		sumaDoWygraniaField.setText(String.valueOf(Math.round(loteria.getSumaDoWygrania() * 100) / 100.0));
+
+		JPanel btnPanel = new JPanel(new FlowLayout());
+		JButton btnSave = new JButton("Zapisz zmiany");
+
+		btnPanel.add(btnSave);
+		btnSave.addActionListener(e -> {
+			if (Loteria.isValidData(frame1, minLiczbaField.getText(), maxLiczbaField.getText(), wartoscField.getText(),
+					sumaDoWygraniaField.getText())) {
+				Metody.setLoteria(new Loteria(Integer.parseInt(minLiczbaField.getText()),
+						Integer.parseInt(maxLiczbaField.getText()), Double.parseDouble(wartoscField.getText()),
+						Double.parseDouble(sumaDoWygraniaField.getText())));
+				dialogLoteria.dispose();
+			}
+
+		});
+
+		panel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		dialogLoteria.add(BorderLayout.CENTER, panel);
+		dialogLoteria.add(BorderLayout.SOUTH, btnPanel);
+
+		dialogLoteria.setSize(300, 300);
+		dialogLoteria.setVisible(true);
 	}
 
 	private void initializeKlientTableModel() {
@@ -497,7 +551,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		JTable searchTable = new JTable(searchTableModel);
 		search(searchField.getText(), searchTableModel, lista);
-		
+
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
 

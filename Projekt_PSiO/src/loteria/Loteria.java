@@ -85,4 +85,40 @@ public class Loteria implements Serializable {
 	public void setSumaDoWygrania(double sumaDoWygrania) {
 		this.sumaDoWygrania = sumaDoWygrania;
 	}
+
+	// Metody
+	public static boolean isValidData(JFrame frame1, String minLiczba, String maxLiczba, String wartosc,
+			String sumaDoWygrania) {
+		if (minLiczba.isEmpty() || maxLiczba.isEmpty() || wartosc.isEmpty() || sumaDoWygrania.isEmpty()) {
+			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być wypełnione!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		if (!(isInt(minLiczba) || isInt(maxLiczba) || isDouble(wartosc) || isDouble(sumaDoWygrania))) {
+			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być liczbami", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean isInt(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	private static boolean isDouble(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 }
