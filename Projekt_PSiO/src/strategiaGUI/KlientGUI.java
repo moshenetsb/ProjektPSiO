@@ -14,9 +14,6 @@ import osoba.Klient;
 
 public class KlientGUI extends WspolneGUI {
 
-	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i
-	// kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
-
 	private JLabel lbSaldoKonta;
 	private boolean expanded = false;
 	private JPanel contentPanel;
@@ -61,8 +58,6 @@ public class KlientGUI extends WspolneGUI {
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
 		createManagementMenu(frame1);
-
-		// TODO Auto-generated method stub
 
 	}
 
@@ -337,9 +332,6 @@ public class KlientGUI extends WspolneGUI {
 		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
 	}
 
-	// _____________________________________________________________
-	// TODO przeczytać podalsze i zrobić coś z tym
-
 	private JPanel createKategoria(String title, ArrayList<Produkty> products) {
 		JPanel categoryPanel = new JPanel();
 		categoryPanel.setLayout(new BorderLayout());
@@ -395,7 +387,6 @@ public class KlientGUI extends WspolneGUI {
 		try {
 			originalIcon = new ImageIcon(ImageIO.read(new File(produkt.getSciezkaObrazu())));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		originalIcon.getImage();
@@ -420,23 +411,6 @@ public class KlientGUI extends WspolneGUI {
 
 		return itemPanel;
 	}
-
-	/*
-	 * private void pokazKoszyk(JFrame frame1) { if (koszyk.isEmpty()) {
-	 * JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk",
-	 * JOptionPane.INFORMATION_MESSAGE); } else { StringBuilder zawartosc = new
-	 * StringBuilder("Zawartość koszyka:\n\n"); for (Produkty produkt : koszyk) {
-	 * zawartosc.append(produkt.getNazwaProduktu()).append("\n"); }
-	 * 
-	 * JButton kupButton = new JButton("Kup");
-	 * 
-	 * kupButton.addActionListener(new ActionListener() {
-	 * 
-	 * @Override public void actionPerformed(ActionEvent e) { klient.kup(frame1);
-	 * koszyk.clear(); } }); JOptionPane.showMessageDialog(frame1,
-	 * zawartosc.toString(), "Koszyk", JOptionPane.INFORMATION_MESSAGE); } }
-	 * 
-	 */
 
 	private void sortArrayList() {
 		for (Produkty produkt : products) {
