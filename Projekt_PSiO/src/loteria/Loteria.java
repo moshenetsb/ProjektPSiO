@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Random;
 import javax.swing.*;
 import bibliotekaMetodIPol.Metody;
+import logowanie.MenuLogowanie;
+import osoba.Klient;
 
 public class Loteria implements Serializable {
 
@@ -30,10 +32,11 @@ public class Loteria implements Serializable {
 
 		if (liczbaUzytkownika >= minLiczba && liczbaUzytkownika <= maxLiczba) {
 			// Opłata za loterie
-			Metody.updateSaldoKonta(-wartosc, login);
+			Klient klient = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(login));
+			klient.updateSaldoKonta(-wartosc);
 			if (liczbaUzytkownika == liczba) {
 				// Dodajemy wygrane
-				Metody.updateSaldoKonta(sumaDoWygrania, login);
+				klient.updateSaldoKonta(sumaDoWygrania);
 				JOptionPane.showMessageDialog(frame1, "Gratulujemy! Wygrałeś " + sumaDoWygrania + " PLN.", "Loteria",
 						JOptionPane.INFORMATION_MESSAGE);
 

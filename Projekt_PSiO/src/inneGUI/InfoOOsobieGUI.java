@@ -2,8 +2,6 @@ package inneGUI;
 
 import osoba.Osoba;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -71,18 +69,7 @@ public class InfoOOsobieGUI {
 		haslo = createStyledPasswordField("Wpisz hasło");
 		haslo.setEchoChar('*');
 		panel1.add(haslo);
-		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
-		haslo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				haslo.setEchoChar((char) 0);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				haslo.setEchoChar('*');
-			}
-		});
+		GUImain.ustawWyswietlelieHasla(haslo);
 
 		// Nazwisko
 		lbNazwisko = new JLabel("Nazwisko:");

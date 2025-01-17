@@ -3,6 +3,8 @@ package strategiaGUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.border.*;
@@ -26,6 +28,7 @@ public class PracownikGUI extends WspolneGUI {
 	private JTextField priceField;
 	private JTextField quantityField;
 	private JTextField descriptionField;
+	private JTextField pathImageField;
 	private JComboBox<String> productTypeComboBox;
 	private JTextField productIdField;
 	private JComboBox<String> actionComboBox;
@@ -53,6 +56,7 @@ public class PracownikGUI extends WspolneGUI {
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
 		frame1.getContentPane().setBackground(Color.LIGHT_GRAY);
+		frame1.setResizable(true);
 		createToolsMenu(frame1);
 	}
 
@@ -141,6 +145,57 @@ public class PracownikGUI extends WspolneGUI {
 		descriptionField = new JTextField(20);
 		gbc.gridx = 3;
 		panel.add(descriptionField, gbc);
+		
+		gbc.gridx = 0;
+	    gbc.gridy = 4;
+	    panel.add(new JLabel("Ścieżka zdjęcia:"), gbc);
+	    pathImageField = new JTextField(20);
+	    gbc.gridx = 1;
+	    gbc.gridwidth = 2; 
+	    panel.add(pathImageField, gbc);
+	    
+	    gbc.gridy = 4;
+	    gbc.gridx = 3;
+	    gbc.gridwidth = 1;
+	    JButton browseButton = new JButton("Przeglądaj...");
+	    panel.add(browseButton, gbc);
+
+	    browseButton.addActionListener(new ActionListener() {
+
+	        public void actionPerformed(ActionEvent e) {
+	        	 UIManager.put("FileChooser.openDialogTitleText", "Wybierz plik");
+	             UIManager.put("FileChooser.openButtonText", "Wybierz");
+	             UIManager.put("FileChooser.cancelButtonText", "Anuluj");
+	            
+	            JFileChooser fileChooser = new JFileChooser(new File("Grafika/Produkty"));
+
+	            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            fileChooser.setAcceptAllFileFilterUsed(false);
+
+	            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+	                
+	                public boolean accept(File file) {
+	                    
+	                    return file.isDirectory() || file.getName().toLowerCase().matches(".*\\.(png|jpg|jpeg|gif)");
+	                }
+
+	                public String getDescription() {
+	                    return "Obrazy (PNG, JPG, GIF)";
+	                }
+	            });
+
+	            int returnValue = fileChooser.showOpenDialog(panel);
+	            if (returnValue == JFileChooser.APPROVE_OPTION) {
+	                File selectedFile = fileChooser.getSelectedFile();
+	                String fullPath = selectedFile.getAbsolutePath();
+
+	                int index = fullPath.indexOf("Grafika");
+	                if (index != -1) {
+	                    String relativePath = fullPath.substring(index);
+	                    pathImageField.setText(relativePath);
+	            }
+	        }
+	        }});
 	}
 
 	private void addActionButtons(JPanel panel, GridBagConstraints gbc) {
@@ -161,7 +216,7 @@ public class PracownikGUI extends WspolneGUI {
 		buttonPanel.add(searchButton);
 
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 5;
 		gbc.gridwidth = 4;
 		panel.add(buttonPanel, gbc);
 		
@@ -184,7 +239,6 @@ public class PracownikGUI extends WspolneGUI {
             } else if ("Modyfikuj".equals(selectedAction)) {
                 if (!isAddingProduct) {
                     enableModifyMode();
-                    handleModifyProduct();  // Inicjalizuje proces modyfikacji
                 }
             }
         });
@@ -271,7 +325,8 @@ public class PracownikGUI extends WspolneGUI {
 
     private void disableAddMode() {
         isAddingProduct = false;
-        confirmButton.setVisible(false);
+        productsTable.setEnabled(true);
+        confirmButton.setVisible(true);
         cancelButton.setVisible(false);  
         deleteButton.setEnabled(true);
 	    searchButton.setEnabled(true);
@@ -284,7 +339,6 @@ public class PracownikGUI extends WspolneGUI {
     
     private void enableModifyMode() {
         isModifyingProduct = true;  
-        productsTable.setEnabled(true);
         confirmButton.setVisible(true);
         cancelButton.setVisible(true);
         deleteButton.setEnabled(false);
@@ -298,7 +352,6 @@ public class PracownikGUI extends WspolneGUI {
 
     private void disableModifyMode() {
         isModifyingProduct = false;
-        productsTable.setEnabled(true);
         confirmButton.setVisible(false);
         cancelButton.setVisible(false);
         deleteButton.setEnabled(true);
@@ -312,7 +365,7 @@ public class PracownikGUI extends WspolneGUI {
 
     
 	private void createProductsTable() {
-		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria" };
+		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria", "Opis", "Sciezka" };
 		tableModel = new DefaultTableModel(columns, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -397,7 +450,7 @@ public class PracownikGUI extends WspolneGUI {
 	    
 	    searchControls.add(sortPanel, gbc);
 
-		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria" };
+		String[] columns = { "Id", "Nazwa", "Cena", "Ilość", "Kategoria", "Opis", "Ścieżka obrazu" };
 		DefaultTableModel searchTableModel = new DefaultTableModel(columns, 0) {
 
 			private static final long serialVersionUID = 1L;
@@ -490,7 +543,7 @@ public class PracownikGUI extends WspolneGUI {
 			searchTableModel.setRowCount(0);
 			for (Produkty product : filteredProducts) {
 				searchTableModel.addRow(new Object[] { product.getIdProduktu(), product.getNazwaProduktu(),
-						product.getCenaProduktu(), product.getLiczbaProduktu(), getProductCategory(product) });
+						product.getCenaProduktu(), product.getLiczbaProduktu(), getProductCategory(product), product.getOpisProduktu(), product.getSciezkaObrazu()  });
 			}
 		} catch (NumberFormatException e) {
 		}
@@ -502,6 +555,8 @@ public class PracownikGUI extends WspolneGUI {
 		priceField.setText(tableModel.getValueAt(selectedRow, 2).toString());
 		quantityField.setText(tableModel.getValueAt(selectedRow, 3).toString());
 		productTypeComboBox.setSelectedItem(tableModel.getValueAt(selectedRow, 4));
+		descriptionField.setText(tableModel.getValueAt(selectedRow, 5).toString());
+		pathImageField.setText(tableModel.getValueAt(selectedRow, 6).toString());
 	}
 
 	private void clearFields() {
@@ -510,6 +565,7 @@ public class PracownikGUI extends WspolneGUI {
 		priceField.setText("");
 		quantityField.setText("");
 		descriptionField.setText("");
+		pathImageField.setText("");
 		productTypeComboBox.setSelectedIndex(0);
 		productsTable.clearSelection();
 	}
@@ -520,7 +576,7 @@ public class PracownikGUI extends WspolneGUI {
 		if (products != null) {
 			for (Produkty product : products) {
 				tableModel.addRow(new Object[] { product.getIdProduktu(), product.getNazwaProduktu(),
-						product.getCenaProduktu(), product.getLiczbaProduktu(), getProductCategory(product) });
+						product.getCenaProduktu(), product.getLiczbaProduktu(), getProductCategory(product), product.getOpisProduktu(), product.getSciezkaObrazu()});
 			}
 		}
 	}
@@ -543,17 +599,18 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
+				String pathImage = pathImageField.getText();
 
 				Produkty newProduct;
 				switch (productType) {
 				case "Gaming":
-					newProduct = new Gaming(name, price, quantity, description,"");
+					newProduct = new Gaming(name, price, quantity, description,pathImage);
 					break;
 				case "Fotografia":
-					newProduct = new Fotografia(name, price, quantity, description,"");
+					newProduct = new Fotografia(name, price, quantity, description, pathImage);
 					break;
 				case "Mieszane":
-					newProduct = new Mieszane(name, price, quantity, description,"");
+					newProduct = new Mieszane(name, price, quantity, description,pathImage);
 					break;
 				default:
 					throw new IllegalArgumentException("Nieprawidłowy typ produktu");
@@ -588,6 +645,7 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
+				String imagePath = pathImageField.getText();
 
 				ArrayList<Produkty> products = Metody.getListaProduktow();
 				boolean found = false;
@@ -597,13 +655,13 @@ public class PracownikGUI extends WspolneGUI {
 						Produkty modifiedProduct;
 						switch (productType) {
 						case "Gaming":
-							modifiedProduct = new Gaming(name, price, quantity, description,"");
+							modifiedProduct = new Gaming(name, price, quantity, description,imagePath);
 							break;
 						case "Fotografia":
-							modifiedProduct = new Fotografia(name, price, quantity, description,"");
+							modifiedProduct = new Fotografia(name, price, quantity, description,imagePath);
 							break;
 						case "Mieszane":
-							modifiedProduct = new Mieszane(name, price, quantity, description,"");
+							modifiedProduct = new Mieszane(name, price, quantity, description,imagePath);
 							break;
 						default:
 							throw new IllegalArgumentException("Nieprawidłowy typ produktu");
@@ -704,16 +762,17 @@ public class PracownikGUI extends WspolneGUI {
 	}
 
 	private void showProductManagement() {
-		frame1.getContentPane().removeAll();
+	    frame1.getContentPane().removeAll();
 
-		initializeComponents();
+	    initializeComponents();
 
-		mainProductPanel = createMainProductPanel();
-		JScrollPane mainScrollPane = new JScrollPane(mainProductPanel);
-		contentPanel.add(mainScrollPane, BorderLayout.CENTER);
+	    mainProductPanel = createMainProductPanel();
+	    
+	    // Usuwamy JScrollPane i dodajemy panel bezpośrednio
+	    contentPanel.add(mainProductPanel, BorderLayout.CENTER);
 
-		frame1.revalidate();
-		frame1.repaint();
+	    frame1.revalidate();
+	    frame1.repaint();
 	}
 
 	private void showProductSearch() {
