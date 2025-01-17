@@ -3,17 +3,16 @@ package strategiaGUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import logowanie.MenuLogowanie;
 import adres.Adres;
 import bibliotekaMetodIPol.Metody;
 import bibliotekaMetodIPol.ZapisywanieObiektow;
+import inneGUI.GUImain;
 import osoba.*;
 import promocjaStrategia.PromocjaPodstawowa;
 import zakupy.Zakupy;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import bibliotekaMetodIPol.*;
 
 public class Rejestracja implements GUIstrategia {
 
@@ -53,6 +52,10 @@ public class Rejestracja implements GUIstrategia {
 
 		JTextField emailField = new JTextField();
 		JPasswordField hasloField = new JPasswordField();
+
+		hasloField.setEchoChar('*');
+		GUImain.ustawWyswietlelieHasla(hasloField);
+
 		JTextField loginField = new JTextField();
 		JTextField nazwiskoField = new JTextField();
 		JTextField imieField = new JTextField();
@@ -110,8 +113,6 @@ public class Rejestracja implements GUIstrategia {
 		}
 
 	}
-
-	
 
 	private void returnToLogin() {
 		Metody.setWybraneGUI(new LoginGUI(frame1));

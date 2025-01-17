@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import bibliotekaMetodIPol.*;
+import inneGUI.GUImain;
 import logowanie.*;
 
 public class LoginGUI implements GUIstrategia {
@@ -63,6 +64,7 @@ public class LoginGUI implements GUIstrategia {
 
 		haslo = new JPasswordField(15);
 		haslo.setEchoChar('*');
+		GUImain.ustawWyswietlelieHasla(haslo);
 		panel1.add(haslo);
 
 		JPanel panel2 = new JPanel();
@@ -77,19 +79,6 @@ public class LoginGUI implements GUIstrategia {
 
 		btnRejestracja = new JButton("Rejestracja");
 		panel2.add(btnRejestracja);
-
-		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
-		haslo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				haslo.setEchoChar((char) 0);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				haslo.setEchoChar('*');
-			}
-		});
 
 		// Zmiana sposobu logowania
 		btnSposobLog.addActionListener(new ActionListener() {

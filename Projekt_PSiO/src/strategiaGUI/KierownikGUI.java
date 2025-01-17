@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
 import osoba.*;
-import adres.Adres;
 import promocjaStrategia.*;
 import zakupy.*;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
+import inneGUI.GUImain;
 
 public class KierownikGUI extends PracownikGUI {
 
@@ -193,6 +193,7 @@ public class KierownikGUI extends PracownikGUI {
 		JTextField emailField = new JTextField(10);
 		JPasswordField hasloField = new JPasswordField(10);
 		hasloField.setEchoChar('*');
+		GUImain.ustawWyswietlelieHasla(hasloField);
 		JTextField saldoField = new JTextField(10);
 
 		JTextField wiekField = new JTextField(10);
@@ -331,19 +332,6 @@ public class KierownikGUI extends PracownikGUI {
 						refreshTable(klientTableModel, listaKlientow);
 					}
 				}
-			}
-		});
-
-		// Pokazywanie hasła po przesunięciu na niego wskażnika myszy
-		hasloField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				hasloField.setEchoChar((char) 0);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				hasloField.setEchoChar('*');
 			}
 		});
 
