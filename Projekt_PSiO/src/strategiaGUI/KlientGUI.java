@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
+import Obserwator.Observer;
 import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import logowanie.*;
 import osoba.Klient;
 
-public class KlientGUI extends WspolneGUI {
+public class KlientGUI extends WspolneGUI implements Observer {
 
 	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i
 	// kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
@@ -40,14 +41,19 @@ public class KlientGUI extends WspolneGUI {
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
 		super(frame1);
-		
+
 		JTabbedPane tabPanel = new JTabbedPane();
-		homePanel=new JPanel();
+
+		homePanel = new JPanel();
+		homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.Y_AXIS));
+
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		// contentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 		sortArrayList();
+
+		homePanel.add(createSingleItemSection("Wysprzedaż", productsGaming));
 
 		contentPanel.add(createKategoria("Gaming", productsGaming));
 		contentPanel.add(createKategoria("Fotografia", productsFotografia));
@@ -55,12 +61,11 @@ public class KlientGUI extends WspolneGUI {
 
 		JScrollPane scrollPane = new JScrollPane(contentPanel);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
-		
+
 		tabPanel.addTab("Widok Główny", homePanel);
 		tabPanel.addTab("Produkty", scrollPane);
-		frame1.add(tabPanel,BorderLayout.CENTER);
-		//frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		frame1.add(tabPanel, BorderLayout.CENTER);
+		// frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -193,14 +198,97 @@ public class KlientGUI extends WspolneGUI {
 		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
 	}
 
+	private JPanel GlownyWidok() {
+		JPanel znizkiPanel = new JPanel();
+		znizkiPanel.setLayout(new BorderLayout());
+		znizkiPanel = createSingleItemSection("Wysprzedaż", productsGaming);
+		return znizkiPanel;
+	}
+
+	private JPanel createSingleItemSection(String title, ArrayList<Produkty> products) {
+		JPanel section = new JPanel(new BorderLayout());
+
+		JLabel sectionTitle = new JLabel(title, JLabel.LEFT);
+		sectionTitle.setFont(new Font("Arial", Font.BOLD, 18));
+		section.add(sectionTitle, BorderLayout.NORTH);
+
+		// Panel do wyświetlania jednego elementu
+		JPanel itemPanel = new JPanel();
+		itemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		itemPanel.setPreferredSize(new Dimension(600, 200));
+
+		Produkty firstProdukt = products.get(0);
+
+		JLabel itemImageLabel = new JLabel();
+		itemImageLabel.setPreferredSize(new Dimension(150, 150));
+		itemImageLabel.setIcon(scaleImage(new ImageIcon(firstProdukt.getSciezkaObrazu()), 150, 150));
+		itemPanel.add(itemImageLabel);
+
+		JPanel textPanel = new JPanel();
+		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+
+		JLabel itemNameLabel = new JLabel(firstProdukt.getNazwaProduktu());
+		itemNameLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+		JLabel itemPriceLabel = new JLabel("Cena: " + firstProdukt.getCenaProduktu() + " PLN");
+		itemPriceLabel.setForeground(Color.RED);
+		itemPriceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+		JButton buyButton = new JButton("Kup");
+
+		textPanel.add(itemNameLabel);
+		textPanel.add(itemPriceLabel);
+		textPanel.add(buyButton);
+		itemPanel.add(textPanel);
+
+		section.add(itemPanel, BorderLayout.CENTER);
+
+		// Nawigacja za pomocą strzałek
+		JButton leftArrow = new JButton("<");
+		JButton rightArrow = new JButton(">");
+
+		int[] currentIndex = { 0 };
+
+		// Akcja dla lewej strzałki
+		leftArrow.addActionListener(e -> {
+			currentIndex[0] = (currentIndex[0] - 1 + products.size()) % products.size();
+			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
+		});
+		// Akcja dla prawej strzałki
+		rightArrow.addActionListener(e -> {
+			currentIndex[0] = (currentIndex[0] + 1 + products.size()) % products.size();
+			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
+		});
+
+		// Dodanie strzałek nawigacyjnych
+		JPanel arrowsPanel = new JPanel(new BorderLayout());
+		arrowsPanel.add(leftArrow, BorderLayout.WEST);
+		arrowsPanel.add(rightArrow, BorderLayout.EAST);
+		section.add(arrowsPanel, BorderLayout.SOUTH);
+
+		return section;
+	}
+
+	private void updateProductDisplay(Produkty produkt, JLabel imageLabel, JLabel nameLabel, JLabel priceLabel) {
+		nameLabel.setText(produkt.getNazwaProduktu());
+		priceLabel.setText("Cena: " + produkt.getCenaProduktu() + " PLN");
+		imageLabel.setIcon(scaleImage(new ImageIcon(produkt.getSciezkaObrazu()), 150, 150));
+	}
+
+	private static ImageIcon scaleImage(ImageIcon icon, int width, int height) {
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH); // Skalowanie obrazu
+		return new ImageIcon(scaledImage);
+	}
+
 	// _____________________________________________________________
 	// TODO przeczytać podalsze i zrobić coś z tym
 
 	private JPanel createKategoria(String title, ArrayList<Produkty> products) {
 		JPanel categoryPanel = new JPanel();
-		categoryPanel.setLayout(new BorderLayout());;
+		categoryPanel.setLayout(new BorderLayout());
+		;
 
-		JButton toggleButton = new JButton("▼ "+title);
+		JButton toggleButton = new JButton("▼ " + title);
 		toggleButton.setFocusPainted(false);
 		toggleButton.setContentAreaFilled(false);
 		toggleButton.setBorderPainted(true);
@@ -223,15 +311,16 @@ public class KlientGUI extends WspolneGUI {
 		categoryPanel.add(toggleButton, BorderLayout.NORTH);
 
 		toggleButton.addActionListener(new ActionListener() {
-			
-			
+
 			public void actionPerformed(ActionEvent e) {
 				expanded = !expanded;
 				itemListPanel.setVisible(expanded);
-				if(expanded) toggleButton.setText("► " + title);
-				else toggleButton.setText("▼ " + title);
+				if (expanded)
+					toggleButton.setText("► " + title);
+				else
+					toggleButton.setText("▼ " + title);
 				toggleButton.revalidate();
-		        toggleButton.repaint(); 
+				toggleButton.repaint();
 				itemListPanel.revalidate();
 				itemListPanel.repaint();
 			}
@@ -246,12 +335,7 @@ public class KlientGUI extends WspolneGUI {
 		itemPanel.setBackground(Color.DARK_GRAY);
 
 		ImageIcon originalIcon = null;
-		try {
-			originalIcon = new ImageIcon(ImageIO.read(new File(produkt.getSciezkaObrazu())));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		originalIcon = new ImageIcon(produkt.getSciezkaObrazu());
 		originalIcon.getImage();
 		Image scaledImage = originalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
 		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
@@ -274,7 +358,6 @@ public class KlientGUI extends WspolneGUI {
 
 		return itemPanel;
 	}
-	
 
 	/*
 	 * private void pokazKoszyk(JFrame frame1) { if (koszyk.isEmpty()) {
@@ -293,8 +376,6 @@ public class KlientGUI extends WspolneGUI {
 	 * 
 	 */
 
-
-
 	private void sortArrayList() {
 		for (Produkty produkt : products) {
 			if (produkt instanceof Gaming) {
@@ -305,6 +386,12 @@ public class KlientGUI extends WspolneGUI {
 				productsMieszane.add(produkt);
 			}
 		}
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

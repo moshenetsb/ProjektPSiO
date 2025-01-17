@@ -1,8 +1,11 @@
 package produkty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public abstract class Produkty implements Serializable {
+import Obserwator.*;
+
+public abstract class Produkty implements Serializable, Subject{
 
 	private static final long serialVersionUID = 1L;
 
@@ -10,10 +13,13 @@ public abstract class Produkty implements Serializable {
 	public static int id = 1;
 	private int kodProduktu;
 	private String nazwa;
+
 	private float cena;
 	private int ilosc;
 	private String opis;
 	private String sciezkaObrazu;
+	
+	ArrayList<Observer> ObserverList = new ArrayList<Observer>();
 
 	// Konstruktor dla utworzenia produktu na listaProduktow
 	public Produkty(String nazwa, float cena, int ilosc, String opis,String sciezkaObrazu) {
@@ -90,4 +96,24 @@ public abstract class Produkty implements Serializable {
 				+ opis;
 	}
 
+	@Override
+	public void registerObserver(Observer observer) {
+		// TODO Auto-generated method stub
+		ObserverList.add(observer);
+	}
+	
+	@Override
+	public void removeObserver(Observer observer) {
+		// TODO Auto-generated method stub
+		ObserverList.remove(observer);
+	}
+	
+	@Override
+	public void notifyObservers() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i<ObserverList.size(); i++)
+			ObserverList.get(i).update();
+	}
+	
+	
 }

@@ -26,6 +26,7 @@ public class PracownikGUI extends WspolneGUI {
 	private JTextField priceField;
 	private JTextField quantityField;
 	private JTextField descriptionField;
+	private JTextField imagePathField;
 	private JComboBox<String> productTypeComboBox;
 	private JTextField productIdField;
 	private JComboBox<String> actionComboBox;
@@ -41,6 +42,7 @@ public class PracownikGUI extends WspolneGUI {
 	public PracownikGUI(JFrame frame1) {
 		super(frame1);
 		this.frame1 = frame1;
+		showProductManagement();
 
 		try {
 			frame1.setIconImage(ImageIO.read(new File("Grafika/dolarNiebieski.png")));
@@ -141,6 +143,15 @@ public class PracownikGUI extends WspolneGUI {
 		descriptionField = new JTextField(20);
 		gbc.gridx = 3;
 		panel.add(descriptionField, gbc);
+		
+		gbc.gridx = 5;
+		gbc.insets=new Insets(0, 0, 0, 0);
+		gbc.gridy = 1;
+		panel.add(new JLabel("Obraz:"), gbc);
+		imagePathField = new JTextField(20);
+		gbc.gridx = 4;
+		gbc.gridy=2;
+		panel.add(imagePathField, gbc);
 	}
 
 	private void addActionButtons(JPanel panel, GridBagConstraints gbc) {
@@ -501,6 +512,7 @@ public class PracownikGUI extends WspolneGUI {
 		nameField.setText(tableModel.getValueAt(selectedRow, 1).toString());
 		priceField.setText(tableModel.getValueAt(selectedRow, 2).toString());
 		quantityField.setText(tableModel.getValueAt(selectedRow, 3).toString());
+		imagePathField.setText("");
 		productTypeComboBox.setSelectedItem(tableModel.getValueAt(selectedRow, 4));
 	}
 
@@ -510,6 +522,7 @@ public class PracownikGUI extends WspolneGUI {
 		priceField.setText("");
 		quantityField.setText("");
 		descriptionField.setText("");
+		imagePathField.setText("");
 		productTypeComboBox.setSelectedIndex(0);
 		productsTable.clearSelection();
 	}
@@ -543,17 +556,18 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
+				String imagePath=imagePathField.getText();
 
 				Produkty newProduct;
 				switch (productType) {
 				case "Gaming":
-					newProduct = new Gaming(name, price, quantity, description,"");
+					newProduct = new Gaming(name, price, quantity, description,imagePath);
 					break;
 				case "Fotografia":
-					newProduct = new Fotografia(name, price, quantity, description,"");
+					newProduct = new Fotografia(name, price, quantity, description,imagePath);
 					break;
 				case "Mieszane":
-					newProduct = new Mieszane(name, price, quantity, description,"");
+					newProduct = new Mieszane(name, price, quantity, description,imagePath);
 					break;
 				default:
 					throw new IllegalArgumentException("Nieprawidłowy typ produktu");
@@ -588,22 +602,24 @@ public class PracownikGUI extends WspolneGUI {
 				float price = Float.parseFloat(priceField.getText());
 				int quantity = Integer.parseInt(quantityField.getText());
 				String description = descriptionField.getText();
+				String imagePath=imagePathField.getText();
 
 				ArrayList<Produkty> products = Metody.getListaProduktow();
 				boolean found = false;
 
 				for (int i = 0; i < products.size(); i++) {
 					if (products.get(i).getIdProduktu() == productId) {
+						imagePath=products.get(i).getSciezkaObrazu();
 						Produkty modifiedProduct;
 						switch (productType) {
 						case "Gaming":
-							modifiedProduct = new Gaming(name, price, quantity, description,"");
+							modifiedProduct = new Gaming(name, price, quantity, description,imagePath);
 							break;
 						case "Fotografia":
-							modifiedProduct = new Fotografia(name, price, quantity, description,"");
+							modifiedProduct = new Fotografia(name, price, quantity, description,imagePath);
 							break;
 						case "Mieszane":
-							modifiedProduct = new Mieszane(name, price, quantity, description,"");
+							modifiedProduct = new Mieszane(name, price, quantity, description,imagePath);
 							break;
 						default:
 							throw new IllegalArgumentException("Nieprawidłowy typ produktu");
