@@ -46,10 +46,6 @@ public class KierownikGUI extends PracownikGUI {
 
 	private void createManagementMenu(JFrame frame1) {
 		JMenuBar menuBar = frame1.getJMenuBar();
-		if (menuBar == null) {
-			menuBar = new JMenuBar();
-			frame1.setJMenuBar(menuBar);
-		}
 
 		JMenu toolsMenu = new JMenu("Zarządzanie kontami");
 		JMenu clientsSubmenu = new JMenu("Klienci");
@@ -500,7 +496,8 @@ public class KierownikGUI extends PracownikGUI {
 		searchPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		JTable searchTable = new JTable(searchTableModel);
-
+		search(searchField.getText(), searchTableModel, lista);
+		
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
 

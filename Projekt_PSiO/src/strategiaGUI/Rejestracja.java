@@ -3,7 +3,6 @@ package strategiaGUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import adres.Adres;
 import bibliotekaMetodIPol.Metody;
 import bibliotekaMetodIPol.ZapisywanieObiektow;
 import inneGUI.GUImain;
@@ -101,11 +100,11 @@ public class Rejestracja implements GUIstrategia {
 
 		if (Osoba.isValidData(frame1, email, haslo, login, nazwisko, imie, wiek, false, null)) {
 			Klient newClient = new Klient(email, haslo, login, nazwisko, imie, Integer.parseInt(wiek),
-					new Adres("", "", "", "", "", ""), 0, new PromocjaPodstawowa(), new ArrayList<>(), new Zakupy());
+					null, 0, new PromocjaPodstawowa(), new ArrayList<>(), new Zakupy());
 			Metody.getListaKlientow().add(newClient);
 			ZapisywanieObiektow.zapiszKlientow();
 
-			JOptionPane.showMessageDialog(frame1, "Rejestracja zakończona sukcesem.", "Sukces",
+			JOptionPane.showMessageDialog(frame1, "Rejestracja zakończona sukcesem.", "Informacja rejestracji",
 					JOptionPane.INFORMATION_MESSAGE);
 
 			Metody.setLoginAktywnejOsoby(login);
