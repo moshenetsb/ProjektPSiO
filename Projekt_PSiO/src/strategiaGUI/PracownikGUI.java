@@ -44,6 +44,7 @@ public class PracownikGUI extends WspolneGUI {
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
+		frame1.getContentPane().setBackground(Color.LIGHT_GRAY);
 		createToolsMenu(frame1);
 	}
 

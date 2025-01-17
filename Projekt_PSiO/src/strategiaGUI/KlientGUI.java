@@ -1,11 +1,13 @@
 package strategiaGUI;
 
 import javax.imageio.ImageIO;
+
 import javax.swing.*;
 
 import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,6 +28,7 @@ public class KlientGUI extends WspolneGUI {
 	private JLabel lbSaldoKonta;
 	private boolean expanded = false;
 	private JPanel contentPanel;
+	private JPanel homePanel;
 	private JScrollPane scrollPane;
 	private ArrayList<Produkty> products = Metody.getListaProduktow();
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
@@ -37,6 +40,9 @@ public class KlientGUI extends WspolneGUI {
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
 		super(frame1);
+		
+		JTabbedPane tabPanel = new JTabbedPane();
+		homePanel=new JPanel();
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		// contentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -49,7 +55,12 @@ public class KlientGUI extends WspolneGUI {
 
 		JScrollPane scrollPane = new JScrollPane(contentPanel);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		
+		tabPanel.addTab("Widok Główny", homePanel);
+		tabPanel.addTab("Produkty", scrollPane);
+		frame1.add(tabPanel,BorderLayout.CENTER);
+		//frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -198,6 +209,7 @@ public class KlientGUI extends WspolneGUI {
 		JPanel itemListPanel = new JPanel();
 		itemListPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		itemListPanel.setVisible(false);
+		itemListPanel.setBackground(Color.BLACK);
 		for (Produkty produkt : products) {
 			itemListPanel.add(createItemPanel(produkt));
 		}
@@ -231,6 +243,7 @@ public class KlientGUI extends WspolneGUI {
 		JPanel itemPanel = new JPanel();
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
 		itemPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		itemPanel.setBackground(Color.DARK_GRAY);
 
 		ImageIcon originalIcon = null;
 		try {
@@ -261,6 +274,7 @@ public class KlientGUI extends WspolneGUI {
 
 		return itemPanel;
 	}
+	
 
 	/*
 	 * private void pokazKoszyk(JFrame frame1) { if (koszyk.isEmpty()) {
