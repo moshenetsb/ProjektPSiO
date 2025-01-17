@@ -96,11 +96,23 @@ public class Loteria implements Serializable {
 		}
 
 		if (!(isInt(minLiczba) || isInt(maxLiczba) || isDouble(wartosc) || isDouble(sumaDoWygrania))) {
-			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być liczbami", "Błąd",
+			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być liczbami!", "Błąd",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
+		if (Integer.parseInt(minLiczba) >= Integer.parseInt(maxLiczba)) {
+			JOptionPane.showMessageDialog(frame1, "Minimalna liczba powinna być mniejsza niż maksymalna!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		if (Double.parseDouble(wartosc) >= Double.parseDouble(sumaDoWygrania)) {
+			JOptionPane.showMessageDialog(frame1, "Wartość loterii musi być mniejsza niż suma do wygrania!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
 		return true;
 	}
 

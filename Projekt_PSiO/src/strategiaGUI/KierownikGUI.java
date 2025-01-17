@@ -101,8 +101,10 @@ public class KierownikGUI extends PracownikGUI {
 		menuBar.add(toolsMenu);
 
 		// Zarządzanie loterią
-		JMenuItem loteriaMenu = new JMenuItem("Ustawienia Loteria");
-		menuBar.add(loteriaMenu);
+		JMenu loteria = new JMenu("Loteria");
+		JMenuItem loteriaMenu = new JMenuItem("Ustawienia loterii");
+		menuBar.add(loteria);
+		loteria.add(loteriaMenu);
 		loteriaMenu.addActionListener(e -> zarzadzajLoteria(frame1));
 	}
 
