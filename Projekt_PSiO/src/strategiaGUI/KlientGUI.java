@@ -25,9 +25,6 @@ public class KlientGUI extends WspolneGUI {
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
 	private ArrayList<Produkty> koszyk = new ArrayList<Produkty>();
 
-	// private Klient klient;
-	// private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
-
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
 		super(frame1);
