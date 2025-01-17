@@ -29,11 +29,17 @@ public class KlientGUI extends WspolneGUI {
 	public KlientGUI(JFrame frame1) {
 		super(frame1);
 
+		showProducts(frame1);
+	}
+
+	private void showProducts(JFrame frame1) {
+		
+		frame1.getContentPane().removeAll();
+		
 		JTabbedPane tabPanel = new JTabbedPane();
 		homePanel = new JPanel();
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-		// contentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 		sortArrayList();
 
@@ -48,9 +54,11 @@ public class KlientGUI extends WspolneGUI {
 		tabPanel.addTab("Widok Główny", homePanel);
 		tabPanel.addTab("Produkty", scrollPane);
 		frame1.add(tabPanel, BorderLayout.CENTER);
-		// frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		frame1.revalidate();
+		frame1.repaint();
 	}
-
+	
 	@Override
 	public void GUIcreate(JFrame frame1) {
 		super.GUIcreate(frame1);
@@ -212,9 +220,7 @@ public class KlientGUI extends WspolneGUI {
 
 		JMenuItem mntmWszystkieProdukty = new JMenuItem("Wszystkie produkty");
 		mnProdukty.add(mntmWszystkieProdukty);
-
-		JMenuItem mntmUlubioneProdukty = new JMenuItem("Ulubione produkty");
-		mnProdukty.add(mntmUlubioneProdukty);
+		mntmWszystkieProdukty.addActionListener(e -> showProducts(frame1));
 
 		JMenu mnKoszyk = new JMenu("Koszyk");
 		menuBar.add(mnKoszyk);

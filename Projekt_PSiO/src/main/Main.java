@@ -64,7 +64,7 @@ public class Main {
 				"Julia", 18, null, 1100.0, "27343232432"));
 
 		// Produkty
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS53.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS5.png"));
 		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
 		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
 		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
