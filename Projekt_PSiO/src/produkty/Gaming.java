@@ -5,8 +5,8 @@ public class Gaming extends Produkty {
 	private static final long serialVersionUID = 1L;
 
 	// Konstruktor dla utworzenia produktu na listaProduktow
-	public Gaming(String nazwa, float cena, int ilosc, String opis) {
-		super(nazwa, cena, ilosc, opis);
+	public Gaming(String nazwa, float cena, int ilosc, String opis,String sciezkaObrazu) {
+		super(nazwa, cena, ilosc, opis,sciezkaObrazu);
 	}
 
 	// Konstruktor dla utworzenia produktu do listy Zakupy
