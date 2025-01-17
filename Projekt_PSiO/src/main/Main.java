@@ -17,14 +17,14 @@ public class Main {
 	}
 
 	private static void start() {
-		// WczytywanieObiektow.wczytajDane();
+		WczytywanieObiektow.wczytajDane();
 
 		// Pierwsze konto w sklepie, jeśli jeszcze nie było (admin)
 		if (Metody.getListaOsobZarzadzajacych().isEmpty())
 			Metody.getListaOsobZarzadzajacych().add(new Kierownik("admin@gmail.com", "admin", "admin", "Nazwisko",
 					"Imie", 18, null, 0, "000000000000"));
 
-		testoweDane();
+		// testoweDane();
 
 		@SuppressWarnings("unused")
 		GUImain oknoGlowne = new GUImain();
@@ -64,60 +64,60 @@ public class Main {
 				"Julia", 18, null, 1100.0, "27343232432"));
 
 		// Produkty
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null, "./Grafika/Produkty/Gaming/PS53.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null, "./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null, "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null, "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null, "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null, "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null, "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Retro Lego", 1400, 5, null, "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null, "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null, "./Grafika/Produkty/Gaming/PS5.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null, "./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null, "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null, "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null, "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null, "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null, "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, null, "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null, "./Grafika/Produkty//Mieszane/EtuiDoAparatu.png"));
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null, "./Grafika/Produkty/Gaming/PS5.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null, "./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null, "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null, "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null, "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null, "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null, "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, null, "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null, "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null, "./Grafika/Produkty/Gaming/PS5.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null, "./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null, "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null, "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null, "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null, "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null, "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, null, "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null, "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null, "./Grafika/Produkty/Gaming/PS5.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null, "./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null, "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null, "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null, "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null, "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null, "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, null,"./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null,"./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
-		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, null,"./Grafika/Produkty/Gaming/PS5.png"));
-		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, null,"./Grafika/Produkty/Gaming/PS4.png"));
-		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, null,"./Grafika/Produkty/Gaming/NintendoSwitch.png"));
-		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, null,"./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
-		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, null,"./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
-		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, null,"./Grafika/Produkty/Fotografia/KartaPamieci.png"));
-		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, null,"./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
-		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, null,"./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
-		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, null,"./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS53.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis", "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis", "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis", "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Retro Lego", 1400, 5, "Testowy opis", "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis", "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS5.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis", "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis", "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis", "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, "Testowy opis", "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis", "./Grafika/Produkty//Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS5.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis", "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis", "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis", "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, "Testowy opis", "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis", "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS5.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis", "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis", "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis", "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, "Testowy opis", "./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis", "./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis", "./Grafika/Produkty/Gaming/PS5.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis", "./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis", "./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis", "./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis", "./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis", "./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis", "./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, "Testowy opis","./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis","./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
+		Metody.getListaProduktow().add(new Gaming("PS5", 3000, 7, "Testowy opis","./Grafika/Produkty/Gaming/PS5.png"));
+		Metody.getListaProduktow().add(new Gaming("PS4", 2000, 4, "Testowy opis","./Grafika/Produkty/Gaming/PS4.png"));
+		Metody.getListaProduktow().add(new Gaming("Nintendo Switch", 1500, 3, "Testowy opis","./Grafika/Produkty/Gaming/NintendoSwitch.png"));
+		Metody.getListaProduktow().add(new Fotografia("Lustrzanka Canon", 1700, 2, "Testowy opis","./Grafika/Produkty/Fotografia/LustrzankaCanon.png"));
+		Metody.getListaProduktow().add(new Fotografia("Papier fotograficzny", 85, 22, "Testowy opis","./Grafika/Produkty/Fotografia/PapierFotograficzny.png"));
+		Metody.getListaProduktow().add(new Fotografia("Karta pamięci sd 64gb", 80, 20, "Testowy opis","./Grafika/Produkty/Fotografia/KartaPamieci.png"));
+		Metody.getListaProduktow().add(new Mieszane("Gamingowa drukarka HP", 800, 7, "Testowy opis","./Grafika/Produkty/Mieszane/GamingowaDrukarka.png"));
+		Metody.getListaProduktow().add(new Mieszane("Aparat w stylu Naruto", 1400, 5, "Testowy opis","./Grafika/Produkty/Mieszane/AparatRetroLego.png"));
+		Metody.getListaProduktow().add(new Mieszane("Etui do aparatu Hideokojima Edition", 500, 2, "Testowy opis","./Grafika/Produkty/Mieszane/EtuiDoAparatu.png"));
 
 	}
 
