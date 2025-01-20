@@ -1,5 +1,8 @@
 package osoba;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import adres.Adres;
 
 public class Pracownik extends Osoba {
@@ -29,6 +32,20 @@ public class Pracownik extends Osoba {
 
 	public void setPesel(String pesel) {
 		this.pesel = pesel;
+	}
+
+	public static boolean isValidDataPracownik(JFrame frame, String pesel) {
+		if (pesel.isEmpty()) {
+			JOptionPane.showMessageDialog(frame, "Wszystkie pola muszą być wypełnione!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (pesel.matches("\\d{11}") && pesel.length() != 11) {
+			JOptionPane.showMessageDialog(frame, "PESEL musi zawierać 11 cyfr", "Błąd", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	
+		return true;
 	}
 
 }

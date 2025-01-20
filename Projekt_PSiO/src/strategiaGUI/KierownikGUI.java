@@ -339,7 +339,7 @@ public class KierownikGUI extends PracownikGUI {
 					if (typ.equals(Pracownik.class)) {
 						String pesel = peselField.getText().trim();
 
-						if (isValidDataPracownik(frame, pesel)) {
+						if (Pracownik.isValidDataPracownik(frame, pesel)) {
 							Pracownik pracownik;
 
 							if (czyEdytowanie) {
@@ -401,20 +401,6 @@ public class KierownikGUI extends PracownikGUI {
 		hasloField.setText(osoba.getHaslo());
 		saldoField.setText(String.valueOf(Math.round(osoba.getSaldoKonta() * 100) / 100.0));
 		wiekField.setText(String.valueOf(osoba.getWiek()));
-	}
-
-	private boolean isValidDataPracownik(JFrame frame, String pesel) {
-		if (pesel.isEmpty()) {
-			JOptionPane.showMessageDialog(frame, "Wszystkie pola muszą być wypełnione!", "Błąd",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (pesel.matches("\\d{11}")) {
-			JOptionPane.showMessageDialog(frame, "PESEL musi zawierać 11 cyfr", "Błąd", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		return true;
 	}
 
 	private boolean isValidDataSaldoKonta(JFrame frame, String saldo) {
@@ -582,7 +568,7 @@ public class KierownikGUI extends PracownikGUI {
 							pracownik.getPesel() });
 				} else if (osoba instanceof Klient) {
 					Klient klient = (Klient) osoba;
-					String promocja = typPromocji(klient.getPromocjaKlienta());
+					String promocja = Metody.typPromocji(klient.getPromocjaKlienta());
 
 					tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
 							klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
@@ -614,23 +600,13 @@ public class KierownikGUI extends PracownikGUI {
 						pracownik.getPesel() });
 			} else if (osoba instanceof Klient) {
 				Klient klient = (Klient) osoba;
-				String promocja = typPromocji(klient.getPromocjaKlienta());
+				String promocja = Metody.typPromocji(klient.getPromocjaKlienta());
 
 				tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
 						klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
 			}
 
 		}
-	}
-
-	private String typPromocji(Promocja promocja) {
-		if (promocja instanceof PromocjaPodstawowa)
-			return "Podstawowa";
-
-		if (promocja instanceof PromocjaStalegoKlienta)
-			return "Stały klient";
-
-		return "Studencka";
 	}
 
 	// Ikony aplikacji

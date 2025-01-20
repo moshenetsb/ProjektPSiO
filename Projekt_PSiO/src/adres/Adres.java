@@ -2,10 +2,13 @@ package adres;
 
 import java.io.Serializable;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;;
+
 public class Adres implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	// Składowe kłasy
 	private String panstwo;
 	private String kodPocztowy;
@@ -79,4 +82,15 @@ public class Adres implements Serializable {
 				+ miasto + ", Ulica: " + ulica + ", Numer budynku=" + numerBudynku + "]";
 	}
 
+	public static boolean isValidData(JFrame frame1, String panstwo, String kodPocztowy, String region, String miasto,
+			String ulica, String numerBudynku) {
+		if (panstwo.isEmpty() || kodPocztowy.isEmpty() || region.isEmpty() || miasto.isEmpty() || ulica.isEmpty()
+				|| numerBudynku.isEmpty()) {
+			JOptionPane.showMessageDialog(frame1, "Wszystkie pola muszą być wypełnione!", "Błąd",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
+	}
 }
