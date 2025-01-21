@@ -2,13 +2,12 @@ package strategiaGUI;
 
 import java.io.File;
 import javax.imageio.ImageIO;
-import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import bibliotekaMetodIPol.*;
 import osoba.Osoba;
-import inneGUI.InfoOOsobieGUI;
+import inneGUI.StronaMojeKonto;
 import logowanie.MenuLogowanie;
 
 public abstract class WspolneGUI implements GUIstrategia {
@@ -54,29 +53,20 @@ public abstract class WspolneGUI implements GUIstrategia {
 		mntmMojeDane.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-				frame1.getContentPane().removeAll();
-
-				InfoOOsobieGUI strona = new InfoOOsobieGUI(frame1);
-				strona.getLbTytul().setText("   MOJE KONTO   ");
-				strona.getLbTytul().setFont(new Font("Arial", Font.BOLD, 24));
-				strona.getLbTytul().setForeground(Color.GREEN);
-
-				frame1.getContentPane().add(panel, BorderLayout.SOUTH);
 
 				Osoba osoba;
 				if (Metody.getWybraneGUI() instanceof KlientGUI)
-					osoba = Metody.getListaKlientow().get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
+					osoba = Metody.getListaKlientow()
+							.get(MenuLogowanie.szukajIDLoginKlienta(Metody.getLoginAktywnejOsoby()));
 				else
-					osoba = Metody.getListaOsobZarzadzajacych().get(MenuLogowanie.szukajIDLoginZarzadzajacych(Metody.getLoginAktywnejOsoby()));
+					osoba = Metody.getListaOsobZarzadzajacych()
+							.get(MenuLogowanie.szukajIDLoginZarzadzajacych(Metody.getLoginAktywnejOsoby()));
 
-				strona.wyswietlInformacje(osoba);
+				@SuppressWarnings("unused")
+				StronaMojeKonto strona = new StronaMojeKonto(frame1, osoba);
 
-				frame1.revalidate();
-				frame1.repaint();
 			}
 		});
-		// TODO dostęp do danych konta
 
 		// Zapisywanie zmian obiektów
 		mntmZapisz.addActionListener(new ActionListener() {
