@@ -2,9 +2,9 @@ package strategiaGUI;
 
 import javax.imageio.ImageIO;
 
+
 import javax.swing.*;
 
-import Obserwator.Observer;
 import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +22,7 @@ import logowanie.*;
 import osoba.Klient;
 import osoba.Osoba;
 
-public class KlientGUI extends WspolneGUI implements Observer {
+public class KlientGUI extends WspolneGUI {
 
 	// TODO zrobić klienta (dodawanie produktów do koszyka, wyświetlenie koszyka i
 	// kupowanie ze strone koszyka funkcja "KUP" w klasie Klient)
@@ -33,15 +33,16 @@ public class KlientGUI extends WspolneGUI implements Observer {
 	private JPanel homePanel;
 	private JScrollPane scrollPane;
 	private ArrayList<Produkty> products = Metody.getListaProduktow();
+	private ArrayList<Produkty> filtered=new ArrayList<Produkty>() ;
 	private ArrayList<Produkty> productsGaming = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsFotografia = new ArrayList<Produkty>();
 	private ArrayList<Produkty> productsMieszane = new ArrayList<Produkty>();
-	// private Klient klient;
-	// private ArrayList<Produkty> koszyk = klient.getKoszyk().getListaProduktow();
+	private ArrayList<Produkty> koszyk =new ArrayList<Produkty>();
 
 	// Konstruktor
 	public KlientGUI(JFrame frame1) {
 		super(frame1);
+		
 
 		JTabbedPane tabPanel = new JTabbedPane();
 
@@ -54,7 +55,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 
 		sortArrayList();
 
-		homePanel.add(createSingleItemSection("Wysprzedaż", productsGaming));
+		homePanel.add(createSingleItemSection("Wysprzedaż", products));
 
 		contentPanel.add(createKategoria("Gaming", productsGaming));
 		contentPanel.add(createKategoria("Fotografia", productsFotografia));
@@ -68,6 +69,13 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		frame1.add(tabPanel, BorderLayout.CENTER);
 		// frame1.getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
+	
+	public void updateDisplay(Produkty produkt) {
+		if(produkt.getCenaProduktu()<5000) {
+			filtered.add(produkt);
+		}
+		
+	}
 
 	@Override
 	public void GUIcreate(JFrame frame1) {
@@ -77,6 +85,154 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		// TODO Auto-generated method stub
 
 	}
+	
+	private void pokazKoszyk(JFrame frame1) {
+	    if (koszyk.isEmpty()) {
+	        JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+	        return;
+	    }
+
+	    JFrame koszykFrame = null;
+	    for (Window window : Window.getWindows()) {
+	        if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Koszyk")) {
+	            koszykFrame = (JFrame) window;
+	            break;
+	        }
+	    }
+	    
+	    if (koszykFrame == null) {
+	        koszykFrame = new JFrame("Koszyk");
+	        koszykFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        koszykFrame.setSize(700, 700);
+	    }
+
+	    try {
+	        koszykFrame.setIconImage(ImageIO.read(new File("Grafika/koszyk.jpg")));
+	    } catch (Exception e) {
+	        System.err.println("Błąd podczas wczytywania ikony: " + e.getMessage());
+	    }
+
+
+	    JPanel koszykPanel = new JPanel();
+	    koszykPanel.setLayout(new BoxLayout(koszykPanel, BoxLayout.Y_AXIS));
+	    koszykPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+	    final JFrame finalKoszykFrame = koszykFrame;
+
+	    for (Produkty produkt : koszyk) {
+	        JPanel produktPanel = new JPanel();
+	        produktPanel.setLayout(new BoxLayout(produktPanel, BoxLayout.X_AXIS));
+	        produktPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+	        produktPanel.setPreferredSize(new Dimension(600, 150));
+	        produktPanel.setMaximumSize(new Dimension(600, 150));
+
+	        try {
+	            File file = new File(produkt.getSciezkaObrazu());
+	            ImageIcon originalIcon = new ImageIcon(ImageIO.read(file));
+
+	            Image image = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+	            JLabel obrazekLabel = new JLabel(new ImageIcon(image));
+	            obrazekLabel.setHorizontalAlignment(SwingConstants.LEFT);
+	            obrazekLabel.setPreferredSize(new Dimension(100, 100));
+	            produktPanel.add(obrazekLabel);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            JLabel obrazekLabel = new JLabel(new ImageIcon("domyslny_obrazek.jpg"));
+	            obrazekLabel.setHorizontalAlignment(SwingConstants.LEFT);
+	            obrazekLabel.setPreferredSize(new Dimension(100, 100));
+	            produktPanel.add(obrazekLabel);
+	        }
+
+	        JPanel tekstPanel = new JPanel();
+	        tekstPanel.setLayout(new BoxLayout(tekstPanel, BoxLayout.Y_AXIS));
+	        tekstPanel.setPreferredSize(new Dimension(300, 100));
+
+	        JLabel nazwaLabel = new JLabel("Nazwa: " + produkt.getNazwaProduktu());
+	        nazwaLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	        nazwaLabel.setPreferredSize(new Dimension(300, 20));
+	        nazwaLabel.setMaximumSize(new Dimension(300, 20));
+	        tekstPanel.add(nazwaLabel);
+
+	        JLabel cenaLabel = new JLabel("Cena: " + produkt.getCenaProduktu() + " PLN");
+	        cenaLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+	        tekstPanel.add(cenaLabel);
+
+	        produktPanel.add(tekstPanel);
+
+	        JTextArea opisText = new JTextArea(3, 30);
+	        opisText.setText(produkt.getOpisProduktu());
+	        opisText.setWrapStyleWord(true);
+	        opisText.setLineWrap(true);
+	        opisText.setCaretPosition(0);
+	        opisText.setEditable(false);
+	        opisText.setFont(new Font("Arial", Font.ITALIC, 12));
+
+	        opisText.setPreferredSize(new Dimension(350, 60));
+	        opisText.setMaximumSize(new Dimension(350, 100));
+	        opisText.setMinimumSize(new Dimension(350, 60));
+
+	        JScrollPane opisScroll = new JScrollPane(opisText);
+	        opisScroll.setPreferredSize(new Dimension(350, 100));
+	        opisScroll.setMaximumSize(new Dimension(350, 100));
+
+	        produktPanel.add(opisScroll);
+
+	        JButton usunButton = new JButton(new ImageIcon("Grafika/x.jpg"));
+	        usunButton.setPreferredSize(new Dimension(40, 40));
+	        usunButton.setFont(new Font("Arial", Font.BOLD, 16));
+	        usunButton.addActionListener(e -> {
+	            koszyk.remove(produkt);
+	            if (koszyk.isEmpty()) {
+	                finalKoszykFrame.dispose();
+	                JOptionPane.showMessageDialog(frame1, "Koszyk jest pusty.", "Koszyk", JOptionPane.INFORMATION_MESSAGE);
+	            } else {
+	                koszykPanel.removeAll();
+	                pokazKoszyk(frame1);
+	            }
+	        });
+
+	        JPanel usunPanel = new JPanel();
+	        usunPanel.setLayout(new BoxLayout(usunPanel, BoxLayout.Y_AXIS));
+	        usunPanel.add(usunButton);
+	        produktPanel.add(usunPanel);
+
+	        koszykPanel.add(produktPanel);
+	    }
+
+	    JButton kupButton = new JButton("Kup");
+	    kupButton.setPreferredSize(new Dimension(120, 40));
+	    kupButton.addActionListener(e -> {
+	        JOptionPane.showMessageDialog(frame1, "Zakup został dokonany.", "Zakup", JOptionPane.INFORMATION_MESSAGE);
+	        koszyk.clear();
+	        finalKoszykFrame.dispose();
+	    });
+
+	    JButton kontynuujButton = new JButton("Kontynuuj zakupy");
+	    kontynuujButton.setPreferredSize(new Dimension(180, 40));
+	    kontynuujButton.addActionListener(e -> {
+	        finalKoszykFrame.setVisible(false);
+	    	frame1.setVisible(true);
+	        try {
+	            frame1.setIconImage(ImageIO.read(new File("./Grafika/dolarZielony.png")));
+	        } catch (Exception e1) {
+	            System.err.println("Błąd podczas wczytywania ikony: " + e1.getMessage());
+	        }
+	    });
+
+	    JPanel przyciskiPanel = new JPanel();
+	    przyciskiPanel.add(kupButton);
+	    przyciskiPanel.add(kontynuujButton);
+
+	    koszykPanel.add(przyciskiPanel);
+
+	    koszykFrame.getContentPane().removeAll();
+	    koszykFrame.add(new JScrollPane(koszykPanel));
+	    koszykFrame.revalidate();
+	    koszykFrame.repaint();
+	    koszykFrame.setVisible(true);
+	}
+
+
 
 	private void createManagementMenu(JFrame frame1) {
 		JMenuBar menuBar = frame1.getJMenuBar();
@@ -95,7 +251,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 
 		JMenuItem mntmPokazKoszyk = new JMenuItem("Pokaż koszyk");
 		mnKoszyk.add(mntmPokazKoszyk);
-		// mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
+		mntmPokazKoszyk.addActionListener(e -> pokazKoszyk(frame1));
 
 		JMenu mnKonto = new JMenu("Konto");
 		menuBar.add(mnKonto);
@@ -223,8 +379,8 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		Produkty firstProdukt = products.get(0);
 
 		JLabel itemImageLabel = new JLabel();
-		itemImageLabel.setPreferredSize(new Dimension(150, 150));
-		itemImageLabel.setIcon(scaleImage(new ImageIcon(firstProdukt.getSciezkaObrazu()), 150, 150));
+		itemImageLabel.setPreferredSize(new Dimension(400, 400));
+		itemImageLabel.setIcon(scaleImage(new ImageIcon(firstProdukt.getSciezkaObrazu()), 400, 400));
 		itemPanel.add(itemImageLabel);
 
 		JPanel textPanel = new JPanel();
@@ -274,7 +430,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 	private void updateProductDisplay(Produkty produkt, JLabel imageLabel, JLabel nameLabel, JLabel priceLabel) {
 		nameLabel.setText(produkt.getNazwaProduktu());
 		priceLabel.setText("Cena: " + produkt.getCenaProduktu() + " PLN");
-		imageLabel.setIcon(scaleImage(new ImageIcon(produkt.getSciezkaObrazu()), 150, 150));
+		imageLabel.setIcon(scaleImage(new ImageIcon(produkt.getSciezkaObrazu()), 400, 400));
 	}
 
 	private static ImageIcon scaleImage(ImageIcon icon, int width, int height) {
@@ -344,7 +500,7 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		JLabel iconLabel = new JLabel(new ImageIcon(scaledImage));
 		JLabel nameLabel = new JLabel(produkt.getNazwaProduktu());
 		JButton itemButton = new JButton("Dodaj do koszyka");
-		// itemButton.addActionListener(e -> koszyk.add(produkt));
+		itemButton.addActionListener(e -> koszyk.add(produkt));
 
 		nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -391,10 +547,5 @@ public class KlientGUI extends WspolneGUI implements Observer {
 		}
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
-	}
 
 }
