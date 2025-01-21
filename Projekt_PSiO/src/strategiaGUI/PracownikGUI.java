@@ -46,7 +46,6 @@ public class PracownikGUI extends WspolneGUI {
 	public PracownikGUI(JFrame frame1) {
 		super(frame1);
 		this.frame1 = frame1;
-		showProductManagement();
 
 		try {
 			frame1.setIconImage(ImageIO.read(new File("Grafika/dolarNiebieski.png")));

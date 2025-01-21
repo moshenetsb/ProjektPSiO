@@ -2,6 +2,9 @@ package bibliotekaMetodIPol;
 
 import osoba.*;
 import produkty.*;
+import promocjaStrategia.Promocja;
+import promocjaStrategia.PromocjaPodstawowa;
+import promocjaStrategia.PromocjaStalegoKlienta;
 import strategiaGUI.*;
 import java.util.ArrayList;
 
@@ -81,6 +84,16 @@ public class Metody {
 		}
 
 		return null;
+	}
+
+	public static String typPromocji(Promocja promocja) {
+		if (promocja instanceof PromocjaPodstawowa)
+			return "Podstawowa";
+	
+		if (promocja instanceof PromocjaStalegoKlienta)
+			return "Stały klient";
+	
+		return "Studencka";
 	}
 
 }

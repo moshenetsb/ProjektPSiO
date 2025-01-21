@@ -4,8 +4,6 @@ import javax.imageio.ImageIO;
 
 
 import javax.swing.*;
-
-import adres.Adres;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -357,87 +355,6 @@ public class KlientGUI extends WspolneGUI {
 		lbSaldoKonta.setText(" Saldo konta: " + saldoString + " PLN");
 	}
 
-	private JPanel GlownyWidok() {
-		JPanel znizkiPanel = new JPanel();
-		znizkiPanel.setLayout(new BorderLayout());
-		znizkiPanel = createSingleItemSection("Wysprzedaż", productsGaming);
-		return znizkiPanel;
-	}
-
-	private JPanel createSingleItemSection(String title, ArrayList<Produkty> products) {
-		JPanel section = new JPanel(new BorderLayout());
-
-		JLabel sectionTitle = new JLabel(title, JLabel.LEFT);
-		sectionTitle.setFont(new Font("Arial", Font.BOLD, 18));
-		section.add(sectionTitle, BorderLayout.NORTH);
-
-		// Panel do wyświetlania jednego elementu
-		JPanel itemPanel = new JPanel();
-		itemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		itemPanel.setPreferredSize(new Dimension(600, 200));
-
-		Produkty firstProdukt = products.get(0);
-
-		JLabel itemImageLabel = new JLabel();
-		itemImageLabel.setPreferredSize(new Dimension(400, 400));
-		itemImageLabel.setIcon(scaleImage(new ImageIcon(firstProdukt.getSciezkaObrazu()), 400, 400));
-		itemPanel.add(itemImageLabel);
-
-		JPanel textPanel = new JPanel();
-		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-
-		JLabel itemNameLabel = new JLabel(firstProdukt.getNazwaProduktu());
-		itemNameLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-		JLabel itemPriceLabel = new JLabel("Cena: " + firstProdukt.getCenaProduktu() + " PLN");
-		itemPriceLabel.setForeground(Color.RED);
-		itemPriceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-		JButton buyButton = new JButton("Kup");
-
-		textPanel.add(itemNameLabel);
-		textPanel.add(itemPriceLabel);
-		textPanel.add(buyButton);
-		itemPanel.add(textPanel);
-
-		section.add(itemPanel, BorderLayout.CENTER);
-
-		// Nawigacja za pomocą strzałek
-		JButton leftArrow = new JButton("<");
-		JButton rightArrow = new JButton(">");
-
-		int[] currentIndex = { 0 };
-
-		// Akcja dla lewej strzałki
-		leftArrow.addActionListener(e -> {
-			currentIndex[0] = (currentIndex[0] - 1 + products.size()) % products.size();
-			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
-		});
-		// Akcja dla prawej strzałki
-		rightArrow.addActionListener(e -> {
-			currentIndex[0] = (currentIndex[0] + 1 + products.size()) % products.size();
-			updateProductDisplay(products.get(currentIndex[0]), itemImageLabel, itemNameLabel, itemPriceLabel);
-		});
-
-		// Dodanie strzałek nawigacyjnych
-		JPanel arrowsPanel = new JPanel(new BorderLayout());
-		arrowsPanel.add(leftArrow, BorderLayout.WEST);
-		arrowsPanel.add(rightArrow, BorderLayout.EAST);
-		section.add(arrowsPanel, BorderLayout.SOUTH);
-
-		return section;
-	}
-
-	private void updateProductDisplay(Produkty produkt, JLabel imageLabel, JLabel nameLabel, JLabel priceLabel) {
-		nameLabel.setText(produkt.getNazwaProduktu());
-		priceLabel.setText("Cena: " + produkt.getCenaProduktu() + " PLN");
-		imageLabel.setIcon(scaleImage(new ImageIcon(produkt.getSciezkaObrazu()), 400, 400));
-	}
-
-	private static ImageIcon scaleImage(ImageIcon icon, int width, int height) {
-		Image image = icon.getImage();
-		Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH); // Skalowanie obrazu
-		return new ImageIcon(scaledImage);
-	}
 
 	// _____________________________________________________________
 	// TODO przeczytać podalsze i zrobić coś z tym

@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import bibliotekaMetodIPol.*;
 import logowanie.MenuLogowanie;
+import loteria.Loteria;
 import osoba.*;
 import promocjaStrategia.*;
 import zakupy.*;
@@ -98,6 +99,61 @@ public class KierownikGUI extends PracownikGUI {
 		toolsMenu.add(clientsSubmenu);
 		toolsMenu.add(employeesSubmenu);
 		menuBar.add(toolsMenu);
+
+		// Zarządzanie loterią
+		JMenu loteria = new JMenu("Loteria");
+		JMenuItem loteriaMenu = new JMenuItem("Ustawienia loterii");
+		menuBar.add(loteria);
+		loteria.add(loteriaMenu);
+		loteriaMenu.addActionListener(e -> zarzadzajLoteria(frame1));
+	}
+
+	private void zarzadzajLoteria(JFrame frame1) {
+		JDialog dialogLoteria = new JDialog(frame1, "Zarządzanie Loterią", true);
+
+		JTextField minLiczbaField = new JTextField(10);
+		JTextField maxLiczbaField = new JTextField(10);
+		JTextField wartoscField = new JTextField(10);
+		JTextField sumaDoWygraniaField = new JTextField(10);
+
+		JPanel panel = new JPanel(new GridLayout(8, 1));
+
+		panel.add(new JLabel("Najmniejsza liczba:"));
+		panel.add(minLiczbaField);
+		panel.add(new JLabel("Największa liczba:"));
+		panel.add(maxLiczbaField);
+		panel.add(new JLabel("Wartość jednej gry:"));
+		panel.add(wartoscField);
+		panel.add(new JLabel("Suma do wygrania:"));
+		panel.add(sumaDoWygraniaField);
+
+		Loteria loteria = Metody.getLoteria();
+		minLiczbaField.setText(String.valueOf(loteria.getMinLiczba()));
+		maxLiczbaField.setText(String.valueOf(loteria.getMaxLiczba()));
+		wartoscField.setText(String.valueOf(Math.round(loteria.getWartosc() * 100) / 100.0));
+		sumaDoWygraniaField.setText(String.valueOf(Math.round(loteria.getSumaDoWygrania() * 100) / 100.0));
+
+		JPanel btnPanel = new JPanel(new FlowLayout());
+		JButton btnSave = new JButton("Zapisz zmiany");
+
+		btnPanel.add(btnSave);
+		btnSave.addActionListener(e -> {
+			if (Loteria.isValidData(frame1, minLiczbaField.getText(), maxLiczbaField.getText(), wartoscField.getText(),
+					sumaDoWygraniaField.getText())) {
+				Metody.setLoteria(new Loteria(Integer.parseInt(minLiczbaField.getText()),
+						Integer.parseInt(maxLiczbaField.getText()), Double.parseDouble(wartoscField.getText()),
+						Double.parseDouble(sumaDoWygraniaField.getText())));
+				dialogLoteria.dispose();
+			}
+
+		});
+
+		panel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		dialogLoteria.add(BorderLayout.CENTER, panel);
+		dialogLoteria.add(BorderLayout.SOUTH, btnPanel);
+
+		dialogLoteria.setSize(300, 300);
+		dialogLoteria.setVisible(true);
 	}
 
 	private void initializeKlientTableModel() {
@@ -283,7 +339,7 @@ public class KierownikGUI extends PracownikGUI {
 					if (typ.equals(Pracownik.class)) {
 						String pesel = peselField.getText().trim();
 
-						if (isValidDataPracownik(frame, pesel)) {
+						if (Pracownik.isValidDataPracownik(frame, pesel)) {
 							Pracownik pracownik;
 
 							if (czyEdytowanie) {
@@ -345,20 +401,6 @@ public class KierownikGUI extends PracownikGUI {
 		hasloField.setText(osoba.getHaslo());
 		saldoField.setText(String.valueOf(Math.round(osoba.getSaldoKonta() * 100) / 100.0));
 		wiekField.setText(String.valueOf(osoba.getWiek()));
-	}
-
-	private boolean isValidDataPracownik(JFrame frame, String pesel) {
-		if (pesel.isEmpty()) {
-			JOptionPane.showMessageDialog(frame, "Wszystkie pola muszą być wypełnione!", "Błąd",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (pesel.matches("\\d{11}")) {
-			JOptionPane.showMessageDialog(frame, "PESEL musi zawierać 11 cyfr", "Błąd", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		return true;
 	}
 
 	private boolean isValidDataSaldoKonta(JFrame frame, String saldo) {
@@ -497,7 +539,7 @@ public class KierownikGUI extends PracownikGUI {
 
 		JTable searchTable = new JTable(searchTableModel);
 		search(searchField.getText(), searchTableModel, lista);
-		
+
 		searchFrame.add(searchPanel, BorderLayout.NORTH);
 		searchFrame.add(new JScrollPane(searchTable), BorderLayout.CENTER);
 
@@ -526,7 +568,7 @@ public class KierownikGUI extends PracownikGUI {
 							pracownik.getPesel() });
 				} else if (osoba instanceof Klient) {
 					Klient klient = (Klient) osoba;
-					String promocja = typPromocji(klient.getPromocjaKlienta());
+					String promocja = Metody.typPromocji(klient.getPromocjaKlienta());
 
 					tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
 							klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
@@ -558,23 +600,13 @@ public class KierownikGUI extends PracownikGUI {
 						pracownik.getPesel() });
 			} else if (osoba instanceof Klient) {
 				Klient klient = (Klient) osoba;
-				String promocja = typPromocji(klient.getPromocjaKlienta());
+				String promocja = Metody.typPromocji(klient.getPromocjaKlienta());
 
 				tableModel.addRow(new Object[] { klient.getImie(), klient.getNazwisko(), klient.getLogin(),
 						klient.getEmail(), klient.getHaslo(), klient.getSaldoKonta(), klient.getWiek(), promocja });
 			}
 
 		}
-	}
-
-	private String typPromocji(Promocja promocja) {
-		if (promocja instanceof PromocjaPodstawowa)
-			return "Podstawowa";
-
-		if (promocja instanceof PromocjaStalegoKlienta)
-			return "Stały klient";
-
-		return "Studencka";
 	}
 
 	// Ikony aplikacji
