@@ -53,7 +53,7 @@ Celem projektu było zaprojektowanie prostego systemu sklepowego z interfejsem g
 
 1. [@moshenetsb](https://github.com/moshenetsb)
 2. [@Euvgene9](https://github.com/Euvgene9)
-3. [@StudentBJ](https://github.com/StudentBJ)   
+3. [@shang1410 (dawniej StudentBJ)](https://github.com/shang1410)   
 4. [@zhenia0908](https://github.com/zhenia0908)
 5. [@Dimoaon](https://github.com/Dimoaon)
 6. [@ToriLomakova](https://github.com/ToriLomakova)  
